@@ -13,7 +13,7 @@ where S0 : Sequence, S1 : Sequence, S2 : Sequence, S3 : Sequence,
     let s2: S2
     let s3: S3
 
-    init(_ s0: S0, _ s1: S1, _ s2: S2, s3: S3) {
+    init(_ s0: S0, _ s1: S1, _ s2: S2, _ s3: S3) {
         self.s0 = s0
         self.s1 = s1
         self.s2 = s2
