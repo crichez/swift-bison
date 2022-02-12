@@ -219,4 +219,49 @@ class DocBuilderTests: XCTestCase {
         >.self
         XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
     }
+
+    func testTuple10() throws {
+        @DocBuilder func buildContent() -> some BinaryConvertible {
+            Int32(0)
+            Int64(1)
+            Double(2)
+            "three"
+            false
+            String?.none
+            ""
+            UInt64(0)
+            Bool?.some(true)
+            Int32(-100_000)
+        }
+
+        let content = buildContent()
+        let expectedType = Tuple10<
+            Int32, 
+            Int64, 
+            Double, 
+            String, 
+            Bool, 
+            String?, 
+            String, 
+            UInt64,
+            Bool?,
+            Int32
+        >.self
+        XCTAssertTrue(type(of: content) == expectedType)
+
+        let encodedContent = try content.encode()
+        let expectedEncodedType = Chain10<
+            [UInt8], 
+            [UInt8], 
+            [UInt8], 
+            EncodedString, 
+            CollectionOfOne<UInt8>, 
+            Optional<String>.Encoded,
+            EncodedString,
+            [UInt8],
+            Optional<Bool>.Encoded,
+            [UInt8]
+        >.self
+        XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
+    }
 }
