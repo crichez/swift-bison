@@ -5,7 +5,6 @@
 //
 //
 
-
 struct Tuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>: BinaryConvertible
 where T0 : BinaryConvertible, T1 : BinaryConvertible, T2 : BinaryConvertible, 
       T3 : BinaryConvertible, T4 : BinaryConvertible, T5 : BinaryConvertible,
