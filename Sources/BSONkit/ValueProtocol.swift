@@ -1,104 +1,91 @@
 //
-//  BSONValue.swift
+//  ValueProtocol.swift
 //  
 //
 //  Created by Christopher Richez on 2/6/22.
 //
 
-import Algorithms
-
-typealias Byte = CollectionOfOne<UInt8>
-
 /// A value that can be encoded into a BSON document.
-protocol BSONValue {
-    /// The type used by the encoded representation of this value.
-    associatedtype Encoded: Sequence where Encoded.Element == UInt8
-    
-    /// Encodes the value into its `Encoded` type.
-    func encode() throws -> Encoded
-    
+protocol ValueProtocol: BinaryConvertible {
     /// The BSON type byte to attach to the key associated with this value.
-    var type: Byte { get }
+    var type: CollectionOfOne<UInt8> { get }
 }
 
-typealias Chained = Chain2Sequence
-
-extension Int32: BSONValue {
+extension Int32: ValueProtocol {
     typealias Encoded = [UInt8]
-    
-    var type: Byte { CollectionOfOne(0x10) }
     
     func encode() throws -> Encoded {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
     }
+
+    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x10) }
 }
 
-extension String: BSONValue {
-    typealias Encoded = Chained<Int32.Encoded, Chained<String.UTF8View, Byte>>
-    
-    var type: Byte { CollectionOfOne(0x02) }
+extension String: ValueProtocol {
+    typealias Encoded = Chain3<Int32.Encoded, String.UTF8View, CollectionOfOne<UInt8>>
     
     func encode() throws -> Encoded {
         let content = utf8
         let terminator = CollectionOfOne<UInt8>(0x00)
-        let terminatedContent = chain(content, terminator)
-        guard let size = Int32(exactly: terminatedContent.count) else {
+        guard let size = Int32(exactly: content.count + 1) else {
             fatalError("string too long")
         }
-        let encodedValue = chain(try size.encode(), terminatedContent)
+        let encodedValue = Chain3(one: try size.encode(), two: content, three: terminator)
         return encodedValue
     }
+
+    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x02) }
 }
 
-extension Bool: BSONValue {
-    typealias Encoded = Byte
-    
-    var type: Byte { CollectionOfOne(0x00) }
+extension Bool: ValueProtocol {
+    typealias Encoded = CollectionOfOne<UInt8>
     
     func encode() throws -> Encoded {
         self ? CollectionOfOne(0x01) : CollectionOfOne(0x00)
     }
+    
+    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x00) }
 }
 
-extension Int64: BSONValue {
+extension Int64: ValueProtocol {
     typealias Encoded = [UInt8]
-    
-    var type: Byte { CollectionOfOne(0x12) }
     
     func encode() throws -> Encoded {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
     }
+    
+    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x12) }
 }
 
-extension UInt64: BSONValue {
+extension UInt64: ValueProtocol {
     typealias Encoded = [UInt8]
-    
-    var type: Byte { CollectionOfOne(0x11) }
     
     func encode() throws -> Encoded {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
     }
+    
+    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x11) }
 }
 
-extension Double: BSONValue {
+extension Double: ValueProtocol {
     typealias Encoded = [UInt8]
-    
-    var type: Byte { CollectionOfOne(0x01) }
     
     func encode() throws -> Encoded {
         withUnsafeBytes(of: bitPattern) { bytes in
             Array(bytes)
         }
     }
+    
+    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x01) }
 }
 
-extension Optional: BSONValue where Wrapped : BSONValue {
+extension Optional: BinaryConvertible, ValueProtocol where Wrapped : ValueProtocol {
     enum Encoded: Sequence {
         case none
         case some(Wrapped.Encoded)
@@ -124,8 +111,6 @@ extension Optional: BSONValue where Wrapped : BSONValue {
         }
     }
     
-    var type: Byte { self?.type ?? CollectionOfOne(0x0A) }
-    
     func encode() throws -> Encoded {
         switch self {
         case .none:
@@ -134,4 +119,6 @@ extension Optional: BSONValue where Wrapped : BSONValue {
             return .some(try value.encode())
         }
     }
+    
+    var type: CollectionOfOne<UInt8> { self?.type ?? CollectionOfOne(0x0A) }
 }
