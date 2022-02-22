@@ -1,0 +1,36 @@
+<% for tuple in types.all where tuple.name.hasPrefix("Tuple") { -%>
+
+extension <%= tuple.name %>: BinaryConvertible where 
+<% for valueNumber in 0..<tuple.variables.count - 1 { -%>
+  T<%= valueNumber %>: BinaryConvertible,
+<% } -%>
+  T<%= tuple.variables.count - 1 %>: BinaryConvertible {
+    typealias Encoded = Chain<%= tuple.variables.count %><
+<% for valueNumber in 0..<tuple.variables.count - 1 { -%>
+      T<%= valueNumber %>.Encoded,
+<% } -%>
+      T<%= tuple.variables.count - 1 %>.Encoded
+    >
+
+    func encode() throws -> Encoded {
+        Chain<%= tuple.variables.count %>(
+<% for valueNumber in 0..<tuple.variables.count - 1 { -%>
+            s<%= valueNumber %>: try t<%= valueNumber %>.encode(),
+<% } -%>
+            s<%= tuple.variables.count - 1 %>: try t<%= tuple.variables.count - 1 %>.encode()
+        )
+    }
+
+    init(
+<% for valueNumber in 0..<tuple.variables.count - 1 { -%>
+        _ t<%= valueNumber %>: T<%= valueNumber %>,
+<% } -%>
+        _ t<%= tuple.variables.count - 1 %>: T<%= tuple.variables.count - 1 %>
+    ) {
+<% for valueNumber in 0..<tuple.variables.count - 1 { -%>
+        self.t<%= valueNumber %> = t<%= valueNumber %>
+<% } -%>
+        self.t<%= tuple.variables.count - 1 %> = t<%= tuple.variables.count - 1 %>
+    }
+}
+<% } -%>

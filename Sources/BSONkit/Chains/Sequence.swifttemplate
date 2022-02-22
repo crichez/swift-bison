@@ -1,0 +1,29 @@
+<%# stencil -%>
+<% for chain in types.all where chain.name.hasPrefix("Chain") { -%>
+extension <%= chain.name %>: Sequence {
+    struct Iterator: IteratorProtocol {
+<% for linkNumber in 0..<chain.variables.count { -%>
+        var i<%= linkNumber %>: S<%= linkNumber %>.Iterator
+<% } -%>
+
+        mutating func next() -> S0.Element? {
+<% for linkNumber in 0..<chain.variables.count { -%>
+            if let next = i<%= linkNumber %>.next() {
+                return next
+            }
+<% } -%>
+            return nil
+        }
+    }
+
+    func makeIterator() -> Iterator {
+        Iterator(
+<% for linkNumber in 0..<chain.variables.count - 1 { -%>
+            i<%= linkNumber %>: s<%= linkNumber %>.makeIterator(),
+<% } -%>
+            i<%= chain.variables.count - 1 %>: s<%= chain.variables.count - 1 %>.makeIterator()
+        )
+    }
+}
+
+<% } -%>

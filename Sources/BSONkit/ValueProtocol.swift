@@ -32,7 +32,7 @@ extension String: ValueProtocol {
         guard let size = Int32(exactly: content.count + 1) else {
             fatalError("string too long")
         }
-        let encodedValue = Chain3(try size.encode(), content, terminator)
+        let encodedValue = Chain3(s0: try size.encode(), s1: content, s2: terminator)
         return encodedValue
     }
 

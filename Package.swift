@@ -34,6 +34,11 @@ let package = Package(
             dependencies: [
                 //.product(name: "OrderedCollections", package: "swift-collections"),
                 //.product(name: "Algorithms", package: "swift-algorithms")
+            ],
+            resources: [
+                .copy("Chains/Sequence.swifttemplate"),
+                .copy("Tuples/BinaryConvertible.swifttemplate"),
+                .copy("DocBuilderBlocks.swifttemplate"),
             ]),
         .testTarget(
             name: "BSONKitTests",
