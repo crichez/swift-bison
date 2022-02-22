@@ -17,35 +17,27 @@ extension Chain10: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
-            }
-            if let next = i4.next() {
+            } else if let next = i4.next() {
                 return next
-            }
-            if let next = i5.next() {
+            } else if let next = i5.next() {
                 return next
-            }
-            if let next = i6.next() {
+            } else if let next = i6.next() {
                 return next
-            }
-            if let next = i7.next() {
+            } else if let next = i7.next() {
                 return next
-            }
-            if let next = i8.next() {
+            } else if let next = i8.next() {
                 return next
-            }
-            if let next = i9.next() {
+            } else if let next = i9.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -73,11 +65,11 @@ extension Chain2: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -98,14 +90,13 @@ extension Chain3: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -128,17 +119,15 @@ extension Chain4: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -163,20 +152,17 @@ extension Chain5: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
-            }
-            if let next = i4.next() {
+            } else if let next = i4.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -203,23 +189,19 @@ extension Chain6: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
-            }
-            if let next = i4.next() {
+            } else if let next = i4.next() {
                 return next
-            }
-            if let next = i5.next() {
+            } else if let next = i5.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -248,26 +230,21 @@ extension Chain7: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
-            }
-            if let next = i4.next() {
+            } else if let next = i4.next() {
                 return next
-            }
-            if let next = i5.next() {
+            } else if let next = i5.next() {
                 return next
-            }
-            if let next = i6.next() {
+            } else if let next = i6.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -298,29 +275,23 @@ extension Chain8: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
-            }
-            if let next = i4.next() {
+            } else if let next = i4.next() {
                 return next
-            }
-            if let next = i5.next() {
+            } else if let next = i5.next() {
                 return next
-            }
-            if let next = i6.next() {
+            } else if let next = i6.next() {
                 return next
-            }
-            if let next = i7.next() {
+            } else if let next = i7.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -353,32 +324,25 @@ extension Chain9: Sequence {
         mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
-            }
-            if let next = i1.next() {
+            } else if let next = i1.next() {
                 return next
-            }
-            if let next = i2.next() {
+            } else if let next = i2.next() {
                 return next
-            }
-            if let next = i3.next() {
+            } else if let next = i3.next() {
                 return next
-            }
-            if let next = i4.next() {
+            } else if let next = i4.next() {
                 return next
-            }
-            if let next = i5.next() {
+            } else if let next = i5.next() {
                 return next
-            }
-            if let next = i6.next() {
+            } else if let next = i6.next() {
                 return next
-            }
-            if let next = i7.next() {
+            } else if let next = i7.next() {
                 return next
-            }
-            if let next = i8.next() {
+            } else if let next = i8.next() {
                 return next
+            } else {
+                return nil
             }
-            return nil
         }
     }
 

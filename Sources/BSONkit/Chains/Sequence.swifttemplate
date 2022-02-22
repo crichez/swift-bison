@@ -7,12 +7,13 @@ extension <%= chain.name %>: Sequence {
 <% } -%>
 
         mutating func next() -> S0.Element? {
-<% for linkNumber in 0..<chain.variables.count { -%>
-            if let next = i<%= linkNumber %>.next() {
+            if let next = i0.next() {
                 return next
+            }<%_ for linkNumber in 1..<chain.variables.count { -%> else if let next = i<%= linkNumber %>.next() {
+                return next
+            }<%_ } -%> else {
+                return nil
             }
-<% } -%>
-            return nil
         }
     }
 
