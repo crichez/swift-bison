@@ -25,3 +25,11 @@ struct Pair<T>: BinaryConvertible where T : ValueProtocol {
         )
     }
 }
+
+infix operator => : AssignmentPrecedence
+
+extension String {
+    static func => <T: ValueProtocol>(key: String, value: T) -> Pair<T> {
+        Pair(name: key, value: value)
+    } 
+}

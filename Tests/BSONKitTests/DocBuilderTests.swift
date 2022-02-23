@@ -12,18 +12,18 @@ import XCTest
 class DocBuilderTests: XCTestCase {
     func testBuilder() throws {
         @DocBuilder func buildContent() -> some BinaryConvertible {
-            Int32(0)
-            Int64(1)
-            Double(2)
-            "three"
+            "zero" => Int32(0)
+            "one" => Int64(1)
+            "two" => Double(2)
+            "three" => "three"
         }
 
         let content = buildContent()
-        let expectedType = Tuple4<Int32, Int64, Double, String>.self
+        let expectedType = Tuple4<Pair<Int32>, Pair<Int64>, Pair<Double>, Pair<String>>.self
         XCTAssertTrue(type(of: content) == expectedType)
 
         let encodedContent = try content.encode()
-        let expectedEncodedType = Chain4<Int32.Encoded, Int64.Encoded, Double.Encoded, String.Encoded>.self
+        let expectedEncodedType = Chain4<Pair<Int32>.Encoded, Pair<Int64>.Encoded, Pair<Double>.Encoded, Pair<String>.Encoded>.self
         XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
     }
 }
