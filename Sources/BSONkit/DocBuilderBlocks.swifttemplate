@@ -4,7 +4,7 @@ struct DocBuilder {
         t
     }
 <% for tupleSize in 2...10 { %>
-    static func buildBlock<<% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %>, <% } -%>T<%= tupleSize - 1 %>> (<% for valueNumber in 0..<tupleSize - 1 { -%>t<%= valueNumber %>: T<%= valueNumber %>, <% } -%>t<%= tupleSize - 1 %>: T<%= tupleSize - 1 %>) -> some BinaryConvertible
+    static func buildBlock<<% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %>, <% } -%>T<%= tupleSize - 1 %>> (<% for valueNumber in 0..<tupleSize - 1 { -%>_ t<%= valueNumber %>: T<%= valueNumber %>, <% } -%>_ t<%= tupleSize - 1 %>: T<%= tupleSize - 1 %>) -> some BinaryConvertible
     where <% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %> : BinaryConvertible, <% } -%>T<%= tupleSize - 1 %> : BinaryConvertible {
         Tuple<%= tupleSize %>(<% for valueNumber in 0..<tupleSize - 1 { -%>t<%= valueNumber %>, <% } -%>t<%= tupleSize - 1 %>)
     }
