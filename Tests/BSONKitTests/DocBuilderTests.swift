@@ -10,54 +10,7 @@ import BSONKit
 import XCTest
 
 class DocBuilderTests: XCTestCase {
-    func testSingleValue() throws {
-        @DocBuilder func buildContent() -> some BinaryConvertible {
-            true
-        }
-
-        let content = buildContent()
-        let expectedType = Bool.self
-        XCTAssertTrue(type(of: content) == expectedType)
-
-        let encodedContent = try content.encode()
-        let expectedEncodedType = Bool.Encoded.self
-        XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
-    }
-
-    typealias EncodedString = Chain3<[UInt8], String.UTF8View, CollectionOfOne<UInt8>>
-
-    func testTuple2() throws {
-        @DocBuilder func buildContent() -> some BinaryConvertible {
-            "one"
-            "two"
-        }
-
-        let content = buildContent()
-        let expectedType = Tuple2<String, String>.self
-        XCTAssertTrue(type(of: content) == expectedType)
-
-        let encodedContent = try content.encode()
-        let expectedEncodedType = Chain2<EncodedString, EncodedString>.self
-        XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
-    }
-
-    func testTuple3() throws {
-        @DocBuilder func buildContent() -> some BinaryConvertible {
-            Int32(0)
-            Int64(1)
-            Double(2)
-        }
-
-        let content = buildContent()
-        let expectedType = Tuple3<Int32, Int64, Double>.self
-        XCTAssertTrue(type(of: content) == expectedType)
-
-        let encodedContent = try content.encode()
-        let expectedEncodedType = Chain3<[UInt8], [UInt8], [UInt8]>.self
-        XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
-    }
-
-    func testTuple4() throws {
+    func testBuilder() throws {
         @DocBuilder func buildContent() -> some BinaryConvertible {
             Int32(0)
             Int64(1)
@@ -70,7 +23,7 @@ class DocBuilderTests: XCTestCase {
         XCTAssertTrue(type(of: content) == expectedType)
 
         let encodedContent = try content.encode()
-        let expectedEncodedType = Chain4<[UInt8], [UInt8], [UInt8], EncodedString>.self
+        let expectedEncodedType = Chain4<Int32.Encoded, Int64.Encoded, Double.Encoded, String.Encoded>.self
         XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
     }
 }
