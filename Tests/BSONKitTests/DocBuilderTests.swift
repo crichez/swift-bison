@@ -31,4 +31,16 @@ class DocBuilderTests: XCTestCase {
         let expectedEncodedType = Chain2<Chain4<Pair<Int32>.Encoded, Pair<Int64>.Encoded, Pair<Double>.Encoded, Pair<String>.Encoded>, Pair<UInt64>.Encoded>.self
         XCTAssertTrue(type(of: encodedContent) == expectedEncodedType, "built type: \(type(of: encodedContent))")
     }
+
+    func testDocument() throws {
+        let doc = Document {
+            "test" => true
+        }
+        let bytes = Array(try doc.encode())
+        let declaredSizeData = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
+        declaredSizeData.copyBytes(from: bytes.prefix(4))
+        let declaredSize = Int(declaredSizeData.load(as: Int32.self))
+        XCTAssertEqual(bytes.count, declaredSize, "\(bytes)")
+        XCTAssertEqual(bytes.last, 0, "\(bytes)")
+    }
 }
