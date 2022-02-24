@@ -12,18 +12,23 @@ import XCTest
 class DocBuilderTests: XCTestCase {
     func testBuilder() throws {
         @DocBuilder func buildContent() -> some BinaryConvertible {
-            "zero" => Int32(0)
-            "one" => Int64(1)
-            "two" => Double(2)
-            "three" => "three"
+            Group {
+                "zero" => Int32(0)
+                "one" => Int64(1)
+                "two" => Double(2)
+                "three" => "three"
+            }
+            Group {
+                "four" => UInt64(4)
+            }
         }
 
         let content = buildContent()
-        let expectedType = Tuple4<Pair<Int32>, Pair<Int64>, Pair<Double>, Pair<String>>.self
-        XCTAssertTrue(type(of: content) == expectedType)
+        let expectedType = Tuple2<Group<Tuple4<Pair<Int32>, Pair<Int64>, Pair<Double>, Pair<String>>>, Group<Pair<UInt64>>>.self
+        XCTAssertTrue(type(of: content) == expectedType, "built type: \(type(of: content))")
 
         let encodedContent = try content.encode()
-        let expectedEncodedType = Chain4<Pair<Int32>.Encoded, Pair<Int64>.Encoded, Pair<Double>.Encoded, Pair<String>.Encoded>.self
-        XCTAssertTrue(type(of: encodedContent) == expectedEncodedType)
+        let expectedEncodedType = Chain2<Chain4<Pair<Int32>.Encoded, Pair<Int64>.Encoded, Pair<Double>.Encoded, Pair<String>.Encoded>, Pair<UInt64>.Encoded>.self
+        XCTAssertTrue(type(of: encodedContent) == expectedEncodedType, "built type: \(type(of: encodedContent))")
     }
 }

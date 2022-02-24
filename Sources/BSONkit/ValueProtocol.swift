@@ -86,7 +86,7 @@ extension Double: ValueProtocol {
 }
 
 extension Optional: BinaryConvertible, ValueProtocol where Wrapped : ValueProtocol {
-    enum Encoded: Sequence {
+    enum Encoded: Collection {
         case none
         case some(Wrapped.Encoded)
         
@@ -107,6 +107,78 @@ extension Optional: BinaryConvertible, ValueProtocol where Wrapped : ValueProtoc
                 return Iterator(encodedValueIterator: nil)
             case .some(let encodedValue):
                 return Iterator(encodedValueIterator: encodedValue.makeIterator())
+            }
+        }
+
+        enum Index: Comparable {
+            case none, some(Wrapped.Encoded.Index)
+
+            static func < (lhs: Self, rhs: Self) -> Bool {
+                switch (lhs, rhs) {
+                case (.none, .none):
+                    return false
+                case (.none, .some(_)):
+                    return true
+                case (.some(_), .none):
+                    return false
+                case (.some(let lhs), .some(let rhs)):
+                    return lhs < rhs
+                }
+            }
+        }
+
+        func index(after i: Index) -> Index {
+            switch i {
+            case .none:
+                return .none
+            case .some(let i):
+                switch self {
+                case .none:
+                    return .none
+                case .some(let encoded):
+                    return .some(encoded.index(after: i))
+                }
+            }
+        }
+
+        var count: Int {
+            switch self {
+            case .none: 
+                return 0
+            case .some(let encoded):
+                return encoded.count
+            }
+        }
+
+        var startIndex: Index {
+            switch self {
+            case .none:
+                return .none
+            case .some(let encoded):
+                return .some(encoded.startIndex)
+            }
+        }
+
+        var endIndex: Index {
+            switch self {
+            case .none:
+                return .none
+            case .some(let encoded):
+                return .some(encoded.endIndex)
+            }
+        }
+
+        subscript(position: Index) -> UInt8 {
+            switch position {
+            case .none:
+                fatalError("requested the position of a nil index")
+            case .some(let position):
+                switch self {
+                case .none:
+                    fatalError("encoded optional index out of range")
+                case .some(let encoded):
+                    return encoded[position]
+                }
             }
         }
     }
