@@ -10,7 +10,8 @@ import BSONKit
 import XCTest
 
 class DocBuilderTests: XCTestCase {
-    func testBuilder() throws {
+    /// This test compares the type of the value outputted by `DocBuilder` to developer expectations.
+    func testBuilderTypes() throws {
         @DocBuilder func buildContent() -> some BinaryConvertible {
             Group {
                 "zero" => Int32(0)
@@ -31,7 +32,8 @@ class DocBuilderTests: XCTestCase {
         let expectedEncodedType = Chain2<Chain4<Pair<Int32>.Encoded, Pair<Int64>.Encoded, Pair<Double>.Encoded, Pair<String>.Encoded>, Pair<UInt64>.Encoded>.self
         XCTAssertTrue(type(of: encodedContent) == expectedEncodedType, "built type: \(type(of: encodedContent))")
     }
-
+    
+    /// This test asserts the content, size and terminator of the document are property encoded.
     func testDocument() throws {
         let doc = Document {
             "test" => true
@@ -42,5 +44,16 @@ class DocBuilderTests: XCTestCase {
         let declaredSize = Int(declaredSizeData.load(as: Int32.self))
         XCTAssertEqual(bytes.count, declaredSize, "\(bytes)")
         XCTAssertEqual(bytes.last, 0, "\(bytes)")
+    }
+    
+    /// This test asserts content from a loop is encoded as expected.
+    func testLoop() throws {
+        let doc = Document {
+            ForEach([Int64]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) { number in
+                String(describing: number) => number
+            }
+        }
+        let encodedDoc = Array(try doc.encode())
+        XCTAssertEqual(encodedDoc.count, (3 * 10) + (8 * 10) + 5)
     }
 }

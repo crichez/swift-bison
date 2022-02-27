@@ -39,6 +39,7 @@ let package = Package(
                 .copy("Chains/Sequence.swifttemplate"),
                 .copy("Tuples/BinaryConvertible.swifttemplate"),
                 .copy("DocBuilderBlocks.swifttemplate"),
+                .copy("Chains/Collection.swifttemplate"),
             ]),
         .testTarget(
             name: "BSONKitTests",
