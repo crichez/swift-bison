@@ -6,7 +6,7 @@
 //
 
 /// A BSON document that can be encoded into its binary representation.
-struct Document<T: BinaryConvertible>: BinaryConvertible {
+struct Document<T: BinaryConvertible>: ValueProtocol {
     /// The contents of this document.
     let body: T
     
@@ -21,5 +21,9 @@ struct Document<T: BinaryConvertible>: BinaryConvertible {
             s0: try Int32(encodedBody.count + 5).encode(),
             s1: encodedBody,
             s2: CollectionOfOne(UInt8(0)))
+    }
+
+    var type: CollectionOfOne<UInt8> { 
+        CollectionOfOne(3)
     }
 }
