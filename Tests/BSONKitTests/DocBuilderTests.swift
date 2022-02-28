@@ -107,4 +107,21 @@ class DocBuilderTests: XCTestCase {
             try XCTSkipIf(true, "test requires specific version to complete")
         }
     }
+
+    func testNestedDocuments() throws {
+        let doc = Document {
+            "nestedDoc" => Document {
+                "test" => true
+            }
+        }
+
+        let expectedType = Document<Pair<Document<Pair<Bool>>>>.self
+        let actualType = type(of: doc)
+        XCTAssertTrue(expectedType == actualType, "\(actualType)")
+
+        let encodedDoc = try doc.encode()
+        let expectedEncodedType = Chain3<Int32.Encoded, Pair<Document<Pair<Bool>>>.Encoded, CollectionOfOne<UInt8>>.self
+        let actualEncodedType = type(of: encodedDoc)
+        XCTAssertTrue(expectedEncodedType == actualEncodedType, "\(actualEncodedType)")
+    }
 }
