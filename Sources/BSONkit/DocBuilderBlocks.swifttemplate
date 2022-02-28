@@ -16,4 +16,8 @@ struct DocBuilder {
     static func buildEither<T>(second component: T) -> T where T : BinaryConvertible {
         component
     }
+
+    static func buildOptional<T>(_ component: T?) -> OptionalValue<T> {
+        OptionalValue(component)
+    }
 }
