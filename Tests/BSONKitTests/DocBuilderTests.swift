@@ -56,4 +56,21 @@ class DocBuilderTests: XCTestCase {
         let encodedDoc = Array(try doc.encode())
         XCTAssertEqual(encodedDoc.count, (3 * 10) + (8 * 10) + 5)
     }
+
+    func testConditional() throws {
+        let flag = true
+        let doc = Document {
+            if flag {
+                "test" => "passed"
+            } else {
+                "test" => "failed"
+            }
+        }
+        let expectedDoc = Document {
+            "test" => "passed"
+        }
+        let encodedDoc = Array(try doc.encode())
+        let expectedEncodedDoc = Array(try expectedDoc.encode())
+        XCTAssertEqual(encodedDoc, expectedEncodedDoc)
+    }
 }

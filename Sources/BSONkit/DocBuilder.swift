@@ -51,4 +51,12 @@ struct DocBuilder {
     where T0 : BinaryConvertible, T1 : BinaryConvertible, T2 : BinaryConvertible, T3 : BinaryConvertible, T4 : BinaryConvertible, T5 : BinaryConvertible, T6 : BinaryConvertible, T7 : BinaryConvertible, T8 : BinaryConvertible, T9 : BinaryConvertible {
         Tuple10(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9)
     }
+
+    static func buildEither<T>(first component: T) -> T where T : BinaryConvertible {
+        component
+    }
+
+    static func buildEither<T>(second component: T) -> T where T : BinaryConvertible {
+        component
+    }
 }

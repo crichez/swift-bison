@@ -8,5 +8,12 @@ struct DocBuilder {
     where <% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %> : BinaryConvertible, <% } -%>T<%= tupleSize - 1 %> : BinaryConvertible {
         Tuple<%= tupleSize %>(<% for valueNumber in 0..<tupleSize - 1 { -%>t<%= valueNumber %>, <% } -%>t<%= tupleSize - 1 %>)
     }
-<% } -%>
+<% } %>
+    static func buildEither<T>(first component: T) -> T where T : BinaryConvertible {
+        component
+    }
+
+    static func buildEither<T>(second component: T) -> T where T : BinaryConvertible {
+        component
+    }
 }
