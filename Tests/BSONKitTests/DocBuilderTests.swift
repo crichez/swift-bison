@@ -73,4 +73,20 @@ class DocBuilderTests: XCTestCase {
         let expectedEncodedDoc = Array(try expectedDoc.encode())
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
+
+    func testOptional() throws {
+        let flag = false
+        let doc = Document {
+            if flag {
+                "zero" => Int64(0)
+            }
+            "one" => Int64(1)
+        }
+        let expectedDoc = Document {
+            "one" => Int64(1)
+        }
+        let encodedDoc = Array(try doc.encode())
+        let expectedEncodedDoc = Array(try expectedDoc.encode())
+        XCTAssertEqual(encodedDoc, expectedEncodedDoc)
+    }
 }
