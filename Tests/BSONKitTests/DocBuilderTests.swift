@@ -89,4 +89,22 @@ class DocBuilderTests: XCTestCase {
         let expectedEncodedDoc = Array(try expectedDoc.encode())
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
+
+    func testLimitedAvailability() throws {
+        let doc = Document {
+            if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
+                "isOn2020ReleaseOrGreater" => true
+            }
+        }
+        let encodedDoc = Array(try doc.encode())
+        let expectedDoc = Document {
+            "isOn2020ReleaseOrGreater" => true
+        }
+        let expectedEncodedDoc = Array(try expectedDoc.encode())
+        if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
+            XCTAssertEqual(encodedDoc, expectedEncodedDoc)
+        } else {
+            try XCTSkipIf(true, "test requires specific version to complete")
+        }
+    }
 }

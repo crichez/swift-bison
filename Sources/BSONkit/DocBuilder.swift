@@ -60,7 +60,11 @@ struct DocBuilder {
         component
     }
 
-    static func buildOptional<T>(_ component: T?) -> OptionalValue<T> {
+    static func buildOptional<T>(_ component: T?) -> OptionalValue<T> where T : BinaryConvertible {
         OptionalValue(component)
+    }
+
+    static func buildLimitedAvailability<T>(_ component: T) -> T where T : BinaryConvertible {
+        component
     }
 }
