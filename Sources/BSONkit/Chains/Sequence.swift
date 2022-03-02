@@ -2,7 +2,7 @@
 // DO NOT EDIT
 
 extension Chain10: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
@@ -14,7 +14,7 @@ extension Chain10: Sequence {
         var i8: S8.Iterator
         var i9: S9.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -41,7 +41,7 @@ extension Chain10: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -58,11 +58,11 @@ extension Chain10: Sequence {
 }
 
 extension Chain2: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -73,7 +73,7 @@ extension Chain2: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator()
@@ -82,12 +82,12 @@ extension Chain2: Sequence {
 }
 
 extension Chain3: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -100,7 +100,7 @@ extension Chain3: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -110,13 +110,13 @@ extension Chain3: Sequence {
 }
 
 extension Chain4: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
         var i3: S3.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -131,7 +131,7 @@ extension Chain4: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -142,14 +142,14 @@ extension Chain4: Sequence {
 }
 
 extension Chain5: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
         var i3: S3.Iterator
         var i4: S4.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -166,7 +166,7 @@ extension Chain5: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -178,7 +178,7 @@ extension Chain5: Sequence {
 }
 
 extension Chain6: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
@@ -186,7 +186,7 @@ extension Chain6: Sequence {
         var i4: S4.Iterator
         var i5: S5.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -205,7 +205,7 @@ extension Chain6: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -218,7 +218,7 @@ extension Chain6: Sequence {
 }
 
 extension Chain7: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
@@ -227,7 +227,7 @@ extension Chain7: Sequence {
         var i5: S5.Iterator
         var i6: S6.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -248,7 +248,7 @@ extension Chain7: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -262,7 +262,7 @@ extension Chain7: Sequence {
 }
 
 extension Chain8: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
@@ -272,7 +272,7 @@ extension Chain8: Sequence {
         var i6: S6.Iterator
         var i7: S7.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -295,7 +295,7 @@ extension Chain8: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),
@@ -310,7 +310,7 @@ extension Chain8: Sequence {
 }
 
 extension Chain9: Sequence {
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var i0: S0.Iterator
         var i1: S1.Iterator
         var i2: S2.Iterator
@@ -321,7 +321,7 @@ extension Chain9: Sequence {
         var i7: S7.Iterator
         var i8: S8.Iterator
 
-        mutating func next() -> S0.Element? {
+        public mutating func next() -> S0.Element? {
             if let next = i0.next() {
                 return next
             } else if let next = i1.next() {
@@ -346,7 +346,7 @@ extension Chain9: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(
             i0: s0.makeIterator(),
             i1: s1.makeIterator(),

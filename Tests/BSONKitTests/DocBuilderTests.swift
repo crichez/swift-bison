@@ -12,7 +12,7 @@ import XCTest
 class DocBuilderTests: XCTestCase {
     /// This test compares the type of the value outputted by `DocBuilder` to developer expectations.
     func testBuilderTypes() throws {
-        @DocBuilder func buildContent() -> some BinaryConvertible {
+        @DocBuilder func buildContent() -> some DocComponent {
             Group {
                 "zero" => Int32(0)
                 "one" => Int64(1)
@@ -28,7 +28,7 @@ class DocBuilderTests: XCTestCase {
         let expectedType = Tuple2<Group<Tuple4<Pair<Int32>, Pair<Int64>, Pair<Double>, Pair<String>>>, Group<Pair<UInt64>>>.self
         XCTAssertTrue(type(of: content) == expectedType, "built type: \(type(of: content))")
 
-        let encodedContent = try content.encode()
+        let encodedContent = content.bsonEncoded
         let expectedEncodedType = Chain2<Chain4<Pair<Int32>.Encoded, Pair<Int64>.Encoded, Pair<Double>.Encoded, Pair<String>.Encoded>, Pair<UInt64>.Encoded>.self
         XCTAssertTrue(type(of: encodedContent) == expectedEncodedType, "built type: \(type(of: encodedContent))")
     }
@@ -38,7 +38,7 @@ class DocBuilderTests: XCTestCase {
         let doc = Document {
             "test" => true
         }
-        let bytes = Array(try doc.encode())
+        let bytes = Array(doc.bsonEncoded)
         let declaredSizeData = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
         declaredSizeData.copyBytes(from: bytes.prefix(4))
         let declaredSize = Int(declaredSizeData.load(as: Int32.self))
@@ -53,7 +53,7 @@ class DocBuilderTests: XCTestCase {
                 String(describing: number) => number
             }
         }
-        let encodedDoc = Array(try doc.encode())
+        let encodedDoc = Array(doc.bsonEncoded)
         XCTAssertEqual(encodedDoc.count, (3 * 10) + (8 * 10) + 5)
     }
 
@@ -69,8 +69,8 @@ class DocBuilderTests: XCTestCase {
         let expectedDoc = Document {
             "test" => "passed"
         }
-        let encodedDoc = Array(try doc.encode())
-        let expectedEncodedDoc = Array(try expectedDoc.encode())
+        let encodedDoc = Array(doc.bsonEncoded)
+        let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
@@ -85,8 +85,8 @@ class DocBuilderTests: XCTestCase {
         let expectedDoc = Document {
             "one" => Int64(1)
         }
-        let encodedDoc = Array(try doc.encode())
-        let expectedEncodedDoc = Array(try expectedDoc.encode())
+        let encodedDoc = Array(doc.bsonEncoded)
+        let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
@@ -96,11 +96,11 @@ class DocBuilderTests: XCTestCase {
                 "isOn2020ReleaseOrGreater" => true
             }
         }
-        let encodedDoc = Array(try doc.encode())
+        let encodedDoc = Array(doc.bsonEncoded)
         let expectedDoc = Document {
             "isOn2020ReleaseOrGreater" => true
         }
-        let expectedEncodedDoc = Array(try expectedDoc.encode())
+        let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
         if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
             XCTAssertEqual(encodedDoc, expectedEncodedDoc)
         } else {
@@ -119,7 +119,7 @@ class DocBuilderTests: XCTestCase {
         let actualType = type(of: doc)
         XCTAssertTrue(expectedType == actualType, "\(actualType)")
 
-        let encodedDoc = try doc.encode()
+        let encodedDoc = doc.bsonEncoded
         let expectedEncodedType = Chain3<Int32.Encoded, Pair<Document<Pair<Bool>>>.Encoded, CollectionOfOne<UInt8>>.self
         let actualEncodedType = type(of: encodedDoc)
         XCTAssertTrue(expectedEncodedType == actualEncodedType, "\(actualEncodedType)")

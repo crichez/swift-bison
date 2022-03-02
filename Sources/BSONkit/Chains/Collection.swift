@@ -4,7 +4,7 @@
 
 extension Chain10: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : Collection, S5 : Collection, S6 : Collection, S7 : Collection, S8 : Collection, S9 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
@@ -16,7 +16,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         case s8(S8.Index)
         case s9(S9.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -222,7 +222,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
@@ -235,15 +235,15 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         return sum9
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s9(s9.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -268,7 +268,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -296,11 +296,11 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
 
 extension Chain2: Collection
 where S0 : Collection, S1 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -314,20 +314,20 @@ where S0 : Collection, S1 : Collection {
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         return sum1
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s1(s1.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -336,7 +336,7 @@ where S0 : Collection, S1 : Collection {
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -348,12 +348,12 @@ where S0 : Collection, S1 : Collection {
 
 extension Chain3: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -377,21 +377,21 @@ where S0 : Collection, S1 : Collection, S2 : Collection {
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         return sum2
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s2(s2.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -402,7 +402,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection {
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -416,13 +416,13 @@ where S0 : Collection, S1 : Collection, S2 : Collection {
 
 extension Chain4: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
         case s3(S3.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -460,22 +460,22 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection {
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
         return sum3
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s3(s3.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -488,7 +488,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection {
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -504,14 +504,14 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection {
 
 extension Chain5: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
         case s3(S3.Index)
         case s4(S4.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -567,7 +567,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
@@ -575,15 +575,15 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         return sum4
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s4(s4.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -598,7 +598,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -616,7 +616,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
 
 extension Chain6: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : Collection, S5 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
@@ -624,7 +624,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         case s4(S4.Index)
         case s5(S5.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -702,7 +702,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
@@ -711,15 +711,15 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         return sum5
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s5(s5.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -736,7 +736,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -756,7 +756,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
 
 extension Chain7: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : Collection, S5 : Collection, S6 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
@@ -765,7 +765,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         case s5(S5.Index)
         case s6(S6.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -869,7 +869,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
@@ -879,15 +879,15 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         return sum6
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s6(s6.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -906,7 +906,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -928,7 +928,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
 
 extension Chain8: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : Collection, S5 : Collection, S6 : Collection, S7 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
@@ -938,7 +938,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         case s6(S6.Index)
         case s7(S7.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -1072,7 +1072,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
@@ -1083,15 +1083,15 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         return sum7
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s7(s7.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -1112,7 +1112,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]
@@ -1136,7 +1136,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
 
 extension Chain9: Collection
 where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : Collection, S5 : Collection, S6 : Collection, S7 : Collection, S8 : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case s0(S0.Index)
         case s1(S1.Index)
         case s2(S2.Index)
@@ -1147,7 +1147,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         case s7(S7.Index)
         case s8(S8.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.s0(_), .s1(_)):
                 return true
@@ -1315,7 +1315,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    var count: Int {
+    public var count: Int {
         let sum1 = s0.count + s1.count
         let sum2 = sum1 + s2.count
         let sum3 = sum2 + s3.count
@@ -1327,15 +1327,15 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         return sum8
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s8(s8.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
             return .s0(s0.index(after: i))
@@ -1358,7 +1358,7 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
         case .s0(let position):
             return s0[position]

@@ -1,27 +1,27 @@
 @resultBuilder
 struct DocBuilder {
-    static func buildBlock<T: BinaryConvertible>(_ t: T) -> some BinaryConvertible {
+    static func buildBlock<T: DocComponent>(_ t: T) -> some DocComponent {
         t
     }
 <% for tupleSize in 2...10 { %>
-    static func buildBlock<<% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %>, <% } -%>T<%= tupleSize - 1 %>> (<% for valueNumber in 0..<tupleSize - 1 { -%>_ t<%= valueNumber %>: T<%= valueNumber %>, <% } -%>_ t<%= tupleSize - 1 %>: T<%= tupleSize - 1 %>) -> some BinaryConvertible
-    where <% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %> : BinaryConvertible, <% } -%>T<%= tupleSize - 1 %> : BinaryConvertible {
+    static func buildBlock<<% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %>, <% } -%>T<%= tupleSize - 1 %>> (<% for valueNumber in 0..<tupleSize - 1 { -%>_ t<%= valueNumber %>: T<%= valueNumber %>, <% } -%>_ t<%= tupleSize - 1 %>: T<%= tupleSize - 1 %>) -> some DocComponent
+    where <% for valueNumber in 0..<tupleSize - 1 { -%>T<%= valueNumber %> : DocComponent, <% } -%>T<%= tupleSize - 1 %> : DocComponent {
         Tuple<%= tupleSize %>(<% for valueNumber in 0..<tupleSize - 1 { -%>t<%= valueNumber %>, <% } -%>t<%= tupleSize - 1 %>)
     }
 <% } %>
-    static func buildEither<T>(first component: T) -> T where T : BinaryConvertible {
+    static func buildEither<T>(first component: T) -> T where T : DocComponent {
         component
     }
 
-    static func buildEither<T>(second component: T) -> T where T : BinaryConvertible {
+    static func buildEither<T>(second component: T) -> T where T : DocComponent {
         component
     }
 
-    static func buildOptional<T>(_ component: T?) -> OptionalValue<T> where T : BinaryConvertible {
+    static func buildOptional<T>(_ component: T?) -> OptionalValue<T> where T : DocComponent {
         OptionalValue(component)
     }
 
-    static func buildLimitedAvailability<T>(_ component: T) -> T where T : BinaryConvertible {
+    static func buildLimitedAvailability<T>(_ component: T) -> T where T : DocComponent {
         component
     }
 }

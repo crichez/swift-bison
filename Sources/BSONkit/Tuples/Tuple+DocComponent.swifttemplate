@@ -1,0 +1,17 @@
+<% for tuple in types.all where tuple.name.hasPrefix("Tuple") { %>
+extension <%= tuple.name %>: DocComponent 
+where <% for valueNumber in 0..<tuple.variables.count - 1 { -%>T<%= valueNumber %>: DocComponent, <% } -%>T<%= tuple.variables.count - 1 %>: DocComponent {
+    public typealias Encoded = Chain<%= tuple.variables.count %><<% for valueNumber in 0..<tuple.variables.count - 1 { -%>T<%= valueNumber %>.Encoded, <% } -%>T<%= tuple.variables.count - 1 %>.Encoded>
+
+    public var bsonEncoded: Encoded {
+        Chain<%= tuple.variables.count %>(<% for valueNumber in 0..<tuple.variables.count - 1 { -%>s<%= valueNumber %>: t<%= valueNumber %>.bsonEncoded, <% } -%>s<%= tuple.variables.count - 1 %>: t<%= tuple.variables.count - 1 %>.bsonEncoded)
+    }
+
+    public init(<% for valueNumber in 0..<tuple.variables.count - 1 { -%>_ t<%= valueNumber %>: T<%= valueNumber %>,<% } -%>_ t<%= tuple.variables.count - 1 %>: T<%= tuple.variables.count - 1 %>) {
+<% for valueNumber in 0..<tuple.variables.count - 1 { -%>
+        self.t<%= valueNumber %> = t<%= valueNumber %>
+<% } -%>
+        self.t<%= tuple.variables.count - 1 %> = t<%= tuple.variables.count - 1 %>
+    }
+}
+<% } %>

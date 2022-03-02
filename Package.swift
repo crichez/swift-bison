@@ -37,7 +37,7 @@ let package = Package(
             ],
             resources: [
                 .copy("Chains/Sequence.swifttemplate"),
-                .copy("Tuples/BinaryConvertible.swifttemplate"),
+                .copy("Tuples/DocComponent.swifttemplate"),
                 .copy("DocBuilderBlocks.swifttemplate"),
                 .copy("Chains/Collection.swifttemplate"),
             ]),

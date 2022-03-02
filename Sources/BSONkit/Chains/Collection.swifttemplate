@@ -1,12 +1,12 @@
 <% for chain in types.all where chain.name.hasPrefix("Chain") { %>
 extension <%= chain.name %>: Collection
 where S0 : Collection, <% for linkNumber in 1..<chain.variables.count - 1 { -%>S<%= linkNumber %> : Collection, <% } -%>S<%= chain.variables.count - 1 %> : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
 <% for linkNumber in 0..<chain.variables.count { -%>
         case s<%= linkNumber %>(S<%= linkNumber %>.Index)
 <% } -%>
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
 <% for linkNumber in 0..<chain.variables.count { -%>
 <% for greaterLinkNumber in (linkNumber + 1)..<chain.variables.count { -%>
@@ -24,22 +24,22 @@ where S0 : Collection, <% for linkNumber in 1..<chain.variables.count - 1 { -%>S
         }
     }
 
-    var count: Int {
+    public var count: Int {
 <% for linkNumber in 0..<chain.variables.count - 1 { -%>
         let sum<%= linkNumber + 1 %> = <% if linkNumber == 0 { -%>s0.count<% } else { -%>sum<%= linkNumber %><% } -%> + s<%= linkNumber + 1 %>.count
 <% } -%>
         return sum<%= chain.variables.count - 1 %>
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         .s0(s0.startIndex)
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         .s<%= chain.variables.count - 1 %>(s<%= chain.variables.count - 1 %>.endIndex)
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
 <% for linkNumber in 0..<chain.variables.count { -%>
         case .s<%= linkNumber %>(let i):
@@ -48,7 +48,7 @@ where S0 : Collection, <% for linkNumber in 1..<chain.variables.count - 1 { -%>S
         }
     }
 
-    subscript(position: Index) -> S0.Element {
+    public subscript(position: Index) -> S0.Element {
         switch position {
 <% for linkNumber in 0..<chain.variables.count { -%>
         case .s<%= linkNumber %>(let position):

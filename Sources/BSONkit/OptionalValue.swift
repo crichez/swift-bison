@@ -5,7 +5,7 @@
 //
 //
 
-enum OptionalValue<T: BinaryConvertible>: BinaryConvertible {
+enum OptionalValue<T: DocComponent>: DocComponent {
     case some(T)
     case none
 
@@ -22,10 +22,10 @@ enum OptionalValue<T: BinaryConvertible>: BinaryConvertible {
         case some(T.Encoded)
         case none
 
-        init(_ value: OptionalValue) throws {
+        init(_ value: OptionalValue) {
             switch value {
             case .some(let value):
-                self = .some(try value.encode())
+                self = .some(value.bsonEncoded)
             case .none:
                 self = .none
             }
@@ -126,7 +126,7 @@ enum OptionalValue<T: BinaryConvertible>: BinaryConvertible {
         }
     }
 
-    func encode() throws -> Encoded {
-        try Encoded(self)
+    var bsonEncoded: Encoded {
+        Encoded(self)
     }
 }

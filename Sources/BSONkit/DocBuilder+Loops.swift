@@ -6,22 +6,22 @@
 //
 
 /// Encodes a `Sequence` of arbitrary type into a BSON document using the provided closure.
-struct ForEach<Source: Sequence, Element: BinaryConvertible> {
+struct ForEach<Source: Sequence, Element: DocComponent> {
     /// The sequence to which to apply the provided `transform` for each element.
     let source: Source
 
-    /// A closure that takes a `source` element and returns a `BinaryConvertible` value.
+    /// A closure that takes a `source` element and returns a `DocComponent` value.
     /// 
     /// This closure will be applied to each element in the `source` sequence 
     /// when `encode()` is called.
     let transform: (Source.Element) -> Element
 
-    /// Encodes a sequence of elements by providing a `BinaryConvertible` value for each element.
+    /// Encodes a sequence of elements by providing a `DocComponent` value for each element.
     /// 
     /// - Parameters:
     ///   - source: a `Sequence` of arbitrary type to which to apply a transformation
     ///   - transform: a closure that takes a `source` element 
-    ///     and returns a `BinaryConvertible` value.
+    ///     and returns a `DocComponent` value.
     ///
     /// - Usage:
     /// ```swift
@@ -61,22 +61,22 @@ extension ForEach: Sequence {
     }
 }
 
-extension ForEach: BinaryConvertible {
+extension ForEach: DocComponent {
     /// A collection type that returns the encoded bytes of each element of a `ForEach` loop.
     struct Encoded {
         /// The encoded elements of the declared `ForEach` loop.
         let encodedElements: [Element.Encoded]
         
         /// Encodes each transformed element of the `ForEach` loop.
-        init(_ loop: ForEach) throws {
-            self.encodedElements = try loop.lazy.map { element in
-                try element.encode()
+        init(_ loop: ForEach) {
+            self.encodedElements = loop.lazy.map { element in
+                element.bsonEncoded
             }
         }
     }
     
-    func encode() throws -> Encoded {
-        try Encoded(self)
+    var bsonEncoded: Encoded {
+        Encoded(self)
     }
 }
 

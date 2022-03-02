@@ -6,102 +6,102 @@
 //
 
 /// A value that can be encoded into a BSON document.
-protocol ValueProtocol: BinaryConvertible {
+public protocol ValueProtocol: DocComponent {
     /// The BSON type byte to attach to the key associated with this value.
     var type: CollectionOfOne<UInt8> { get }
 }
 
 extension Int32: ValueProtocol {
-    typealias Encoded = [UInt8]
+    public typealias Encoded = [UInt8]
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
     }
 
-    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x10) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x10) }
 }
 
 extension String: ValueProtocol {
-    typealias Encoded = Chain3<Int32.Encoded, String.UTF8View, CollectionOfOne<UInt8>>
+    public typealias Encoded = Chain3<Int32.Encoded, String.UTF8View, CollectionOfOne<UInt8>>
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         let content = utf8
         let terminator = CollectionOfOne<UInt8>(0x00)
         guard let size = Int32(exactly: content.count + 1) else {
             fatalError("string too long")
         }
-        let encodedValue = Chain3(s0: try size.encode(), s1: content, s2: terminator)
+        let encodedValue = Chain3(s0: size.bsonEncoded, s1: content, s2: terminator)
         return encodedValue
     }
 
-    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x02) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x02) }
 }
 
 extension Bool: ValueProtocol {
-    typealias Encoded = CollectionOfOne<UInt8>
+    public typealias Encoded = CollectionOfOne<UInt8>
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         self ? CollectionOfOne(0x01) : CollectionOfOne(0x00)
     }
     
-    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x00) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x00) }
 }
 
 extension Int64: ValueProtocol {
-    typealias Encoded = [UInt8]
+    public typealias Encoded = [UInt8]
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
     }
     
-    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x12) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x12) }
 }
 
 extension UInt64: ValueProtocol {
-    typealias Encoded = [UInt8]
+    public typealias Encoded = [UInt8]
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
     }
     
-    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x11) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x11) }
 }
 
 extension Double: ValueProtocol {
-    typealias Encoded = [UInt8]
+    public typealias Encoded = [UInt8]
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         withUnsafeBytes(of: bitPattern) { bytes in
             Array(bytes)
         }
     }
     
-    var type: CollectionOfOne<UInt8> { CollectionOfOne(0x01) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x01) }
 }
 
-extension Optional: BinaryConvertible, ValueProtocol where Wrapped : ValueProtocol {
-    enum Encoded: Sequence {
+extension Optional: DocComponent, ValueProtocol where Wrapped : ValueProtocol {
+    public enum Encoded: Sequence {
         case none
         case some(Wrapped.Encoded)
         
-        struct Iterator: IteratorProtocol {
+        public struct Iterator: IteratorProtocol {
             /// The iterator for the encoded value, or `nil` if the value is `nil`.
             var encodedValueIterator: Wrapped.Encoded.Iterator?
             
             /// If the sequence is empty, unconditionally returns nil.
             /// Oterwise, returns the next element in `Encoded`.
-            mutating func next() -> UInt8? {
+            public mutating func next() -> UInt8? {
                 encodedValueIterator?.next()
             }
         }
         
-        func makeIterator() -> Iterator {
+        public func makeIterator() -> Iterator {
             switch self {
             case .none:
                 return Iterator(encodedValueIterator: nil)
@@ -111,23 +111,23 @@ extension Optional: BinaryConvertible, ValueProtocol where Wrapped : ValueProtoc
         }
     }
     
-    func encode() throws -> Encoded {
+    public var bsonEncoded: Encoded {
         switch self {
         case .none:
             return .none
         case .some(let value):
-            return .some(try value.encode())
+            return .some(value.bsonEncoded)
         }
     }
     
-    var type: CollectionOfOne<UInt8> { self?.type ?? CollectionOfOne(0x0A) }
+    public var type: CollectionOfOne<UInt8> { self?.type ?? CollectionOfOne(0x0A) }
 }
 
 extension Optional.Encoded: Collection where Wrapped.Encoded : Collection {
-    enum Index: Comparable {
+    public enum Index: Comparable {
         case none, some(Wrapped.Encoded.Index)
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        public static func < (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case (.none, .none):
                 return false
@@ -141,7 +141,7 @@ extension Optional.Encoded: Collection where Wrapped.Encoded : Collection {
         }
     }
 
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         switch i {
         case .none:
             return .none
@@ -155,7 +155,7 @@ extension Optional.Encoded: Collection where Wrapped.Encoded : Collection {
         }
     }
 
-    var count: Int {
+    public var count: Int {
         switch self {
         case .none:
             return 0
@@ -164,7 +164,7 @@ extension Optional.Encoded: Collection where Wrapped.Encoded : Collection {
         }
     }
 
-    var startIndex: Index {
+    public var startIndex: Index {
         switch self {
         case .none:
             return .none
@@ -173,7 +173,7 @@ extension Optional.Encoded: Collection where Wrapped.Encoded : Collection {
         }
     }
 
-    var endIndex: Index {
+    public var endIndex: Index {
         switch self {
         case .none:
             return .none
@@ -182,7 +182,7 @@ extension Optional.Encoded: Collection where Wrapped.Encoded : Collection {
         }
     }
 
-    subscript(position: Index) -> UInt8 {
+    public subscript(position: Index) -> UInt8 {
         switch position {
         case .none:
             fatalError("requested the position of a nil index")

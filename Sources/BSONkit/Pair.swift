@@ -5,7 +5,7 @@
 //
 //
 
-struct Pair<T>: BinaryConvertible where T : ValueProtocol {
+struct Pair<T>: DocComponent where T : ValueProtocol {
     let name: String
     let value: T
 
@@ -16,12 +16,12 @@ struct Pair<T>: BinaryConvertible where T : ValueProtocol {
         T.Encoded
     >
 
-    func encode() throws -> Encoded {
+    var bsonEncoded: Encoded {
         Chain4(
             s0: value.type, 
             s1: name.utf8, 
             s2: CollectionOfOne<UInt8>(0x00), 
-            s3: try value.encode()
+            s3: value.bsonEncoded
         )
     }
 }

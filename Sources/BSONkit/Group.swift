@@ -5,7 +5,7 @@
 //
 //
 
-struct Group<T: BinaryConvertible>: BinaryConvertible {
+struct Group<T: DocComponent>: DocComponent {
     typealias Encoded = T.Encoded
 
     let content: T
@@ -14,7 +14,7 @@ struct Group<T: BinaryConvertible>: BinaryConvertible {
         self.content = content()
     }
 
-    func encode() throws -> Encoded {
-        try content.encode()
+    var bsonEncoded: Encoded {
+        content.bsonEncoded
     }
 }
