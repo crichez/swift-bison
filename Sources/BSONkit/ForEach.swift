@@ -1,16 +1,16 @@
 //
+//  ForEach.swift
+//  ForEach
 //
-//
-//
-//
+//  Created by Christopher Richez on March 1 2022
 //
 
-/// Encodes a `Sequence` of arbitrary type into a BSON document using the provided closure.
-struct ForEach<Source: Sequence, Element: DocComponent> {
+/// Encodes a `Sequence` of arbitrary type into a BSON document by applying the provided transform.
+public struct ForEach<Source: Sequence, Element: DocComponent> {
     /// The sequence to which to apply the provided `transform` for each element.
     let source: Source
 
-    /// A closure that takes a `source` element and returns a `DocComponent` value.
+    /// A closure that takes a `source` element and returns a `DocComponent` conforming value.
     /// 
     /// This closure will be applied to each element in the `source` sequence 
     /// when `encode()` is called.
@@ -29,7 +29,7 @@ struct ForEach<Source: Sequence, Element: DocComponent> {
     ///     String(describing: number) => number
     /// }
     /// ```
-    init(_ source: Source, @DocBuilder transform: @escaping (Source.Element) -> Element) {
+    public init(_ source: Source, @DocBuilder transform: @escaping (Source.Element) -> Element) {
         self.source = source
         self.transform = transform
     }
@@ -37,7 +37,7 @@ struct ForEach<Source: Sequence, Element: DocComponent> {
 
 extension ForEach: Sequence {
     /// An iterator that applies a transform to each `Source` element before returning it.
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         /// The iterator of the `Source` sequence.
         var source: Source.Iterator
         
@@ -50,20 +50,20 @@ extension ForEach: Sequence {
             self.transform = loop.transform
         }
 
-        mutating func next() -> Element? {
+        public mutating func next() -> Element? {
             guard let nextSourceElement = source.next() else { return nil }
             return transform(nextSourceElement)
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(self)
     }
 }
 
 extension ForEach: DocComponent {
     /// A collection type that returns the encoded bytes of each element of a `ForEach` loop.
-    struct Encoded {
+    public struct Encoded {
         /// The encoded elements of the declared `ForEach` loop.
         let encodedElements: [Element.Encoded]
         
@@ -75,14 +75,14 @@ extension ForEach: DocComponent {
         }
     }
     
-    var bsonEncoded: Encoded {
+    public var bsonEncoded: Encoded {
         Encoded(self)
     }
 }
 
 extension ForEach.Encoded: Sequence {
     /// An iterator that returns the individual bytes of each encoded transformed element.
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         /// The iterator for the declared `ForEach` loop.
         var source: Array<ForEach.Element.Encoded>.Iterator
 
@@ -94,7 +94,7 @@ extension ForEach.Encoded: Sequence {
             self.currentIterator = source.next()?.makeIterator()
         }
 
-        mutating func next() -> UInt8? {
+        public mutating func next() -> UInt8? {
             // Check if we have a non-exhausted iterator to work with
             if currentIterator != nil {
                 // If so, get the next byte from that iterator
@@ -120,13 +120,13 @@ extension ForEach.Encoded: Sequence {
         }
     }
 
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         Iterator(encodedElements)
     }
 }
 
 extension ForEach.Encoded: Collection {
-    var count: Int {
+    public var count: Int {
         var accumulatedCount = 0
         for encodedElement in encodedElements {
             accumulatedCount += encodedElement.count
@@ -134,11 +134,11 @@ extension ForEach.Encoded: Collection {
         return accumulatedCount
     }
     
-    struct Index: Comparable {
+    public struct Index: Comparable {
         let element: Array<Element.Encoded>.Index
         let byte: Element.Encoded.Index?
         
-        static func < (lhs: Index, rhs: Index) -> Bool {
+        public static func < (lhs: Index, rhs: Index) -> Bool {
             if lhs.element == rhs.element {
                 switch (lhs.byte, rhs.byte) {
                 case (.none, .none):
@@ -163,19 +163,19 @@ extension ForEach.Encoded: Collection {
         }
     }
     
-    var startIndex: Index {
+    public var startIndex: Index {
         Index(encodedElements.startIndex, encodedElements.first?.startIndex)
     }
     
-    var endIndex: Index {
+    public var endIndex: Index {
         Index(encodedElements.endIndex, encodedElements.last?.endIndex)
     }
     
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         Index(i.element + 1, nil)
     }
     
-    subscript(position: Index) -> UInt8 {
+    public subscript(position: Index) -> UInt8 {
         encodedElements[position.element][position.byte!]
     }
 }
