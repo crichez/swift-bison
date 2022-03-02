@@ -36,10 +36,10 @@ let package = Package(
                 //.product(name: "Algorithms", package: "swift-algorithms")
             ],
             resources: [
-                .copy("Chains/Sequence.swifttemplate"),
-                .copy("Tuples/Tuple+DocComponent.swifttemplate"),
                 .copy("DocBuilderBlocks.swifttemplate"),
-                .copy("Chains/Collection.swifttemplate"),
+                .copy("Tuples/Tuple+DocComponent.swifttemplate"),
+                .copy("Chains/Chain+Sequence.swifttemplate"),
+                .copy("Chains/Chain+Collection.swifttemplate"),
             ]),
         .testTarget(
             name: "BSONKitTests",
