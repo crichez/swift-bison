@@ -36,7 +36,7 @@ let package = Package(
                 //.product(name: "Algorithms", package: "swift-algorithms")
             ],
             resources: [
-                .copy("DocBuilderBlocks.swifttemplate"),
+                .copy("DocBuilder.swifttemplate"),
                 .copy("Tuples/Tuple+DocComponent.swifttemplate"),
                 .copy("Chains/Chain+Sequence.swifttemplate"),
                 .copy("Chains/Chain+Collection.swifttemplate"),
