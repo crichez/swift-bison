@@ -34,8 +34,8 @@ class DocBuilderTests: XCTestCase {
     }
     
     /// This test asserts the content, size and terminator of the document are property encoded.
-    func testDocument() throws {
-        let doc = Document {
+    func testComposedDocument() throws {
+        let doc = ComposedDocument {
             "test" => true
         }
         let bytes = Array(doc.bsonEncoded)
@@ -48,7 +48,7 @@ class DocBuilderTests: XCTestCase {
     
     /// This test asserts content from a loop is encoded as expected.
     func testLoop() throws {
-        let doc = Document {
+        let doc = ComposedDocument {
             ForEach([Int64]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) { number in
                 String(describing: number) => number
             }
@@ -59,14 +59,14 @@ class DocBuilderTests: XCTestCase {
 
     func testConditional() throws {
         let flag = true
-        let doc = Document {
+        let doc = ComposedDocument {
             if flag {
                 "test" => "passed"
             } else {
                 "test" => "failed"
             }
         }
-        let expectedDoc = Document {
+        let expectedDoc = ComposedDocument {
             "test" => "passed"
         }
         let encodedDoc = Array(doc.bsonEncoded)
@@ -76,13 +76,13 @@ class DocBuilderTests: XCTestCase {
 
     func testOptional() throws {
         let flag = false
-        let doc = Document {
+        let doc = ComposedDocument {
             if flag {
                 "zero" => Int64(0)
             }
             "one" => Int64(1)
         }
-        let expectedDoc = Document {
+        let expectedDoc = ComposedDocument {
             "one" => Int64(1)
         }
         let encodedDoc = Array(doc.bsonEncoded)
@@ -91,13 +91,13 @@ class DocBuilderTests: XCTestCase {
     }
 
     func testLimitedAvailability() throws {
-        let doc = Document {
+        let doc = ComposedDocument {
             if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
                 "isOn2020ReleaseOrGreater" => true
             }
         }
         let encodedDoc = Array(doc.bsonEncoded)
-        let expectedDoc = Document {
+        let expectedDoc = ComposedDocument {
             "isOn2020ReleaseOrGreater" => true
         }
         let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
@@ -108,19 +108,19 @@ class DocBuilderTests: XCTestCase {
         }
     }
 
-    func testNestedDocuments() throws {
-        let doc = Document {
-            "nestedDoc" => Document {
+    func testNestedComposedDocuments() throws {
+        let doc = ComposedDocument {
+            "nestedDoc" => ComposedDocument {
                 "test" => true
             }
         }
 
-        let expectedType = Document<Pair<Document<Pair<Bool>>>>.self
+        let expectedType = ComposedDocument<Pair<ComposedDocument<Pair<Bool>>>>.self
         let actualType = type(of: doc)
         XCTAssertTrue(expectedType == actualType, "\(actualType)")
 
         let encodedDoc = doc.bsonEncoded
-        let expectedEncodedType = Chain3<Int32.Encoded, Pair<Document<Pair<Bool>>>.Encoded, CollectionOfOne<UInt8>>.self
+        let expectedEncodedType = Chain3<Int32.Encoded, Pair<ComposedDocument<Pair<Bool>>>.Encoded, CollectionOfOne<UInt8>>.self
         let actualEncodedType = type(of: encodedDoc)
         XCTAssertTrue(expectedEncodedType == actualEncodedType, "\(actualEncodedType)")
     }
