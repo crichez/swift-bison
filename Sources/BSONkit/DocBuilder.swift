@@ -3,7 +3,7 @@
 
 @resultBuilder
 public struct DocBuilder {
-    public static func buildBlock<T: DocComponent>(_ t: T) -> some DocComponent {
+    public static func buildBlock<T: DocComponent>(_ t: T) -> T {
         t
     }
 
@@ -61,7 +61,7 @@ public struct DocBuilder {
     }
 
     public static func buildOptional<T>(_ component: T?) -> some DocComponent where T : DocComponent {
-        OptionalValue(component)
+        OptionalComponent(component)
     }
 
     public static func buildLimitedAvailability<T>(_ component: T) -> T where T : DocComponent {

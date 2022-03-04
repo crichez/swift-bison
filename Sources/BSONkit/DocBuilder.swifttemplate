@@ -1,6 +1,6 @@
 @resultBuilder
 public struct DocBuilder {
-    public static func buildBlock<T: DocComponent>(_ t: T) -> some DocComponent {
+    public static func buildBlock<T: DocComponent>(_ t: T) -> T {
         t
     }
 <% for tupleSize in 2...10 { %>
@@ -17,8 +17,8 @@ public struct DocBuilder {
         component
     }
 
-    public static func buildOptional<T>(_ component: T?) -> OptionalValue<T> where T : DocComponent {
-        OptionalValue(component)
+    public static func buildOptional<T>(_ component: T?) -> some DocComponent where T : DocComponent {
+        OptionalComponent(component)
     }
 
     public static func buildLimitedAvailability<T>(_ component: T) -> T where T : DocComponent {

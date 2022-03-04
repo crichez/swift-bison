@@ -5,7 +5,7 @@
 //
 //
 
-enum OptionalValue<T: DocComponent>: DocComponent {
+enum OptionalComponent<T: DocComponent>: DocComponent {
     case some(T)
     case none
 
@@ -22,7 +22,7 @@ enum OptionalValue<T: DocComponent>: DocComponent {
         case some(T.Encoded)
         case none
 
-        init(_ value: OptionalValue) {
+        init(_ value: OptionalComponent) {
             switch value {
             case .some(let value):
                 self = .some(value.bsonEncoded)
@@ -34,7 +34,7 @@ enum OptionalValue<T: DocComponent>: DocComponent {
         struct Iterator: IteratorProtocol {
             var iterator: T.Encoded.Iterator?
 
-            init(_ encoded: OptionalValue.Encoded) {
+            init(_ encoded: OptionalComponent.Encoded) {
                 switch encoded {
                 case .some(let encoded):
                     iterator = encoded.makeIterator()

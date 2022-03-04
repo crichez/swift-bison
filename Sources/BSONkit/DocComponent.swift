@@ -8,7 +8,6 @@
 /// A value that can be converted into a collection of BSON-encoded bytes.
 /// 
 /// BSON document components include `Pair`, `Group` and `ForEach`.
-/// BSON values like `Int64` & `String` conform to `ValueProtocol`, which inherits `DocComponent`.
 public protocol DocComponent {
     /// The collection of BSON-encoded bytes returned by the `bsonBytes` property.
     /// 

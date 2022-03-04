@@ -6,9 +6,14 @@
 //
 
 /// A value that can be encoded into a BSON document.
-public protocol ValueProtocol: DocComponent {
+public protocol ValueProtocol {
+    /// The type of the encoded representation for this value.
+    associatedtype Encoded: Collection where Encoded.Element == UInt8
+
     /// The BSON type byte to attach to the key associated with this value.
     var type: CollectionOfOne<UInt8> { get }
+
+    var bsonEncoded: Encoded { get }
 }
 
 extension Int32: ValueProtocol {
