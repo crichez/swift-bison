@@ -246,23 +246,68 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
-            return .s3(s3.index(after: i))
+            let next = s3.index(after: i)
+            if next >= s3.endIndex {
+                return .s4(s4.startIndex)
+            } else {
+                return .s3(next)
+            }
         case .s4(let i):
-            return .s4(s4.index(after: i))
+            let next = s4.index(after: i)
+            if next >= s4.endIndex {
+                return .s5(s5.startIndex)
+            } else {
+                return .s4(next)
+            }
         case .s5(let i):
-            return .s5(s5.index(after: i))
+            let next = s5.index(after: i)
+            if next >= s5.endIndex {
+                return .s6(s6.startIndex)
+            } else {
+                return .s5(next)
+            }
         case .s6(let i):
-            return .s6(s6.index(after: i))
+            let next = s6.index(after: i)
+            if next >= s6.endIndex {
+                return .s7(s7.startIndex)
+            } else {
+                return .s6(next)
+            }
         case .s7(let i):
-            return .s7(s7.index(after: i))
+            let next = s7.index(after: i)
+            if next >= s7.endIndex {
+                return .s8(s8.startIndex)
+            } else {
+                return .s7(next)
+            }
         case .s8(let i):
-            return .s8(s8.index(after: i))
+            let next = s8.index(after: i)
+            if next >= s8.endIndex {
+                return .s9(s9.startIndex)
+            } else {
+                return .s8(next)
+            }
         case .s9(let i):
             return .s9(s9.index(after: i))
         }
@@ -330,7 +375,12 @@ where S0 : Collection, S1 : Collection {
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
             return .s1(s1.index(after: i))
         }
@@ -394,9 +444,19 @@ where S0 : Collection, S1 : Collection, S2 : Collection {
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
             return .s2(s2.index(after: i))
         }
@@ -478,11 +538,26 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection {
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
             return .s3(s3.index(after: i))
         }
@@ -586,13 +661,33 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
-            return .s3(s3.index(after: i))
+            let next = s3.index(after: i)
+            if next >= s3.endIndex {
+                return .s4(s4.startIndex)
+            } else {
+                return .s3(next)
+            }
         case .s4(let i):
             return .s4(s4.index(after: i))
         }
@@ -722,15 +817,40 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
-            return .s3(s3.index(after: i))
+            let next = s3.index(after: i)
+            if next >= s3.endIndex {
+                return .s4(s4.startIndex)
+            } else {
+                return .s3(next)
+            }
         case .s4(let i):
-            return .s4(s4.index(after: i))
+            let next = s4.index(after: i)
+            if next >= s4.endIndex {
+                return .s5(s5.startIndex)
+            } else {
+                return .s4(next)
+            }
         case .s5(let i):
             return .s5(s5.index(after: i))
         }
@@ -890,17 +1010,47 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
-            return .s3(s3.index(after: i))
+            let next = s3.index(after: i)
+            if next >= s3.endIndex {
+                return .s4(s4.startIndex)
+            } else {
+                return .s3(next)
+            }
         case .s4(let i):
-            return .s4(s4.index(after: i))
+            let next = s4.index(after: i)
+            if next >= s4.endIndex {
+                return .s5(s5.startIndex)
+            } else {
+                return .s4(next)
+            }
         case .s5(let i):
-            return .s5(s5.index(after: i))
+            let next = s5.index(after: i)
+            if next >= s5.endIndex {
+                return .s6(s6.startIndex)
+            } else {
+                return .s5(next)
+            }
         case .s6(let i):
             return .s6(s6.index(after: i))
         }
@@ -1094,19 +1244,54 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
-            return .s3(s3.index(after: i))
+            let next = s3.index(after: i)
+            if next >= s3.endIndex {
+                return .s4(s4.startIndex)
+            } else {
+                return .s3(next)
+            }
         case .s4(let i):
-            return .s4(s4.index(after: i))
+            let next = s4.index(after: i)
+            if next >= s4.endIndex {
+                return .s5(s5.startIndex)
+            } else {
+                return .s4(next)
+            }
         case .s5(let i):
-            return .s5(s5.index(after: i))
+            let next = s5.index(after: i)
+            if next >= s5.endIndex {
+                return .s6(s6.startIndex)
+            } else {
+                return .s5(next)
+            }
         case .s6(let i):
-            return .s6(s6.index(after: i))
+            let next = s6.index(after: i)
+            if next >= s6.endIndex {
+                return .s7(s7.startIndex)
+            } else {
+                return .s6(next)
+            }
         case .s7(let i):
             return .s7(s7.index(after: i))
         }
@@ -1338,21 +1523,61 @@ where S0 : Collection, S1 : Collection, S2 : Collection, S3 : Collection, S4 : C
     public func index(after i: Index) -> Index {
         switch i {
         case .s0(let i):
-            return .s0(s0.index(after: i))
+            let next = s0.index(after: i)
+            if next >= s0.endIndex {
+                return .s1(s1.startIndex)
+            } else {
+                return .s0(next)
+            }
         case .s1(let i):
-            return .s1(s1.index(after: i))
+            let next = s1.index(after: i)
+            if next >= s1.endIndex {
+                return .s2(s2.startIndex)
+            } else {
+                return .s1(next)
+            }
         case .s2(let i):
-            return .s2(s2.index(after: i))
+            let next = s2.index(after: i)
+            if next >= s2.endIndex {
+                return .s3(s3.startIndex)
+            } else {
+                return .s2(next)
+            }
         case .s3(let i):
-            return .s3(s3.index(after: i))
+            let next = s3.index(after: i)
+            if next >= s3.endIndex {
+                return .s4(s4.startIndex)
+            } else {
+                return .s3(next)
+            }
         case .s4(let i):
-            return .s4(s4.index(after: i))
+            let next = s4.index(after: i)
+            if next >= s4.endIndex {
+                return .s5(s5.startIndex)
+            } else {
+                return .s4(next)
+            }
         case .s5(let i):
-            return .s5(s5.index(after: i))
+            let next = s5.index(after: i)
+            if next >= s5.endIndex {
+                return .s6(s6.startIndex)
+            } else {
+                return .s5(next)
+            }
         case .s6(let i):
-            return .s6(s6.index(after: i))
+            let next = s6.index(after: i)
+            if next >= s6.endIndex {
+                return .s7(s7.startIndex)
+            } else {
+                return .s6(next)
+            }
         case .s7(let i):
-            return .s7(s7.index(after: i))
+            let next = s7.index(after: i)
+            if next >= s7.endIndex {
+                return .s8(s8.startIndex)
+            } else {
+                return .s7(next)
+            }
         case .s8(let i):
             return .s8(s8.index(after: i))
         }

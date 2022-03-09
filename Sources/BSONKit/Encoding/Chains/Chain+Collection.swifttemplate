@@ -43,7 +43,16 @@ where S0 : Collection, <% for linkNumber in 1..<chain.variables.count - 1 { -%>S
         switch i {
 <% for linkNumber in 0..<chain.variables.count { -%>
         case .s<%= linkNumber %>(let i):
+<% if linkNumber < chain.variables.count - 1 { -%>
+            let next = s<%= linkNumber %>.index(after: i)
+            if next >= s<%= linkNumber %>.endIndex {
+                return .s<%= linkNumber + 1 %>(s<%= linkNumber + 1 %>.startIndex)
+            } else {
+                return .s<%= linkNumber %>(next)
+            }
+<% } else { -%>
             return .s<%= linkNumber %>(s<%= linkNumber %>.index(after: i))
+<% } -%>
 <% } -%>
         }
     }
