@@ -51,7 +51,7 @@ extension Bool: ValueProtocol {
         self ? CollectionOfOne(0x01) : CollectionOfOne(0x00)
     }
     
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x00) }
+    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x08) }
 }
 
 extension Int64: ValueProtocol {
