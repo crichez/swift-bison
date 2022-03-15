@@ -2,23 +2,35 @@
 // DO NOT EDIT
 
 
-extension Tuple10: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, T8: DocComponent, T9: DocComponent {
+extension Tuple10: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, 
+  T8: DocComponent, T9: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        let sum4 = sum3 + t4.bsonEncoded
-        let sum5 = sum4 + t5.bsonEncoded
-        let sum6 = sum5 + t6.bsonEncoded
-        let sum7 = sum6 + t7.bsonEncoded
-        let sum8 = sum7 + t8.bsonEncoded
-        let sum9 = sum8 + t9.bsonEncoded
-        return sum9
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t7.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t8.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t9.bsonEncoded)
+        return concatenatedComponents
     }
 
-    public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6,_ t7: T7,_ t8: T8,_ t9: T9) {
+    public init(
+        _ t0: T0, 
+        _ t1: T1, 
+        _ t2: T2, 
+        _ t3: T3, 
+        _ t4: T4, 
+        _ t5: T5, 
+        _ t6: T6, 
+        _ t7: T7, 
+        _ t8: T8, 
+        _ t9: T9
+    ) {
         self.t0 = t0
         self.t1 = t1
         self.t2 = t2
@@ -32,12 +44,11 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
     }
 }
 
-extension Tuple2: DocComponent 
-where T0: DocComponent, T1: DocComponent {
+extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        return sum1
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1) {
@@ -46,13 +57,12 @@ where T0: DocComponent, T1: DocComponent {
     }
 }
 
-extension Tuple3: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent {
+extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        return sum2
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2) {
@@ -62,14 +72,14 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent {
     }
 }
 
-extension Tuple4: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent {
+extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        return sum3
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3) {
@@ -80,15 +90,15 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent {
     }
 }
 
-extension Tuple5: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent {
+extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent, T4: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        let sum4 = sum3 + t4.bsonEncoded
-        return sum4
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4) {
@@ -100,16 +110,16 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
     }
 }
 
-extension Tuple6: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent {
+extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent, T4: DocComponent, T5: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        let sum4 = sum3 + t4.bsonEncoded
-        let sum5 = sum4 + t5.bsonEncoded
-        return sum5
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5) {
@@ -122,17 +132,17 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
     }
 }
 
-extension Tuple7: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent {
+extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        let sum4 = sum3 + t4.bsonEncoded
-        let sum5 = sum4 + t5.bsonEncoded
-        let sum6 = sum5 + t6.bsonEncoded
-        return sum6
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6) {
@@ -146,18 +156,18 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
     }
 }
 
-extension Tuple8: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent {
+extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        let sum4 = sum3 + t4.bsonEncoded
-        let sum5 = sum4 + t5.bsonEncoded
-        let sum6 = sum5 + t6.bsonEncoded
-        let sum7 = sum6 + t7.bsonEncoded
-        return sum7
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t7.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6,_ t7: T7) {
@@ -172,19 +182,20 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
     }
 }
 
-extension Tuple9: DocComponent 
-where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, T8: DocComponent {
+extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
+  T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, 
+  T8: DocComponent {
     public var bsonEncoded: [UInt8] {
-        let sum0 = t0.bsonEncoded + t1.bsonEncoded
-        let sum1 = sum0 + t1.bsonEncoded
-        let sum2 = sum1 + t2.bsonEncoded
-        let sum3 = sum2 + t3.bsonEncoded
-        let sum4 = sum3 + t4.bsonEncoded
-        let sum5 = sum4 + t5.bsonEncoded
-        let sum6 = sum5 + t6.bsonEncoded
-        let sum7 = sum6 + t7.bsonEncoded
-        let sum8 = sum7 + t8.bsonEncoded
-        return sum8
+        var concatenatedComponents = t0.bsonEncoded
+        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t7.bsonEncoded)
+        concatenatedComponents.append(contentsOf: t8.bsonEncoded)
+        return concatenatedComponents
     }
 
     public init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6,_ t7: T7,_ t8: T8) {
