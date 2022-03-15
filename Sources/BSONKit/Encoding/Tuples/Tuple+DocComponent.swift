@@ -5,16 +5,16 @@
 extension Tuple10: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, T8: DocComponent, T9: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
-        var sum4 = sum3 + t4.bsonEncoded
-        var sum5 = sum4 + t5.bsonEncoded
-        var sum6 = sum5 + t6.bsonEncoded
-        var sum7 = sum6 + t7.bsonEncoded
-        var sum8 = sum7 + t8.bsonEncoded
-        var sum9 = sum8 + t9.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
+        let sum4 = sum3 + t4.bsonEncoded
+        let sum5 = sum4 + t5.bsonEncoded
+        let sum6 = sum5 + t6.bsonEncoded
+        let sum7 = sum6 + t7.bsonEncoded
+        let sum8 = sum7 + t8.bsonEncoded
+        let sum9 = sum8 + t9.bsonEncoded
         return sum9
     }
 
@@ -35,8 +35,8 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
 extension Tuple2: DocComponent 
 where T0: DocComponent, T1: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
         return sum1
     }
 
@@ -49,9 +49,9 @@ where T0: DocComponent, T1: DocComponent {
 extension Tuple3: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
         return sum2
     }
 
@@ -65,10 +65,10 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent {
 extension Tuple4: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
         return sum3
     }
 
@@ -83,11 +83,11 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent {
 extension Tuple5: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
-        var sum4 = sum3 + t4.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
+        let sum4 = sum3 + t4.bsonEncoded
         return sum4
     }
 
@@ -103,12 +103,12 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
 extension Tuple6: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
-        var sum4 = sum3 + t4.bsonEncoded
-        var sum5 = sum4 + t5.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
+        let sum4 = sum3 + t4.bsonEncoded
+        let sum5 = sum4 + t5.bsonEncoded
         return sum5
     }
 
@@ -125,13 +125,13 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
 extension Tuple7: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
-        var sum4 = sum3 + t4.bsonEncoded
-        var sum5 = sum4 + t5.bsonEncoded
-        var sum6 = sum5 + t6.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
+        let sum4 = sum3 + t4.bsonEncoded
+        let sum5 = sum4 + t5.bsonEncoded
+        let sum6 = sum5 + t6.bsonEncoded
         return sum6
     }
 
@@ -149,14 +149,14 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
 extension Tuple8: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
-        var sum4 = sum3 + t4.bsonEncoded
-        var sum5 = sum4 + t5.bsonEncoded
-        var sum6 = sum5 + t6.bsonEncoded
-        var sum7 = sum6 + t7.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
+        let sum4 = sum3 + t4.bsonEncoded
+        let sum5 = sum4 + t5.bsonEncoded
+        let sum6 = sum5 + t6.bsonEncoded
+        let sum7 = sum6 + t7.bsonEncoded
         return sum7
     }
 
@@ -175,15 +175,15 @@ where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4
 extension Tuple9: DocComponent 
 where T0: DocComponent, T1: DocComponent, T2: DocComponent, T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, T8: DocComponent {
     public var bsonEncoded: [UInt8] {
-        var sum0 = t0.bsonEncoded + t1.bsonEncoded
-        var sum1 = sum0 + t1.bsonEncoded
-        var sum2 = sum1 + t2.bsonEncoded
-        var sum3 = sum2 + t3.bsonEncoded
-        var sum4 = sum3 + t4.bsonEncoded
-        var sum5 = sum4 + t5.bsonEncoded
-        var sum6 = sum5 + t6.bsonEncoded
-        var sum7 = sum6 + t7.bsonEncoded
-        var sum8 = sum7 + t8.bsonEncoded
+        let sum0 = t0.bsonEncoded + t1.bsonEncoded
+        let sum1 = sum0 + t1.bsonEncoded
+        let sum2 = sum1 + t2.bsonEncoded
+        let sum3 = sum2 + t3.bsonEncoded
+        let sum4 = sum3 + t4.bsonEncoded
+        let sum5 = sum4 + t5.bsonEncoded
+        let sum6 = sum5 + t6.bsonEncoded
+        let sum7 = sum6 + t7.bsonEncoded
+        let sum8 = sum7 + t8.bsonEncoded
         return sum8
     }
 
