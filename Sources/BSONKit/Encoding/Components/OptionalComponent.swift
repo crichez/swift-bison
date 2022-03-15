@@ -9,10 +9,10 @@ enum OptionalComponent<T: DocComponent>: DocComponent {
     case some(T)
     case none
 
-    init(_ value: T?) {
-        switch value {
-        case .some(let value):
-            self = .some(value)
+    init(_ component: T?) {
+        switch component {
+        case .some(let component):
+            self = .some(component)
         case .none:
             self = .none
         }
