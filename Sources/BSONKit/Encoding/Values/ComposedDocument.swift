@@ -19,7 +19,7 @@ public struct ComposedDocument<Body: DocComponent> {
 extension ComposedDocument: ValueProtocol {
     public var bsonEncoded: [UInt8] {
         let encodedBody = body.bsonEncoded + [0]
-        let encodedSize = Int32(encodedBody.count + 5).bsonEncoded
+        let encodedSize = Int32(encodedBody.count + 4).bsonEncoded
         return encodedSize + encodedBody
     }
 
