@@ -1,6 +1,9 @@
-// Generated using Sourcery 1.6.1 — https://github.com/krzysztofzablocki/Sourcery
-// DO NOT EDIT
-
+//
+//  Tuple+DocComponent.swift
+//
+//
+//  Created by Christopher Richez on March 15 2022
+//
 
 extension Tuple10: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, 
