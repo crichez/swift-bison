@@ -26,7 +26,7 @@ extension Int32: ValueProtocol {
 extension String: ValueProtocol {
     public var bsonEncoded: [UInt8] {
         let content = Array(utf8) + [0]
-        guard let size = Int32(exactly: content.count + 1)?.bsonEncoded else {
+        guard let size = Int32(exactly: content.count)?.bsonEncoded else {
             fatalError("string too long")
         }
         return size + content
