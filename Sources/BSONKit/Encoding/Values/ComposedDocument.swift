@@ -17,12 +17,10 @@ public struct ComposedDocument<Body: DocComponent> {
 }
 
 extension ComposedDocument: ValueProtocol {
-    public var bsonEncoded: Chain3<Int32.Encoded, Body.Encoded, CollectionOfOne<UInt8>> {
-        let encodedBody = body.bsonEncoded
-        return Chain3(
-            s0: Int32(encodedBody.count + 5).bsonEncoded,
-            s1: encodedBody,
-            s2: CollectionOfOne(UInt8(0)))
+    public var bsonEncoded: [UInt8] {
+        let encodedBody = body.bsonEncoded + [0]
+        let encodedSize = Int32(encodedBody.count + 5).bsonEncoded
+        return encodedSize + encodedBody
     }
 
     public var type: CollectionOfOne<UInt8> { 

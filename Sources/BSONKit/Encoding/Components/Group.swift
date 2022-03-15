@@ -18,7 +18,7 @@ public struct Group<T: DocComponent>: DocComponent {
         self.content = try content()
     }
 
-    public var bsonEncoded: T.Encoded {
+    public var bsonEncoded: [UInt8] {
         content.bsonEncoded
     }
 }

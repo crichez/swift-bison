@@ -22,15 +22,11 @@ public struct Pair<T> where T : ValueProtocol {
 }
 
 extension Pair: DocComponent {
-    public typealias Encoded = Chain4<
-        CollectionOfOne<UInt8>, 
-        String.UTF8View, 
-        CollectionOfOne<UInt8>, 
-        T.Encoded
-    >
-
-    public var bsonEncoded: Encoded {
-        Chain4(s0: value.type, s1: name.utf8, s2: CollectionOfOne(0), s3: value.bsonEncoded)
+    public var bsonEncoded: [UInt8] {
+        let encodedValue = value.bsonEncoded
+        let nameBytes = Array(name.utf8) + [0]
+        let typeByte = Array(value.type)
+        return typeByte + nameBytes + encodedValue
     }
 }
 
