@@ -22,7 +22,7 @@ public struct Pair<T: ValueProtocol>: DocComponent {
         let keyCodeUnits = key.utf8
         var pairBytes: [UInt8] = []
         pairBytes.reserveCapacity(key.count + 2)
-        pairBytes.append(contentsOf: value.type)
+        pairBytes.append(value.bsonType)
         pairBytes.append(contentsOf: keyCodeUnits)
         pairBytes.append(0)
         

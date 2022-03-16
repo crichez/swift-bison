@@ -5,10 +5,10 @@
 //  Created by Christopher Richez on 2/6/22.
 //
 
-/// A value that can be encoded into a BSON document.
+/// A value that can be assigned to a ``Pair`` in a BSON document.
 public protocol ValueProtocol {
-    /// The BSON type byte to attach to the key associated with this value.
-    var type: CollectionOfOne<UInt8> { get }
+    /// The BSON type byte for this type.
+    var bsonType: UInt8 { get }
 
     var bsonEncoded: [UInt8] { get }
 }
@@ -20,7 +20,9 @@ extension Int32: ValueProtocol {
         }
     }
 
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x10) }
+    public var bsonType: UInt8 {
+        0x10
+    }
 }
 
 extension String: ValueProtocol {
@@ -32,7 +34,9 @@ extension String: ValueProtocol {
         return size + content
     }
 
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x02) }
+    public var bsonType: UInt8 {
+        0x02
+    }
 }
 
 extension Bool: ValueProtocol {
@@ -40,7 +44,9 @@ extension Bool: ValueProtocol {
         self ? [1] : [0]
     }
     
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x08) }
+    public var bsonType: UInt8 {
+        0x08
+    }
 }
 
 extension Int64: ValueProtocol {
@@ -50,7 +56,9 @@ extension Int64: ValueProtocol {
         }
     }
     
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x12) }
+    public var bsonType: UInt8 {
+        0x12
+    }
 }
 
 extension UInt64: ValueProtocol {
@@ -60,7 +68,9 @@ extension UInt64: ValueProtocol {
         }
     }
     
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x11) }
+    public var bsonType: UInt8 {
+        0x11
+    }
 }
 
 extension Double: ValueProtocol {
@@ -70,7 +80,9 @@ extension Double: ValueProtocol {
         }
     }
     
-    public var type: CollectionOfOne<UInt8> { CollectionOfOne(0x01) }
+    public var bsonType: UInt8 {
+        0x01
+    }
 }
 
 extension Optional: ValueProtocol where Wrapped : ValueProtocol {
@@ -83,12 +95,12 @@ extension Optional: ValueProtocol where Wrapped : ValueProtocol {
         }
     }
 
-    public var type: CollectionOfOne<UInt8> {
+    public var bsonType: UInt8 {
         switch self {
         case .some(let value):
-            return value.type
+            return value.bsonType
         case .none:
-            return CollectionOfOne(0x0A)
+            return 0x0A
         }
     }
 }

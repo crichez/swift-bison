@@ -23,7 +23,7 @@ extension ComposedDocument: ValueProtocol {
         return encodedSize + encodedBody
     }
 
-    public var type: CollectionOfOne<UInt8> { 
-        CollectionOfOne(3)
+    public var bsonType: UInt8 {
+        0x03
     }
 }
