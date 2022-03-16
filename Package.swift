@@ -1,11 +1,12 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
-    name: "swift-bson-kit",
+    name: "swift-bson",
     platforms: [
+        // We need to explicitly declare the minimum macOS version to support opaque return types
         .macOS(.v10_15),
     ],
     products: [
