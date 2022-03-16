@@ -1,9 +1,13 @@
-// Generated using Sourcery 1.6.1 — https://github.com/krzysztofzablocki/Sourcery
-// DO NOT EDIT
+//
+//  DocBuilder.swift
+//  DocBuilder
+//
+//  Created by Christopher Richez on March 16 2022
+//
 
 @resultBuilder
 public struct DocBuilder {
-    public static func buildBlock<T: DocComponent>(_ t: T) -> T {
+    public static func buildBlock<T: DocComponent>(_ t: T) -> some DocComponent {
         t
     }
 
@@ -52,19 +56,19 @@ public struct DocBuilder {
         Tuple10(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9)
     }
 
-    public static func buildEither<T>(first component: T) -> T where T : DocComponent {
+    public static func buildEither<T: DocComponent>(first component: T) -> T {
         component
     }
 
-    public static func buildEither<T>(second component: T) -> T where T : DocComponent {
+    public static func buildEither<T: DocComponent>(second component: T) -> T {
         component
     }
 
-    public static func buildOptional<T>(_ component: T?) -> some DocComponent where T : DocComponent {
+    public static func buildOptional<T: DocComponent>(_ component: T?) -> some DocComponent {
         OptionalComponent(component)
     }
 
-    public static func buildLimitedAvailability<T>(_ component: T) -> T where T : DocComponent {
+    public static func buildLimitedAvailability<T: DocComponent>(_ component: T) -> some DocComponent {
         component
     }
 }
