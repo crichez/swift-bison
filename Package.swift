@@ -24,9 +24,6 @@ let package = Package(
             name: "BSONKit",
             dependencies: [
                 .product(name: "OrderedCollections", package: "swift-collections"),
-            ],
-            resources: [
-                .copy("Encoding/DocBuilder.swifttemplate"),
             ]),
         .testTarget(
             name: "BSONKitTests",
