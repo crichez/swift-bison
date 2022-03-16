@@ -11,7 +11,7 @@ public struct ComposedDocument<Body: DocComponent> {
     let body: Body
     
     /// Initializes a `Document` from the provided components.
-    public init(@DocBuilder body: () throws -> Body) rethrows {
+    public init(@DocBuilder body: @escaping () throws -> Body) rethrows {
         self.body = try body()
     }
 }
