@@ -5,20 +5,28 @@
 //  Created by Christopher Richez on March 1 2022
 //
 
-/// A group of `DocComponent` values.
+/// A group of document components values.
 /// 
-/// Use `Group` when you need to assign more than 10 key-value pairs in a document or
-/// `DocBuilder` declaration. Grouping document components does not affect the structure of the
-/// encoded document.
-public struct Group<T: DocComponent>: DocComponent {
-    let content: T
+/// Use a `Group` when you need to declare more than 10 components in a document.
+/// Grouping document components does not affect the structure of the final document.
+public struct Group<Body: DocComponent>: DocComponent {
+    /// The components in this `Group`.
+    let body: Body
 
     /// Groups the provided document components into a single document component.
-    public init(@DocBuilder content: () throws -> T) rethrows {
-        self.content = try content()
+    ///
+    /// Use a `Group` when you need to declare more than 10 components in a document.
+    /// Grouping document components does not affect the structure of the final document.
+    ///
+    /// - Throws:
+    /// Rethrows any errors thrown in ``body``.
+    ///
+    /// - Parameter body: the document components to group
+    public init(@DocBuilder body: @escaping () throws -> Body) rethrows {
+        self.body = try body()
     }
 
     public var bsonEncoded: [UInt8] {
-        content.bsonEncoded
+        body.bsonEncoded
     }
 }
