@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -27,8 +27,6 @@ let package = Package(
             ],
             resources: [
                 .copy("Encoding/DocBuilder.swifttemplate"),
-                .copy("Encoding/Chains/Chain+Sequence.swifttemplate"),
-                .copy("Encoding/Chains/Chain+Collection.swifttemplate"),
             ]),
         .testTarget(
             name: "BSONKitTests",
