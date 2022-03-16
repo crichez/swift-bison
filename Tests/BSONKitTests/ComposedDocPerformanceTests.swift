@@ -27,7 +27,7 @@ class ComposedDocPerformanceTests: XCTestCase {
             }
         }
         measure {
-            let _ = doc.bsonEncoded
+            let _ = doc.bsonBytes
         }
     }
 }

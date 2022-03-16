@@ -26,7 +26,7 @@ public struct Group<Body: DocComponent>: DocComponent {
         self.body = try body()
     }
 
-    public var bsonEncoded: [UInt8] {
-        body.bsonEncoded
+    public var bsonBytes: [UInt8] {
+        body.bsonBytes
     }
 }

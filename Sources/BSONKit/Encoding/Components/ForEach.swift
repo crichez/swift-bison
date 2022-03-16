@@ -26,7 +26,7 @@ public struct ForEach<Base: Sequence, Element: DocComponent>: DocComponent {
         self.elements = base.lazy.map(transform)
     }
     
-    public var bsonEncoded: [UInt8] {
-        elements.flatMap { $0.bsonEncoded }
+    public var bsonBytes: [UInt8] {
+        elements.flatMap { $0.bsonBytes }
     }
 }

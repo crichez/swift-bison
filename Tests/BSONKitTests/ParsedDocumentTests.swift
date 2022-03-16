@@ -13,7 +13,7 @@ class ParsedDocumentTests: XCTestCase {
         let doc = ComposedDocument {
             "test" => true
         }
-        let encodedDoc = Array(doc.bsonEncoded)
+        let encodedDoc = Array(doc.bsonBytes)
         let decodedDoc = try BSONParser(bsonData: encodedDoc).parse()
         let encodedValue = try XCTUnwrap(decodedDoc["test"])
         let decodedValue = try Bool(bsonData: encodedValue)
@@ -28,7 +28,7 @@ class ParsedDocumentTests: XCTestCase {
             "four" => Double(4)
             "five" => "5"
         }
-        let encodedDoc = Array(doc.bsonEncoded)
+        let encodedDoc = Array(doc.bsonBytes)
         let decodedDoc = try BSONParser(bsonData: encodedDoc).parse()
 
         let encodedOne = try XCTUnwrap(decodedDoc["one"])

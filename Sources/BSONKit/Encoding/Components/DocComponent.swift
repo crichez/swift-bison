@@ -8,5 +8,5 @@
 /// A basic building block of a BSON document.
 public protocol DocComponent {
     /// This component's BSON-encoded bytes.
-    var bsonEncoded: [UInt8] { get }
+    var bsonBytes: [UInt8] { get }
 }

@@ -17,7 +17,7 @@ public struct Pair<T: ValueProtocol>: DocComponent {
     let key: String
     let value: T
     
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         // Copy the key bytes
         let keyCodeUnits = key.utf8
         var pairBytes: [UInt8] = []
@@ -27,7 +27,7 @@ public struct Pair<T: ValueProtocol>: DocComponent {
         pairBytes.append(0)
         
         // Copy the value bytes
-        let valueBytes = value.bsonEncoded
+        let valueBytes = value.bsonBytes
         pairBytes.reserveCapacity(valueBytes.count)
         pairBytes.append(contentsOf: valueBytes)
         

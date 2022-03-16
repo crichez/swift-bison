@@ -6,9 +6,9 @@
 //
 
 extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
         return concatenatedComponents
     }
 
@@ -19,10 +19,10 @@ extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
 }
 
 extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
         return concatenatedComponents
     }
 
@@ -35,11 +35,11 @@ extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
         return concatenatedComponents
     }
 
@@ -53,12 +53,12 @@ extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
+        concatenatedComponents.append(contentsOf: t4.bsonBytes)
         return concatenatedComponents
     }
 
@@ -73,13 +73,13 @@ extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
+        concatenatedComponents.append(contentsOf: t4.bsonBytes)
+        concatenatedComponents.append(contentsOf: t5.bsonBytes)
         return concatenatedComponents
     }
 
@@ -95,14 +95,14 @@ extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
+        concatenatedComponents.append(contentsOf: t4.bsonBytes)
+        concatenatedComponents.append(contentsOf: t5.bsonBytes)
+        concatenatedComponents.append(contentsOf: t6.bsonBytes)
         return concatenatedComponents
     }
 
@@ -119,15 +119,15 @@ extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t7.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
+        concatenatedComponents.append(contentsOf: t4.bsonBytes)
+        concatenatedComponents.append(contentsOf: t5.bsonBytes)
+        concatenatedComponents.append(contentsOf: t6.bsonBytes)
+        concatenatedComponents.append(contentsOf: t7.bsonBytes)
         return concatenatedComponents
     }
 
@@ -146,16 +146,16 @@ extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, 
   T8: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t7.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t8.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
+        concatenatedComponents.append(contentsOf: t4.bsonBytes)
+        concatenatedComponents.append(contentsOf: t5.bsonBytes)
+        concatenatedComponents.append(contentsOf: t6.bsonBytes)
+        concatenatedComponents.append(contentsOf: t7.bsonBytes)
+        concatenatedComponents.append(contentsOf: t8.bsonBytes)
         return concatenatedComponents
     }
 
@@ -175,17 +175,17 @@ extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 extension Tuple10: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent,
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent,
   T8: DocComponent, T9: DocComponent {
-    var bsonEncoded: [UInt8] {
-        var concatenatedComponents = t0.bsonEncoded
-        concatenatedComponents.append(contentsOf: t1.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t2.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t3.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t4.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t5.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t6.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t7.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t8.bsonEncoded)
-        concatenatedComponents.append(contentsOf: t9.bsonEncoded)
+    var bsonBytes: [UInt8] {
+        var concatenatedComponents = t0.bsonBytes
+        concatenatedComponents.append(contentsOf: t1.bsonBytes)
+        concatenatedComponents.append(contentsOf: t2.bsonBytes)
+        concatenatedComponents.append(contentsOf: t3.bsonBytes)
+        concatenatedComponents.append(contentsOf: t4.bsonBytes)
+        concatenatedComponents.append(contentsOf: t5.bsonBytes)
+        concatenatedComponents.append(contentsOf: t6.bsonBytes)
+        concatenatedComponents.append(contentsOf: t7.bsonBytes)
+        concatenatedComponents.append(contentsOf: t8.bsonBytes)
+        concatenatedComponents.append(contentsOf: t9.bsonBytes)
         return concatenatedComponents
     }
 

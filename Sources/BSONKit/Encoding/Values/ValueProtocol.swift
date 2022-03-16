@@ -9,12 +9,13 @@
 public protocol ValueProtocol {
     /// The BSON type byte for this type.
     var bsonType: UInt8 { get }
-
-    var bsonEncoded: [UInt8] { get }
+    
+    /// This value's BSON-encoded bytes.
+    var bsonBytes: [UInt8] { get }
 }
 
 extension Int32: ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
@@ -26,9 +27,9 @@ extension Int32: ValueProtocol {
 }
 
 extension String: ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         let content = Array(utf8) + [0]
-        guard let size = Int32(exactly: content.count)?.bsonEncoded else {
+        guard let size = Int32(exactly: content.count)?.bsonBytes else {
             fatalError("string too long")
         }
         return size + content
@@ -40,7 +41,7 @@ extension String: ValueProtocol {
 }
 
 extension Bool: ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         self ? [1] : [0]
     }
     
@@ -50,7 +51,7 @@ extension Bool: ValueProtocol {
 }
 
 extension Int64: ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
@@ -62,7 +63,7 @@ extension Int64: ValueProtocol {
 }
 
 extension UInt64: ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
         }
@@ -74,7 +75,7 @@ extension UInt64: ValueProtocol {
 }
 
 extension Double: ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: bitPattern) { bytes in
             Array(bytes)
         }
@@ -86,10 +87,10 @@ extension Double: ValueProtocol {
 }
 
 extension Optional: ValueProtocol where Wrapped : ValueProtocol {
-    public var bsonEncoded: [UInt8] {
+    public var bsonBytes: [UInt8] {
         switch self {
         case .some(let value):
-            return value.bsonEncoded
+            return value.bsonBytes
         case .none:
             return []
         }

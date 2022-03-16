@@ -23,10 +23,10 @@ enum OptionalComponent<T: DocComponent>: DocComponent {
         }
     }
 
-    var bsonEncoded: [UInt8] {
+    var bsonBytes: [UInt8] {
         switch self {
         case .some(let component):
-            return component.bsonEncoded
+            return component.bsonBytes
         case .none:
             return []
         }

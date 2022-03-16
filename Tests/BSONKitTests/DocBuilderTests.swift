@@ -14,7 +14,7 @@ class DocBuilderTests: XCTestCase {
         let doc = ComposedDocument {
             "test" => true
         }
-        let bytes = Array(doc.bsonEncoded)
+        let bytes = Array(doc.bsonBytes)
         let declaredSizeData = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
         declaredSizeData.copyBytes(from: bytes.prefix(4))
         let declaredSize = Int(declaredSizeData.load(as: Int32.self))
@@ -29,7 +29,7 @@ class DocBuilderTests: XCTestCase {
                 String(describing: number) => number
             }
         }
-        let encodedDoc = Array(doc.bsonEncoded)
+        let encodedDoc = Array(doc.bsonBytes)
         XCTAssertEqual(encodedDoc.count, (3 * 10) + (8 * 10) + 5)
     }
 
@@ -45,8 +45,8 @@ class DocBuilderTests: XCTestCase {
         let expectedDoc = ComposedDocument {
             "test" => "passed"
         }
-        let encodedDoc = Array(doc.bsonEncoded)
-        let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
+        let encodedDoc = Array(doc.bsonBytes)
+        let expectedEncodedDoc = Array(expectedDoc.bsonBytes)
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
@@ -61,8 +61,8 @@ class DocBuilderTests: XCTestCase {
         let expectedDoc = ComposedDocument {
             "one" => Int64(1)
         }
-        let encodedDoc = Array(doc.bsonEncoded)
-        let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
+        let encodedDoc = Array(doc.bsonBytes)
+        let expectedEncodedDoc = Array(expectedDoc.bsonBytes)
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
@@ -72,11 +72,11 @@ class DocBuilderTests: XCTestCase {
                 "isOn2020ReleaseOrGreater" => true
             }
         }
-        let encodedDoc = Array(doc.bsonEncoded)
+        let encodedDoc = Array(doc.bsonBytes)
         let expectedDoc = ComposedDocument {
             "isOn2020ReleaseOrGreater" => true
         }
-        let expectedEncodedDoc = Array(expectedDoc.bsonEncoded)
+        let expectedEncodedDoc = Array(expectedDoc.bsonBytes)
         if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
             XCTAssertEqual(encodedDoc, expectedEncodedDoc)
         } else {
