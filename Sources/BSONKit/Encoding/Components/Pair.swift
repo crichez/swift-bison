@@ -5,28 +5,34 @@
 //  Created by Christopher Richez on March 1 2022
 //
 
-/// Use `Pair` to assign a key to a value that conforms to `ValueProtocol`.
+/// A key-value pair used to compose a BSON document.
 /// 
-/// To create a `Pair`, use the `=>` operator on a `String` and `ValueProtocol` value:
+/// To create a `Pair`, use the `=>` operator on a `String` and a `ValueProtocol` conforming value:
 /// ```swift
-/// let doc = Document {
+/// let doc = ComposedDocument {
 ///     "key" => "value"
 /// }
 /// ```
-public struct Pair<T> where T : ValueProtocol {
-    /// The name of the key to assigned to `value`.
-    public let name: String
-
-    /// The value to assign to the key named `name`.
-    public let value: T
-}
-
-extension Pair: DocComponent {
+public struct Pair<T: ValueProtocol>: DocComponent {
+    let key: String
+    let value: T
+    
     public var bsonEncoded: [UInt8] {
-        let encodedValue = value.bsonEncoded
-        let nameBytes = Array(name.utf8) + [0]
-        let typeByte = Array(value.type)
-        return typeByte + nameBytes + encodedValue
+        // Copy the key bytes
+        let keyCodeUnits = key.utf8
+        var pairBytes: [UInt8] = []
+        pairBytes.reserveCapacity(key.count + 2)
+        pairBytes.append(contentsOf: value.type)
+        pairBytes.append(contentsOf: keyCodeUnits)
+        pairBytes.append(0)
+        
+        // Copy the value bytes
+        let valueBytes = value.bsonEncoded
+        pairBytes.reserveCapacity(valueBytes.count)
+        pairBytes.append(contentsOf: valueBytes)
+        
+        // Return the encoded pair
+        return pairBytes
     }
 }
 
@@ -43,6 +49,6 @@ extension String {
     /// - Returns:
     /// A `Pair` value constructed from the provided key and value.
     public static func => <T: ValueProtocol>(key: String, value: T) -> Pair<T> {
-        Pair(name: key, value: value)
+        Pair(key: key, value: value)
     } 
 }
