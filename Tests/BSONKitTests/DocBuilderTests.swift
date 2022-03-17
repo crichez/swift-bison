@@ -73,13 +73,15 @@ class DocBuilderTests: XCTestCase {
             if flag {
                 "zero" => Int64(0)
             }
-            "one" => Int64(1)
+            if !flag {
+                "one" => Int64(1)
+            }
         }
         let expectedDoc = ComposedDocument {
             "one" => Int64(1)
         }
-        let encodedDoc = Array(doc.bsonBytes)
-        let expectedEncodedDoc = Array(expectedDoc.bsonBytes)
+        let encodedDoc = doc.bsonBytes
+        let expectedEncodedDoc = expectedDoc.bsonBytes
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
