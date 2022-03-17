@@ -49,4 +49,12 @@ class BSONValueEncodingTests: XCTestCase {
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
+
+    func testInt64() throws {
+        let value = Int64.random(in: .min ... .max)
+        let expectedType: UInt8 = 18
+        let expectedBytes = withUnsafeBytes(of: value) { Array($0) }
+        XCTAssertEqual(value.bsonType, expectedType)
+        XCTAssertEqual(value.bsonBytes, expectedBytes)
+    }
 }
