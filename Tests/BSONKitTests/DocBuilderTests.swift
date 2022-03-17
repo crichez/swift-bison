@@ -14,12 +14,16 @@ class DocBuilderTests: XCTestCase {
         let doc = ComposedDocument {
             "test" => true
         }
-        let bytes = Array(doc.bsonBytes)
+        let encodedDoc = doc.bsonBytes
+        
+        // Assert the declared and actual size are the same.
         let declaredSizeData = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
-        declaredSizeData.copyBytes(from: bytes.prefix(4))
+        declaredSizeData.copyBytes(from: encodedDoc.prefix(4))
         let declaredSize = Int(declaredSizeData.load(as: Int32.self))
-        XCTAssertEqual(bytes.count, declaredSize, "\(bytes)")
-        XCTAssertEqual(bytes.last, 0, "\(bytes)")
+        XCTAssertEqual(encodedDoc.count, declaredSize, "\(encodedDoc)")
+        
+        // Assert the document is properly null-terminated.
+        XCTAssertEqual(encodedDoc.last, 0, "\(encodedDoc)")
     }
     
     /// This test asserts content from a loop is encoded as expected.
@@ -29,8 +33,21 @@ class DocBuilderTests: XCTestCase {
                 String(describing: number) => number
             }
         }
-        let encodedDoc = Array(doc.bsonBytes)
-        XCTAssertEqual(encodedDoc.count, (3 * 10) + (8 * 10) + 5)
+        let expectedDoc = ComposedDocument {
+            "0" => Int64(0)
+            "1" => Int64(1)
+            "2" => Int64(2)
+            "3" => Int64(3)
+            "4" => Int64(4)
+            "5" => Int64(5)
+            "6" => Int64(6)
+            "7" => Int64(7)
+            "8" => Int64(8)
+            "9" => Int64(9)
+        }
+        let encodedDoc = doc.bsonBytes
+        let expectedEncodedDoc = expectedDoc.bsonBytes
+        XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
     func testConditional() throws {
