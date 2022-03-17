@@ -25,4 +25,12 @@ class BSONValueEncodingTests: XCTestCase {
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
+
+    func testBool() throws {
+        let value = Bool.random()
+        let expectedType: UInt8 = 8
+        let expectedBytes: [UInt8] = value ? [1] : [0]
+        XCTAssertEqual(value.bsonType, expectedType)
+        XCTAssertEqual(value.bsonBytes, expectedBytes)
+    }
 }
