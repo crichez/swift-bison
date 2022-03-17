@@ -62,8 +62,8 @@ class DocBuilderTests: XCTestCase {
         let expectedDoc = ComposedDocument {
             "test" => "passed"
         }
-        let encodedDoc = Array(doc.bsonBytes)
-        let expectedEncodedDoc = Array(expectedDoc.bsonBytes)
+        let encodedDoc = doc.bsonBytes
+        let expectedEncodedDoc = expectedDoc.bsonBytes
         XCTAssertEqual(encodedDoc, expectedEncodedDoc)
     }
 
