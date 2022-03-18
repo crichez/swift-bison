@@ -9,23 +9,6 @@ import BSONKit
 import XCTest
 
 class DocBuilderTests: XCTestCase {
-    /// This test asserts the content, size and terminator of the document are property encoded.
-    func testDocMetadataEncoding() throws {
-        let doc = ComposedDocument {
-            "test" => true
-        }
-        let encodedDoc = doc.bsonBytes
-        
-        // Assert the declared and actual size are the same.
-        let declaredSizeData = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
-        declaredSizeData.copyBytes(from: encodedDoc.prefix(4))
-        let declaredSize = Int(declaredSizeData.load(as: Int32.self))
-        XCTAssertEqual(encodedDoc.count, declaredSize, "\(encodedDoc)")
-        
-        // Assert the document is properly null-terminated.
-        XCTAssertEqual(encodedDoc.last, 0, "\(encodedDoc)")
-    }
-    
     /// This test asserts content from a loop is encoded as expected.
     func testForEachEncodesAllElements() throws {
         let doc = ComposedDocument {
