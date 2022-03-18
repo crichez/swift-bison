@@ -9,7 +9,7 @@ import BSONKit
 import XCTest
 
 class DocBuilderTests: XCTestCase {
-    func testConditionalEncodes() throws {
+    func testConditional() throws {
         let flag = true
         let doc = ComposedDocument {
             if flag {
@@ -24,7 +24,7 @@ class DocBuilderTests: XCTestCase {
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
     }
 
-    func testOptionalEncodes() throws {
+    func testOptional() throws {
         let flag = false
         let doc = ComposedDocument {
             if flag {
@@ -40,7 +40,7 @@ class DocBuilderTests: XCTestCase {
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
     }
 
-    func testLimitedAvailabilityEncodes() throws {
+    func testLimitedAvailability() throws {
         if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
             let doc = ComposedDocument {
                 if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
