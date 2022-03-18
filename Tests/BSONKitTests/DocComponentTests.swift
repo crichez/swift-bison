@@ -38,7 +38,7 @@ class DocComponentTests: XCTestCase {
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
     }
 
-    func testGroupDoesntAffectDocStructure() throws {
+    func testGroup() throws {
         let doc = ComposedDocument {
             Group {
                 "0" => Int64(0)
