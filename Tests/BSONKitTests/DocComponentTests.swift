@@ -38,4 +38,31 @@ class DocComponentTests: XCTestCase {
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
     }
 
+    func testGroupDoesntAffectDocStructure() throws {
+        let doc = ComposedDocument {
+            Group {
+                "0" => Int64(0)
+                "1" => Int64(1)
+                "2" => Int64(2)
+                "3" => Int64(3)
+                "4" => Int64(4)
+                "5" => Int64(5)
+                "6" => Int64(6)
+                "7" => Int64(7)
+                "8" => Int64(8)
+                "9" => Int64(9)
+            }
+            Group {
+                "10" => Int64(10)
+                "11" => Int64(11)
+                "12" => Int64(12)
+            }
+        }
+        let expectedDoc = ComposedDocument {
+            ForEach(Int64(0)...12) { number in
+                String(describing: number) => number
+            }
+        }
+        XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
+    }
 }
