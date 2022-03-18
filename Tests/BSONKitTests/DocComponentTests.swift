@@ -5,6 +5,7 @@
 //  Created by Christopher Richez on March 17 2022
 //
 
+@testable
 import BSONKit
 import XCTest
 
@@ -64,5 +65,14 @@ class DocComponentTests: XCTestCase {
             }
         }
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
+    }
+
+    func testOptionalComponent() throws {
+        let some = OptionalComponent.some("test" => true)
+        let expectedSome = "test" => true
+        XCTAssertEqual(some.bsonBytes, expectedSome.bsonBytes)
+
+        let none = OptionalComponent<Pair<Bool>>.none
+        XCTAssertEqual(none.bsonBytes, [])
     }
 }
