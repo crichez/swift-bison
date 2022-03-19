@@ -94,12 +94,6 @@ struct Parser<Doc> where Doc : Collection, Doc.Element == UInt8 {
         .fixed(16),
     ]
 
-    public init(bsonData: Doc) {
-        self.raw = bsonData
-    }
-
-    let raw: Doc
-
     func encodedSizeOf(bsonType: UInt8, in remainingDoc: Doc.SubSequence) throws -> Int 
     where Doc : Collection, Doc.Element == UInt8 {
         guard 0 < bsonType && bsonType < 20 else {
@@ -113,9 +107,5 @@ struct Parser<Doc> where Doc : Collection, Doc.Element == UInt8 {
         case .none:
             throw ParsingError.unknownType(bsonType)
         }
-    }
-
-    func parse() throws -> ParsedDocument<Doc> {
-        try ParsedDocument(bsonData: raw)
     }
 }

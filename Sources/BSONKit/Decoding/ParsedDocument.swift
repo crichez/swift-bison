@@ -31,7 +31,7 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
     }
 
     public init(bsonData data: Data) throws {
-        let parser = Parser(bsonData: data)
+        let parser = Parser<Data>()
 
         // Read and check the declared size of the document against its data
         let sizeStart = data.startIndex
