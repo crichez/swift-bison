@@ -6,7 +6,7 @@
 //
 
 /// The default parser for BSON specification types.
-struct BSONParser<Doc> where Doc : Collection, Doc.Element == UInt8 {
+struct Parser<Doc> where Doc : Collection, Doc.Element == UInt8 {
     /// A type that describes the size of an encoded value.
     enum EncodedSize {
         /// A fixed size, independent of the encoded value.
