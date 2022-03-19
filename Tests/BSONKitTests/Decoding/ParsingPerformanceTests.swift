@@ -19,7 +19,7 @@ class ParsingPerformanceTests: XCTestCase {
         let options = XCTMeasureOptions()
         options.iterationCount = 100
         measure(options: options) {
-            let decodedDoc = try! BSONParser(bsonData: encodedDoc).parse()
+            let decodedDoc = try! ParsedDocument(bsonData: encodedDoc)
             for n in Int64(0)..<1000 {
                 let _ = try! Int64(bsonData: decodedDoc["\(n)"]!)
             }

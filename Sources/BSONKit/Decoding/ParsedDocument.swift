@@ -30,7 +30,9 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
         return max
     }
 
-    public init<P: Parser>(bsonData data: Data, parser: P) throws where P.Doc == Data {
+    public init(bsonData data: Data) throws {
+        let parser = BSONParser(bsonData: data)
+
         // Read and check the declared size of the document against its data
         let sizeStart = data.startIndex
         let sizeEnd = data.index(sizeStart, offsetBy: 4)

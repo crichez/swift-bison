@@ -5,33 +5,8 @@
 //  Created by Christopher Richez on March 4 2022
 //
 
-/// A type that can return the encoded size of a BSON value in a raw document.
-public protocol Parser {
-    /// The data type of the document being parsed.
-    associatedtype Doc: Collection where Doc.Element == UInt8
-
-    /// A raw, unparsed BSON document.
-    var raw: Doc { get }
-
-    /// Reads the next value in the remaining document and returns its size in bytes.
-    /// 
-    /// - Parameters:
-    ///   - bsonType: the BSON type byte associated with this value
-    ///   - remainingDoc: the remaining unparsed document from the start of the value to size
-    /// 
-    /// - Returns: 
-    /// The size of the next encoded value in bytes.
-    func encodedSizeOf(bsonType: UInt8, in remainingDoc: Doc.SubSequence) throws -> Int
-}
-
-extension Parser {
-    public func parse() throws -> ParsedDocument<Doc> {
-        try ParsedDocument(bsonData: raw, parser: self)
-    }
-}
-
 /// The default parser for BSON specification types.
-public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UInt8 {
+struct BSONParser<Doc> where Doc : Collection, Doc.Element == UInt8 {
     /// A type that describes the size of an encoded value.
     enum EncodedSize {
         /// A fixed size, independent of the encoded value.
@@ -123,9 +98,9 @@ public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UIn
         self.raw = bsonData
     }
 
-    public let raw: Doc
+    let raw: Doc
 
-    public func encodedSizeOf(bsonType: UInt8, in remainingDoc: Doc.SubSequence) throws -> Int 
+    func encodedSizeOf(bsonType: UInt8, in remainingDoc: Doc.SubSequence) throws -> Int 
     where Doc : Collection, Doc.Element == UInt8 {
         guard 0 < bsonType && bsonType < 20 else {
             throw ParsingError.unknownType(bsonType)
@@ -138,5 +113,9 @@ public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UIn
         case .none:
             throw ParsingError.unknownType(bsonType)
         }
+    }
+
+    func parse() throws -> ParsedDocument<Doc> {
+        try ParsedDocument(bsonData: raw)
     }
 }
