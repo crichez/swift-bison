@@ -39,6 +39,9 @@ public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UIn
         
         /// A variable size, determined by the encoded value itself.
         case variable((Doc.SubSequence) throws -> Int)
+
+        /// An unknown type byte.
+        case none
     }
 
     static var stringHandler: EncodedSize {
@@ -71,12 +74,16 @@ public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UIn
         }
     }
 
-    let typeMap: [UInt8 : EncodedSize] = [
-        1: .fixed(8),
-        2: stringHandler,
-        3: docHandler,
-        4: docHandler,
-        5: .variable { data in 
+    let typeMap: [EncodedSize]
+
+    public init(bsonData: Doc) {
+        self.raw = bsonData
+        var typeMap = [EncodedSize](repeating: .none, count: 20)
+        typeMap[1] = .fixed(8)
+        typeMap[2] = Self.stringHandler
+        typeMap[3] = Self.docHandler
+        typeMap[4] = Self.docHandler
+        typeMap[5] = .variable { data in 
             guard data.count >= 5 else {
                 throw ParsingError.sizeMismatch
             }
@@ -89,12 +96,12 @@ public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UIn
                 throw ParsingError.sizeMismatch
             }
             return size + 5
-        },
-        7: .fixed(12),
-        8: .fixed(1),
-        9: .fixed(8),
-        10: .fixed(0),
-        11: .variable { data in 
+        }
+        typeMap[7] = .fixed(12)
+        typeMap[8] = .fixed(1)
+        typeMap[9] = .fixed(8)
+        typeMap[10] = .fixed(0)
+        typeMap[11] = .variable { data in 
             var zeroesFound = 0
             var cursor = 0
             for byte in data where byte == 0 {
@@ -103,25 +110,20 @@ public struct BSONParser<Doc>: Parser where Doc : Collection, Doc.Element == UIn
                 cursor += 1
             }
             return cursor
-        },
-        13: stringHandler,
-        16: .fixed(4),
-        17: .fixed(8),
-        18: .fixed(8),
-        19: .fixed(16),
-        255: .fixed(0),
-        127: .fixed(0),
-    ]
-
-    public init(bsonData: Doc) {
-        self.raw = bsonData
+        }
+        typeMap[13] = Self.stringHandler
+        typeMap[16] = .fixed(4)
+        typeMap[17] = .fixed(8)
+        typeMap[18] = .fixed(8)
+        typeMap[19] = .fixed(16)
+        self.typeMap = typeMap
     }
 
     public let raw: Doc
 
     public func encodedSizeOf(bsonType: UInt8, in remainingDoc: Doc.SubSequence) throws -> Int 
     where Doc : Collection, Doc.Element == UInt8 {
-        switch typeMap[bsonType] {
+        switch typeMap[Int(truncatingIfNeeded: bsonType)] {
         case .fixed(let size):
             return size
         case .variable(let ruler):
