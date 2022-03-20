@@ -118,18 +118,25 @@ extension Bool: ParsableValue {
 }
 
 extension String: ParsableValue {
+    /// The error type thrown by `String.init(bsonBytes:)`.
     public enum Error: Swift.Error {
-        /// Less than 4 bytes were provided to the initializer.
+        /// Less than 5 bytes were provided to the initializer.
         case dataTooShort
 
-        /// The declared size of an encoded string did not match the number of bytes passed
-        /// to the initializer.
-        /// 
-        /// For a size of `n`, the data passed to the initializer should have a `count` of `n + 4`.
+        /// The declared size of the encoded string did not match the number of bytes passed
+        /// to the initializer. For a size of `n`, the data passed to the initializer should 
+        /// have a `count` of `n + 4`.
         case sizeMismatch
     }
     
-    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    /// Initializes a value from its BSON-encoded bytes.
+    /// 
+    /// - Parameter data: a collection of 5 or more bytes that represent a BSON-encoded `String`
+    /// 
+    /// - Throws:
+    /// `String.Error.dataTooShort` if less than 5 bytes were passed to the initializer.
+    /// `String.Error.sizeMismatch` if the declared and actual size of the `String` did not match.
+    public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count > 4 else { throw Error.dataTooShort }
         let sizeStart = data.startIndex
         let sizeEnd = data.index(sizeStart, offsetBy: 4)
