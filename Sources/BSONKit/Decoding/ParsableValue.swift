@@ -7,30 +7,30 @@
 
 /// A value that can be parsed from its encoded BSON representation.
 public protocol ParsableValue {
-    /// The error type thrown when parsing this value.
+    /// The error type thrown when parsing this value fails.
     associatedtype Error: Swift.Error
 
     /// Initializes this value from the provided BSON bytes.
     /// 
-    /// - Parameter data: the BSON encoded bytes representing this value
+    /// - Parameter data: the encoded value, usually returned by the `ParsedDocument` subscript
     /// 
     /// - Throws:
     /// An `Error` if the value couldn't be parsed.
-    init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8
-}
-
-enum ParsingError: Error {
-    case sizeMismatch
-    case unknownType(UInt8)
-    case unexpectedEnd
+    init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8
 }
 
 extension Int32: ParsableValue {
+    /// The error type thrown by `Int32.init(bsonBytes:)`.
     public enum Error: Swift.Error {
         /// The data passed to the initializer was not 4 bytes long.
         case sizeMismatch
     }
     
+    /// Initializes a value from its BSON-encoded bytes.
+    /// 
+    /// - Parameter data: a collection of exactly 4 bytes that represent an `Int32`
+    /// 
+    /// - Throws: `Int32.Error.sizeMismatch` if `data` was not exactly 4 bytes.
     public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count == 4 else { throw Error.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
