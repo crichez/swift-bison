@@ -51,7 +51,7 @@ extension Int64: ParsableValue {
     /// - Parameter data: a collection of exactly 8 bytes that represent an `Int64`
     /// 
     /// - Throws: `Int64.Error.sizeMismatch` if `data` was not exactly 8 bytes.
-    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 8 else { throw Error.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
