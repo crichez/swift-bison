@@ -31,7 +31,7 @@ extension Int32: ParsableValue {
     /// - Parameter data: a collection of exactly 4 bytes that represent an `Int32`
     /// 
     /// - Throws: `Int32.Error.sizeMismatch` if `data` was not exactly 4 bytes.
-    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 4 else { throw Error.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
         copyBuffer.copyBytes(from: data)
