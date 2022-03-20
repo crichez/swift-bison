@@ -12,6 +12,21 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
     /// The keys and discovered values in this document.
     let discovered: OrderedDictionary<String, Data.SubSequence>
 
+    /// The keys discovered in this document.
+    public var keys: OrderedSet<String> {
+        discovered.keys
+    }
+
+    /// The value blocks discovered in this document.
+    public var values: OrderedDictionary<String, Data.SubSequence>.Values {
+        discovered.values
+    }
+
+    /// Returns the value data block for the specified key, or `nil` if the key doesn't exist.
+    public subscript(key: String) -> Data.SubSequence? {
+        discovered[key]
+    }
+
     /// The declared minimum key for this document.
     let minKey: String?
 
@@ -29,10 +44,114 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
         guard let maxKey = maxKey, let max = discovered[maxKey] else { return nil }
         return max
     }
+}
+
+extension ParsedDocument {
+    /// A type that describes the size of an encoded value.
+    enum ValueSize {
+        /// A fixed size, independent of the encoded value.
+        case fixed(Int)
+        
+        /// A variable size, determined by the encoded value itself.
+        case variable((Data.SubSequence) throws -> Int)
+
+        /// An unknown type byte.
+        case none
+    }
+
+    static var stringHandler: ValueSize {
+        .variable { data in 
+            guard data.count >= 5 else { throw ParsingError.sizeMismatch }
+            let sizeBytes = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
+            let sizeStart = data.startIndex
+            let sizeEnd = data.index(sizeStart, offsetBy: 4)
+            sizeBytes.copyBytes(from: data[sizeStart..<sizeEnd])
+            let size = Int(sizeBytes.load(as: Int32.self))
+            guard data.count >= size + 4 else { throw ParsingError.sizeMismatch }
+            return size + 4
+        }
+    } 
+
+    static var docHandler: ValueSize {
+        .variable { data in 
+            guard data.count >= 5 else {
+                throw ParsingError.sizeMismatch
+            }
+            let sizeBytes = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
+            let sizeStart = data.startIndex
+            let sizeEnd = data.index(sizeStart, offsetBy: 4)
+            sizeBytes.copyBytes(from: data[sizeStart..<sizeEnd])
+            let size = Int(sizeBytes.load(as: Int32.self))
+            guard data.count >= size else {
+                throw ParsingError.sizeMismatch
+            }
+            return size
+        }
+    }
+
+    /// An array where type bytes 0..<20 can be mapped to the size of their encoded values.
+    static var typeMap: [ValueSize] {
+        [  
+            .none,
+            .fixed(8),
+            stringHandler,
+            docHandler,
+            docHandler,
+            .variable { data in 
+                guard data.count >= 5 else {
+                    throw ParsingError.sizeMismatch
+                }
+                let sizeBytes = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
+                let sizeStart = data.startIndex
+                let sizeEnd = data.index(sizeStart, offsetBy: 4)
+                sizeBytes.copyBytes(from: data[sizeStart..<sizeEnd])
+                let size = Int(sizeBytes.load(as: Int32.self))
+                guard data.count >= size + 5 else {
+                    throw ParsingError.sizeMismatch
+                }
+                return size + 5
+            },
+            .none,
+            .fixed(12),
+            .fixed(1),
+            .fixed(8),
+            .fixed(0),
+            .variable { data in 
+                var zeroesFound = 0
+                var cursor = 0
+                for byte in data where byte == 0 {
+                    guard zeroesFound == 2 else { break }
+                    zeroesFound += 1
+                    cursor += 1
+                }
+                return cursor
+            },
+            .none,
+            stringHandler,
+            .none,
+            .none,
+            .fixed(4),
+            .fixed(8),
+            .fixed(8),
+            .fixed(16),
+        ]
+    }
+
+    static func encodedSizeOf(bsonType: UInt8, in remainingDoc: Data.SubSequence) throws -> Int {
+        guard 0 < bsonType && bsonType < 20 else {
+            throw ParsingError.unknownType(bsonType)
+        }
+        switch typeMap[Int(truncatingIfNeeded: bsonType)] {
+        case .fixed(let size):
+            return size
+        case .variable(let ruler):
+            return try ruler(remainingDoc)
+        case .none:
+            throw ParsingError.unknownType(bsonType)
+        }
+    }
 
     public init(bsonBytes data: Data) throws {
-        let parser = Parser<Data>()
-
         // Read and check the declared size of the document against its data
         let sizeStart = data.startIndex
         let sizeEnd = data.index(sizeStart, offsetBy: 4)
@@ -72,7 +191,7 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
             }
 
             // Compute the size of the value
-            let size = try parser.encodedSizeOf(bsonType: type, in: data[cursor...])
+            let size = try Self.encodedSizeOf(bsonType: type, in: data[cursor...])
             
             // Store the pair
             discovered[name] = data[cursor..<data.index(cursor, offsetBy: size)]
@@ -82,21 +201,6 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
         self.discovered = discovered
         self.minKey = minKey
         self.maxKey = maxKey
-    }
-
-    /// The keys discovered in this document.
-    public var keys: OrderedSet<String> {
-        discovered.keys
-    }
-
-    /// The value blocks discovered in this document.
-    public var values: OrderedDictionary<String, Data.SubSequence>.Values {
-        discovered.values
-    }
-
-    /// Returns the value data block for the specified key, or `nil` if the key doesn't exist.
-    public subscript(key: String) -> Data.SubSequence? {
-        discovered[key]
     }
 }
 
