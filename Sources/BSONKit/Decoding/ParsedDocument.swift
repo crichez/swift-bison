@@ -7,6 +7,8 @@
 
 import OrderedCollections
 
+// MARK: Public API & Storage
+
 /// A document where keys and values have been discovered and can be retrieved.
 public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
     /// The keys and discovered values in this document.
@@ -45,6 +47,8 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
         return max
     }
 }
+
+// MARK: Type Maps & Parsing
 
 extension ParsedDocument {
     /// A type that describes the size of an encoded value.
@@ -208,6 +212,8 @@ extension ParsedDocument {
         self.maxKey = maxKey
     }
 }
+
+// MARK: Protocol Conformance
 
 extension ParsedDocument: Sequence {
     public func makeIterator() -> some IteratorProtocol {
