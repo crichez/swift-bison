@@ -108,7 +108,8 @@ extension ParsedDocument {
                     throw Error.docTooShort(needAtLeast: 5, forComponent: .value(2), inData: data)
                 }
                 // Read the size of the string
-                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // try! since we already guaranteed four bytes
+                let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
                 // Ensure the data is at least as long as the declared string size plus metadata
                 guard data.count >= size + 4 else { 
                     throw Error.docTooShort(
@@ -125,10 +126,14 @@ extension ParsedDocument {
                     throw Error.docTooShort(needAtLeast: 5, forComponent: .value(3), inData: data)
                 }
                 // Read the size of the document
-                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // try! since we already guaranteed four bytes
+                let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
                 // Ensure the data is at least as long as the declared size of the document
                 guard data.count >= size else {
-                    throw Error.docTooShort(needAtLeast: size, forComponent: .value(3), inData: data)
+                    throw Error.docTooShort(
+                        needAtLeast: size, 
+                        forComponent: .value(3), 
+                        inData: data)
                 }
                 // Return the declared size of the document
                 return size
@@ -139,10 +144,14 @@ extension ParsedDocument {
                     throw Error.docTooShort(needAtLeast: 5, forComponent: .value(4), inData: data)
                 }
                 // Read the size of the document
-                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // try! since we already guaranteed four bytes
+                let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
                 // Ensure the data is at least as long as the declared size of the document
                 guard data.count >= size else {
-                    throw Error.docTooShort(needAtLeast: size, forComponent: .value(4), inData: data)
+                    throw Error.docTooShort(
+                        needAtLeast: size, 
+                        forComponent: .value(4), 
+                        inData: data)
                 }
                 // Return the declared size of the document
                 return size
@@ -153,10 +162,14 @@ extension ParsedDocument {
                     throw Error.docTooShort(needAtLeast: 5, forComponent: .value(5), inData: data)
                 }
                 // Read the declared size of the value
-                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // try! since we already guaranteed four bytes
+                let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
                 // Ensure there are enough bytes to read the value plus metadata
                 guard data.count >= size + 5 else {
-                    throw Error.docTooShort(needAtLeast: size + 5, forComponent: .value(5), inData: data)
+                    throw Error.docTooShort(
+                        needAtLeast: size + 5, 
+                        forComponent: .value(5), 
+                        inData: data)
                 }
                 /// Return the declared size of the value plus metadata
                 return size + 5
@@ -190,7 +203,8 @@ extension ParsedDocument {
                     throw Error.docTooShort(needAtLeast: 5, forComponent: .value(13), inData: data)
                 }
                 // Read the size of the string
-                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // try! since we already guaranteed four bytes
+                let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
                 // Ensure the data is at least as long as the declared string size plus metadata
                 guard data.count >= size + 4 else { 
                     throw Error.docTooShort(
