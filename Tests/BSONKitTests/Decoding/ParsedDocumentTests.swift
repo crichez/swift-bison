@@ -14,9 +14,9 @@ class ParsedDocumentTests: XCTestCase {
             "test" => true
         }
         let encodedDoc = Array(doc.bsonBytes)
-        let decodedDoc = try ParsedDocument(bsonData: encodedDoc)
+        let decodedDoc = try ParsedDocument(bsonBytes: encodedDoc)
         let encodedValue = try XCTUnwrap(decodedDoc["test"])
-        let decodedValue = try Bool(bsonData: encodedValue)
+        let decodedValue = try Bool(bsonBytes: encodedValue)
         XCTAssertTrue(decodedValue)
     }
 
@@ -29,7 +29,7 @@ class ParsedDocumentTests: XCTestCase {
             "five" => "5"
         }
         let encodedDoc = Array(doc.bsonBytes)
-        let decodedDoc = try ParsedDocument(bsonData: encodedDoc)
+        let decodedDoc = try ParsedDocument(bsonBytes: encodedDoc)
 
         let encodedOne = try XCTUnwrap(decodedDoc["one"])
         let encodedTwo = try XCTUnwrap(decodedDoc["two"])
@@ -37,11 +37,11 @@ class ParsedDocumentTests: XCTestCase {
         let encodedFour = try XCTUnwrap(decodedDoc["four"])
         let encodedFive = try XCTUnwrap(decodedDoc["five"])
 
-        let decodedOne = try Int64(bsonData: encodedOne)
-        let decodedTwo = try Int32(bsonData: encodedTwo)
-        let decodedThree = try UInt64(bsonData: encodedThree)
-        let decodedFour = try Double(bsonData: encodedFour)
-        let decodedFive = try String(bsonData: encodedFive)
+        let decodedOne = try Int64(bsonBytes: encodedOne)
+        let decodedTwo = try Int32(bsonBytes: encodedTwo)
+        let decodedThree = try UInt64(bsonBytes: encodedThree)
+        let decodedFour = try Double(bsonBytes: encodedFour)
+        let decodedFive = try String(bsonBytes: encodedFive)
 
         XCTAssertEqual(decodedOne, 1)
         XCTAssertEqual(decodedTwo, 2)

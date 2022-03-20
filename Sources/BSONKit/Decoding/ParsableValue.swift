@@ -7,13 +7,13 @@
 
 /// A value that can be parsed from its encoded BSON representation.
 public protocol ParsableValue {
-    /// Initializes this value from the provided BSON data.
+    /// Initializes this value from the provided BSON bytes.
     /// 
-    /// - Parameter bsonData: the BSON encoded value
+    /// - Parameter data: the BSON encoded bytes representing this value
     /// 
     /// - Throws:
     /// An error if the value couldn't be parsed.
-    init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8
+    init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8
 }
 
 enum ParsingError: Error {
@@ -23,7 +23,7 @@ enum ParsingError: Error {
 }
 
 extension Int32: ParsableValue {
-    public init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count == 4 else { throw ParsingError.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
         copyBuffer.copyBytes(from: data)
@@ -32,7 +32,7 @@ extension Int32: ParsableValue {
 }
 
 extension Int64: ParsableValue {
-    public init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count == 8 else { throw ParsingError.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
@@ -41,7 +41,7 @@ extension Int64: ParsableValue {
 }
 
 extension UInt64: ParsableValue {
-    public init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count == 8 else { throw ParsingError.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
@@ -50,7 +50,7 @@ extension UInt64: ParsableValue {
 }
 
 extension Double: ParsableValue {
-    public init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count == 8 else { throw ParsingError.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
@@ -59,18 +59,18 @@ extension Double: ParsableValue {
 }
 
 extension Bool: ParsableValue {
-    public init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count == 1 else { throw ParsingError.sizeMismatch }
         self = data[data.startIndex] == 0 ? false : true
     }
 }
 
 extension String: ParsableValue {
-    public init<Data>(bsonData data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
         guard data.count > 4 else { throw ParsingError.sizeMismatch }
         let sizeStart = data.startIndex
         let sizeEnd = data.index(sizeStart, offsetBy: 4)
-        let size = Int(try Int32(bsonData: data[sizeStart..<sizeEnd]))
+        let size = Int(try Int32(bsonBytes: data[sizeStart..<sizeEnd]))
         guard data.count == size + 4 else { throw ParsingError.sizeMismatch }
         self.init(decoding: data[sizeEnd..<data.index(data.endIndex, offsetBy: -1)], as: UTF8.self)
     }
