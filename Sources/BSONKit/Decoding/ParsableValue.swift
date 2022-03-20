@@ -80,12 +80,18 @@ extension UInt64: ParsableValue {
 }
 
 extension Double: ParsableValue {
+    /// The error type thrown by `Double.init(bsonBytes:)`.
     public enum Error: Swift.Error {
-        /// The data passed to the initializer was not 4 bytes long.
+        /// The data passed to the initializer was not 8 bytes long.
         case sizeMismatch
     }
     
-    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    /// Initializes a value from its BSON-encoded bytes.
+    /// 
+    /// - Parameter data: a collection of exactly 8 bytes that represent a `Double`.
+    /// 
+    /// - Throws: `Double.Error.sizeMismatch` if `data` was not exactly 8 bytes.
+    public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 8 else { throw Error.sizeMismatch }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
