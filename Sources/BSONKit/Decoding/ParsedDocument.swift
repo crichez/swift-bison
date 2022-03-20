@@ -48,6 +48,40 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
     }
 }
 
+// MARK: Errors
+
+extension ParsedDocument {
+    /// A BSON document component, used for errors and debugging.
+    public enum Component {
+        /// A null-terminated key.
+        case key
+
+        /// A value with the provided type byte.
+        case value(UInt8)
+    }
+
+    /// An error that occured during initialization.
+    public enum Error: Swift.Error {
+        /// There were not enough bytes left in the document to read a component.
+        ///
+        /// This error usually means the document was corrupted, or the
+        /// data provided was not a valid BSON document to begin with.
+        case docTooShort(needAtLeast: Int, forComponent: Component, inData: Data.SubSequence)
+
+        /// A key was started but a null byte was never found.
+        /// 
+        /// The attached `keyStart` value is the full document starting at the key that triggered
+        /// the error.
+        case keyNeverEnds(keyStart: Data.SubSequence)
+
+        /// The type byte declared by a key is not part of the BSON specification.
+        ///
+        /// This error usually means the document was corrupted, or the
+        /// data provided was not a valid BSON document to begin with.
+        case unknownType(UInt8)
+    }
+}
+
 // MARK: Type Maps & Parsing
 
 extension ParsedDocument {
@@ -59,95 +93,147 @@ extension ParsedDocument {
         /// A variable size, determined by the encoded value itself.
         case variable((Data.SubSequence) throws -> Int)
 
-        /// An unknown type byte.
+        /// An unknown type.
         case none
-    }
-
-    static var stringHandler: ValueSize {
-        .variable { data in 
-            guard data.count >= 5 else { throw ParsingError.sizeMismatch }
-            let sizeBytes = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
-            let sizeStart = data.startIndex
-            let sizeEnd = data.index(sizeStart, offsetBy: 4)
-            sizeBytes.copyBytes(from: data[sizeStart..<sizeEnd])
-            let size = Int(sizeBytes.load(as: Int32.self))
-            guard data.count >= size + 4 else { throw ParsingError.sizeMismatch }
-            return size + 4
-        }
-    } 
-
-    static var docHandler: ValueSize {
-        .variable { data in 
-            guard data.count >= 5 else {
-                throw ParsingError.sizeMismatch
-            }
-            let sizeBytes = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
-            let sizeStart = data.startIndex
-            let sizeEnd = data.index(sizeStart, offsetBy: 4)
-            sizeBytes.copyBytes(from: data[sizeStart..<sizeEnd])
-            let size = Int(sizeBytes.load(as: Int32.self))
-            guard data.count >= size else {
-                throw ParsingError.sizeMismatch
-            }
-            return size
-        }
     }
 
     /// An array where type bytes 0..<20 can be mapped to the size of their encoded values.
     static var typeMap: [ValueSize] {
         [  
-            .none,
-            .fixed(8),
-            stringHandler,
-            docHandler,
-            docHandler,
-            .variable { data in 
+            /* [0] Not Set: */ .none,
+            /* [1] Double: */ .fixed(8),
+            /* [2] String: */ .variable { data in 
+                // Ensure the data is at least 5 bytes long for size and null terminator
+                guard data.count >= 5 else { 
+                    throw Error.docTooShort(needAtLeast: 5, forComponent: .value(2), inData: data)
+                }
+                // Read the size of the string
+                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // Ensure the data is at least as long as the declared string size plus metadata
+                guard data.count >= size + 4 else { 
+                    throw Error.docTooShort(
+                        needAtLeast: size + 4, 
+                        forComponent: .value(2), 
+                        inData: data) 
+                }
+                // Return the declared size of the string plus metadata
+                return size + 4
+            },
+            /* [3] Document: */ .variable { data in 
+                // Ensure the document is at least 5 bytes long for the size and terminator
                 guard data.count >= 5 else {
-                    throw ParsingError.sizeMismatch
+                    throw Error.docTooShort(needAtLeast: 5, forComponent: .value(3), inData: data)
                 }
-                let sizeBytes = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
-                let sizeStart = data.startIndex
-                let sizeEnd = data.index(sizeStart, offsetBy: 4)
-                sizeBytes.copyBytes(from: data[sizeStart..<sizeEnd])
-                let size = Int(sizeBytes.load(as: Int32.self))
+                // Read the size of the document
+                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // Ensure the data is at least as long as the declared size of the document
+                guard data.count >= size else {
+                    throw Error.docTooShort(needAtLeast: size, forComponent: .value(3), inData: data)
+                }
+                // Return the declared size of the document
+                return size
+            },
+            /* [4] Array: */ .variable { data in 
+                // Ensure the document is at least 5 bytes long for the size and terminator
+                guard data.count >= 5 else {
+                    throw Error.docTooShort(needAtLeast: 5, forComponent: .value(4), inData: data)
+                }
+                // Read the size of the document
+                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // Ensure the data is at least as long as the declared size of the document
+                guard data.count >= size else {
+                    throw Error.docTooShort(needAtLeast: size, forComponent: .value(4), inData: data)
+                }
+                // Return the declared size of the document
+                return size
+            },
+            /* [5] Binary: */ .variable { data in 
+                // Ensure there are at least 5 bytes for the size and subtype
+                guard data.count >= 5 else {
+                    throw Error.docTooShort(needAtLeast: 5, forComponent: .value(5), inData: data)
+                }
+                // Read the declared size of the value
+                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // Ensure there are enough bytes to read the value plus metadata
                 guard data.count >= size + 5 else {
-                    throw ParsingError.sizeMismatch
+                    throw Error.docTooShort(needAtLeast: size + 5, forComponent: .value(5), inData: data)
                 }
+                /// Return the declared size of the value plus metadata
                 return size + 5
             },
-            .none,
-            .fixed(12),
-            .fixed(1),
-            .fixed(8),
-            .fixed(0),
-            .variable { data in 
+            /* [6] Undefined (deprecated): */ .none,
+            /* [7] ObjectID: */ .fixed(12),
+            /* [8] Bool: */ .fixed(1),
+            /* [9] UTC DateTime: */ .fixed(8),
+            /* [10] Null: */ .fixed(0),
+            /* [11] Regular Expression: */ .variable { data in 
                 var zeroesFound = 0
                 var cursor = 0
-                for byte in data where byte == 0 {
-                    guard zeroesFound == 2 else { break }
-                    zeroesFound += 1
+                for byte in data {
                     cursor += 1
+                    if byte == 0 { zeroesFound += 1 }
+                    if zeroesFound == 2 { break }
                 }
-                return cursor
+                if zeroesFound == 2 {
+                    return cursor
+                } else {
+                    throw Error.docTooShort(
+                        needAtLeast: cursor + 1, 
+                        forComponent: .value(11), 
+                        inData: data)
+                }
             },
-            .none,
-            stringHandler,
-            .none,
-            .none,
-            .fixed(4),
-            .fixed(8),
-            .fixed(8),
-            .fixed(16),
+            /* [12] DBPointer (deprecated): */ .none,
+            /* [13] JavaScript Code: */ .variable { data in 
+                // Ensure the data is at least 5 bytes long for size and null terminator
+                guard data.count >= 5 else { 
+                    throw Error.docTooShort(needAtLeast: 5, forComponent: .value(13), inData: data)
+                }
+                // Read the size of the string
+                let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+                // Ensure the data is at least as long as the declared string size plus metadata
+                guard data.count >= size + 4 else { 
+                    throw Error.docTooShort(
+                        needAtLeast: size + 4, 
+                        forComponent: .value(13), 
+                        inData: data) 
+                }
+                // Return the declared size of the string plus metadata
+                return size + 4
+            },
+            /* [14] Symbol (deprecated): */ .none,
+            /* [15] JavaScript Code with Scope (Deprecated): */ .none,
+            /* [16] Int32: */ .fixed(4),
+            /* [17] UInt64: */ .fixed(8),
+            /* [18] Int64: */ .fixed(8),
+            /* [19] Decimal128: */ .fixed(16),
         ]
     }
 
+    /// Returns the size of a value in bytes.
+    /// 
+    /// - Parameters:
+    ///   - type: a BSON type byte between 1 and 19
+    ///   - data: a sliced document starting at the value to measure
+    ///   - typeMap: an array that maps BSON type bytes to their `ValueSize`
+    /// 
+    /// - Returns: 
+    /// The size of the first value in `data` using the rules defined in the `typeMap` 
+    /// for that `type`.
+    /// 
+    /// - Throws:
+    /// `ParsedDocument<_>.Error.docTooShort(needAtLeast:forComponent:inData:)` 
+    /// if computing the variable size of a value failed. `ParsedDocument<_>.Error.unknownType(_)`
+    /// if the type byte provided is not part of the BSON specification. In both those errors,
+    /// the data type `_` must be specified in your error capture for the error to match.
     static func encodedSizeOf(
         type: UInt8, 
         data: Data.SubSequence, 
         typeMap: [ValueSize]
     ) throws -> Int {
+        // Ensure the type byte is between 
         guard 0 < type && type < 20 else {
-            throw ParsingError.unknownType(type)
+            throw Error.unknownType(type)
         }
         switch typeMap[Int(truncatingIfNeeded: type)] {
         case .fixed(let size):
@@ -155,38 +241,45 @@ extension ParsedDocument {
         case .variable(let variableSize):
             return try variableSize(data)
         case .none:
-            throw ParsingError.unknownType(type)
+            throw Error.unknownType(type)
         }
     }
 
     public init(bsonBytes data: Data) throws {
         // Read and check the declared size of the document against its data
-        let sizeStart = data.startIndex
-        let sizeEnd = data.index(sizeStart, offsetBy: 4)
-        let size = Int(try Int32(bsonBytes: data[sizeStart..<sizeEnd]))
-        guard data.count == size else { throw ParsingError.sizeMismatch }
+        let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
+        guard data.count == size else { 
+            throw Error.docTooShort(
+                needAtLeast: size, 
+                forComponent: .value(3), 
+                inData: data.dropFirst(0)) 
+        }
 
-        // Start reading the document
+        // Store the type map for the entire parsing process
         let typeMap = Self.typeMap
+        // Initialize a mutable dictionary to store each pair
         var discovered = OrderedDictionary<String, Data.SubSequence>()
+        // Store mutable min and max key names in case we come accross them
         var minKey = String?.none
         var maxKey = String?.none
-        var cursor = sizeEnd
-        while cursor < data.index(data.endIndex, offsetBy: -1) {
+        // Keep track of a cursor so we can slice each value accurately
+        var cursor = data.index(data.startIndex, offsetBy: 4)
+        let lastContentByte = data.index(data.endIndex, offsetBy: -1)
+        while cursor < lastContentByte {
             // Get the type byte
             let type = data[cursor]
             cursor = data.index(after: cursor)
             
-            // Read the name of the key
-            let nameStart = cursor
-            var nameEndOffset = 0
-            while cursor < data.endIndex && data[cursor] != 0 {
-                nameEndOffset += 1
+            // Read the key
+            let keyStart = cursor
+            while data[cursor] != 0 {
                 cursor = data.index(after: cursor)
+                guard cursor < lastContentByte else {
+                    throw Error.keyNeverEnds(keyStart: data[keyStart...])
+                }
             }
-            guard cursor < data.endIndex else { throw ParsingError.unexpectedEnd }
-            let nameEnd = data.index(nameStart, offsetBy: nameEndOffset)
-            let name = String(decoding: data[nameStart..<nameEnd], as: UTF8.self)
+            let keyEnd = cursor
+            let name = String(decoding: data[keyStart..<keyEnd], as: UTF8.self)
             cursor = data.index(after: cursor)
             
             // Check if this is a min or max key
