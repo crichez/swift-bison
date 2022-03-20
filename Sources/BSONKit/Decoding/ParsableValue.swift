@@ -100,12 +100,18 @@ extension Double: ParsableValue {
 }
 
 extension Bool: ParsableValue {
+    /// The error type thrown by `Bool.init(bsonBytes:)`.
     public enum Error: Swift.Error {
         /// The data passed to the initializer was not 1 byte long.
         case sizeMismatch
     }
     
-    public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
+    /// Initializes a value from its BSON-encoded bytes.
+    /// 
+    /// - Parameter data: a collection of exactly 1 byte that represents a `Bool`
+    /// 
+    /// - Throws: `Bool.Error.sizeMismatch` if `data` was not exactly 8 bytes.
+    public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 1 else { throw Error.sizeMismatch }
         self = data[data.startIndex] == 0 ? false : true
     }
