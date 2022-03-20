@@ -137,17 +137,21 @@ extension ParsedDocument {
         ]
     }
 
-    static func encodedSizeOf(bsonType: UInt8, in remainingDoc: Data.SubSequence) throws -> Int {
-        guard 0 < bsonType && bsonType < 20 else {
-            throw ParsingError.unknownType(bsonType)
+    static func encodedSizeOf(
+        type: UInt8, 
+        data: Data.SubSequence, 
+        typeMap: [ValueSize]
+    ) throws -> Int {
+        guard 0 < type && type < 20 else {
+            throw ParsingError.unknownType(type)
         }
-        switch typeMap[Int(truncatingIfNeeded: bsonType)] {
+        switch typeMap[Int(truncatingIfNeeded: type)] {
         case .fixed(let size):
             return size
-        case .variable(let ruler):
-            return try ruler(remainingDoc)
+        case .variable(let variableSize):
+            return try variableSize(data)
         case .none:
-            throw ParsingError.unknownType(bsonType)
+            throw ParsingError.unknownType(type)
         }
     }
 
@@ -159,6 +163,7 @@ extension ParsedDocument {
         guard data.count == size else { throw ParsingError.sizeMismatch }
 
         // Start reading the document
+        let typeMap = Self.typeMap
         var discovered = OrderedDictionary<String, Data.SubSequence>()
         var minKey = String?.none
         var maxKey = String?.none
@@ -191,7 +196,7 @@ extension ParsedDocument {
             }
 
             // Compute the size of the value
-            let size = try Self.encodedSizeOf(bsonType: type, in: data[cursor...])
+            let size = try Self.encodedSizeOf(type: type, data: data[cursor...], typeMap: typeMap)
             
             // Store the pair
             discovered[name] = data[cursor..<data.index(cursor, offsetBy: size)]
