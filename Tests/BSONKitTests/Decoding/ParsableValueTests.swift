@@ -40,6 +40,8 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
+    /// Asserts attempting to decode a `String` from less than 5 bytes throws
+    /// `String.Error.dataTooShort`.
     func testStringDataTooShort() throws {
         do {
             let faultyBytes: [UInt8] = [0, 1, 2]
