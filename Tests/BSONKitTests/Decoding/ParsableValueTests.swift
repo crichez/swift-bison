@@ -51,4 +51,18 @@ class ParsableValueTests: XCTestCase {
             return
         }
     }
+
+    /// Asserts attempting to decode a `String` with a declared size different from its
+    /// actual size throws `String.Error.sizeMismatch`.
+    func testStringSizeMismatch() throws {
+        do {
+            let value = "this is a test! \u{10097}"
+            var encodedValue = value.bsonBytes
+            encodedValue.replaceSubrange(0..<4, with: Int32(5).bsonBytes)
+            let decodedValue = try String(bsonBytes: encodedValue)
+            XCTFail("expected decoding to fail, but returned \(decodedValue)")
+        } catch String.Error.sizeMismatch {
+            return
+        }
+    }
 }
