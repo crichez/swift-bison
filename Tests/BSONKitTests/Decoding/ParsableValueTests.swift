@@ -10,6 +10,8 @@ import XCTest
 
 /// A test suite for the `ParsableValue.init(bsonBytes:)` initializer's code branches.
 class ParsableValueTests: XCTestCase {
+    // MARK: Double
+
     /// Asserts encoding and decoding a valid `Double` returns the same value.
     func testDoubleParsed() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
@@ -27,5 +29,14 @@ class ParsableValueTests: XCTestCase {
         } catch Double.Error.sizeMismatch {
             return
         }
+    }
+
+    // MARK: String
+
+    /// Asserts encoding and decoding a valid `String` returns the same value.
+    func testStringParsed() throws {
+        let value = "this is a test! \u{10097}"
+        let decodedValue = try String(bsonBytes: value.bsonBytes)
+        XCTAssertEqual(value, decodedValue)
     }
 }
