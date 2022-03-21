@@ -39,4 +39,14 @@ class ParsableValueTests: XCTestCase {
         let decodedValue = try String(bsonBytes: value.bsonBytes)
         XCTAssertEqual(value, decodedValue)
     }
+
+    func testStringDataTooShort() throws {
+        do {
+            let faultyBytes: [UInt8] = [0, 1, 2]
+            let decodedValue = try String(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedValue)")
+        } catch String.Error.dataTooShort {
+            return
+        }
+    }
 }
