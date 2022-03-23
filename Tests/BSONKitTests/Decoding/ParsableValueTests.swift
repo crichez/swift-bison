@@ -68,7 +68,7 @@ class ParsableValueTests: XCTestCase {
 
     // MARK: ParsedDocument
 
-    /// Asserts encoding a decoding a valid document returns the same value.
+    /// Asserts encoding and decoding a valid document returns the same value.
     func testDocParsed() throws {
         let doc = ComposedDocument {
             "test" => true
@@ -76,5 +76,12 @@ class ParsableValueTests: XCTestCase {
         let decodedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
         let valueBytes = try XCTUnwrap(decodedDoc["test"])
         XCTAssertTrue(try Bool(bsonBytes: valueBytes))
+    }
+
+    /// Asserts decoding an empty document succeeds without errors.
+    func testEmptyDocParsed() throws {
+        let encodedDoc: [UInt8] = [5, 0, 0, 0, 0]
+        let decodedDoc = try ParsedDocument(bsonBytes: encodedDoc)
+        XCTAssertNil(decodedDoc["test"])
     }
 }
