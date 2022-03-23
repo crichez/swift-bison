@@ -65,4 +65,16 @@ class ParsableValueTests: XCTestCase {
             return
         }
     }
+
+    // MARK: ParsedDocument
+
+    /// Asserts encoding a decoding a valid document returns the same value.
+    func testDocParsed() throws {
+        let doc = ComposedDocument {
+            "test" => true
+        }
+        let decodedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let valueBytes = try XCTUnwrap(decodedDoc["test"])
+        XCTAssertTrue(try Bool(bsonBytes: valueBytes))
+    }
 }
