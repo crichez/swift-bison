@@ -103,6 +103,8 @@ class ParsableValueTests: XCTestCase {
         }
     }
 
+    /// Asserts attempting to parse a document with a declared size less than `data.count`
+    /// throws `.docTooShort` with the expected values.
     func testDocSizeMismatch() throws {
         let faultyBytes: [UInt8] = [3, 0, 0, 0, 0]
         do {
