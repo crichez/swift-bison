@@ -84,4 +84,21 @@ class ParsableValueTests: XCTestCase {
         let decodedDoc = try ParsedDocument(bsonBytes: encodedDoc)
         XCTAssertNil(decodedDoc["test"])
     }
+
+    /// Asserts attempting to parse a document from less than 5 bytes throws 
+    /// `ParsedDocument<_>.Error.docTooShort`.
+    func testDataTooShort() throws {
+        let faultyBytes: [UInt8] = [4, 0, 0, 0]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            XCTAssertEqual(
+                error, 
+                .docTooShort(
+                    needAtLeast: 5, 
+                    forComponent: .value(3), 
+                    inData: faultyBytes.dropFirst(0)))
+        }
+    }
 }
