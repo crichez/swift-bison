@@ -52,7 +52,7 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
 
 extension ParsedDocument {
     /// A BSON document component, used for errors and debugging.
-    public enum Component {
+    public enum Component: Equatable {
         /// A null-terminated key.
         case key
 
@@ -61,7 +61,7 @@ extension ParsedDocument {
     }
 
     /// An error that occured during initialization.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// There were not enough bytes left in the document to read a component.
         ///
         /// This error usually means the document was corrupted, or the
@@ -79,6 +79,20 @@ extension ParsedDocument {
         /// This error usually means the document was corrupted, or the
         /// data provided was not a valid BSON document to begin with.
         case unknownType(UInt8)
+
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            switch (lhs, rhs) {
+            case (.docTooShort(let lhsNeed, let lhsComp, let lhsData), 
+                  .docTooShort(let rhsNeed, let rhsComp, let rhsData)):
+                return lhsNeed == rhsNeed && lhsComp == rhsComp && Array(rhsData) == Array(lhsData)
+            case (.keyNeverEnds(let lhsKeyStart), .keyNeverEnds(let rhsKeyStart)):
+                return Array(lhsKeyStart) == Array(rhsKeyStart)
+            case (.unknownType(let lhsType), .unknownType(let rhsType)):
+                return lhsType == rhsType
+            default: 
+                return false
+            }
+        }
     }
 }
 
@@ -260,6 +274,13 @@ extension ParsedDocument {
     }
 
     public init(bsonBytes data: Data) throws {
+        // Ensure there are at least 5 bytes for the size and terminator
+        guard data.count >= 5 else {
+            throw Error.docTooShort(
+                needAtLeast: 5, 
+                forComponent: .value(3), 
+                inData: data.dropFirst(0))
+        }
         // Read and check the declared size of the document against its data
         let size = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
         guard data.count == size else { 
