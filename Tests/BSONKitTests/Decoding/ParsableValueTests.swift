@@ -92,14 +92,8 @@ class ParsableValueTests: XCTestCase {
         do {
             let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ParsedDocument<[UInt8]>.Error {
-            XCTAssertEqual(
-                error, 
-                .docTooShort(
-                    needAtLeast: 5, 
-                    forComponent: .value(3), 
-                    inData: faultyBytes.dropFirst(0))
-            )
+        } catch ParsedDocument<[UInt8]>.Error.docTooShort {
+            // This is expected
         }
     }
 
@@ -111,13 +105,7 @@ class ParsableValueTests: XCTestCase {
             let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
         } catch let error as ParsedDocument<[UInt8]>.Error {
-            XCTAssertEqual(
-                error,
-                .docTooShort(
-                    needAtLeast: 3, 
-                    forComponent: .value(3), 
-                    inData: faultyBytes.dropFirst(0))
-            )
+            XCTAssertEqual(error, .docSizeMismatch(3))
         }
     }
 }
