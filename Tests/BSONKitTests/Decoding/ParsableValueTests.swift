@@ -97,6 +97,18 @@ class ParsableValueTests: XCTestCase {
         }
     }
 
+    /// Asserts attempting to parse a document from non null-terminated data throws
+    /// `ParsedDocument<_>.Error.notTerminated`.
+    func testDocDataNotTerminated() throws {
+        let faultyBytes: [UInt8] = [10] + [UInt8](repeating: 1, count: 9)
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch ParsedDocument<[UInt8]>.Error.notTerminated {
+            // This is expected
+        }
+    }
+
     /// Asserts attempting to parse a document with a declared size less than `data.count`
     /// throws `.docTooShort` with the expected values.
     func testDocSizeMismatch() throws {
