@@ -284,4 +284,25 @@ class ParsedDocumentTests: XCTestCase {
             XCTAssertEqual(error, .valueSizeMismatch(15, "", progress))
         }
     }
+
+    /// Asserts parsing a document with a regular expression value that doesn't contain a zero
+    /// throws `ParsedDocument<_>.Error.valueSizeMismatch` with the expected attached values.
+    func testRegularExpressionSizeMismatch() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 11, 0, 0, 0,
+            /* regex key: */ 11, 0,
+            /* regex data: */ 1, 1, 1, 1, 
+            /* terminator: */ 0,
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>([:])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[6...])
+            XCTAssertEqual(error, .valueSizeMismatch(6, "", progress))
+        }
+    }
 }
