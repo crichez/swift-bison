@@ -174,4 +174,27 @@ class ParsedDocumentTests: XCTestCase {
             XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
         }
     }
+
+    /// Asserts decoding a document that declares a nested document but offers fewer bytes left
+    /// than are declared throws `ParsedDocument<_>.Error.valueSizeMismatch` with the expected
+    /// attached values.
+    func testDocValueSizeMismatch() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 11, 0, 0, 0,
+            /* document key: */ 3, 0,
+            /* document data: */ 10, 0, 0, 0,
+            /* terminator: */ 0,
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>([:])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[6...])
+            XCTAssertEqual(error, .valueSizeMismatch(10, "", progress))
+        }
+    }
+    
 }
