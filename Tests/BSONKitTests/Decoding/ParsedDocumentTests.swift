@@ -130,4 +130,26 @@ class ParsedDocumentTests: XCTestCase {
                 XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
         }
     }
+
+    /// Asserts parsing a document with a `String` value shorter than its declared size
+    /// throws `ParsedDocument<_>.Error.valueSizeMismatch` with the expected attached values.
+    func testStringSizeMismatch() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 15, 0, 0, 0,
+            /* String key: */ 2, 0,
+            /* String size: */ 10, 0, 0, 0,
+            /* String data: */ 1, 2, 3, 4,
+            /* terminator: */ 0,
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>([:])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[6...])
+            XCTAssertEqual(error, .valueSizeMismatch(14, "", progress))
+        }
+    }
 }
