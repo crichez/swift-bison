@@ -63,4 +63,24 @@ class ParsedDocumentTests: XCTestCase {
             XCTAssertEqual(error, .docSizeMismatch(3))
         }
     }
+
+    /// Asserts attempting to parse a document with a non-specification type throws 
+    /// `ParsedDocument<_>.Error.unknownType` with the expected attached values.
+    func testUnknownType() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 10, 0, 0, 0, 
+            /* Bool key-value paur: */ 8, 0, 1, 
+            /* faulty typed key: */ 100, 0, 0
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>(["": faultyBytes[6...6]])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[7...])
+            XCTAssertEqual(error, .unknownType(100, "", progress))
+        }
+    }
 }
