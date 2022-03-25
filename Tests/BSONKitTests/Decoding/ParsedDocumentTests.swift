@@ -197,4 +197,47 @@ class ParsedDocumentTests: XCTestCase {
         }
     }
     
+    /// Asserts decoding a document that declares a nested array but offers less than 5 
+    /// remaining bytes throws `ParsedDocument<_>.Error.valueSizeMismatch` with the expected
+    /// attached values.
+    func testArrayValueDataTooShort() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 10, 0, 0, 0,
+            /* array key: */ 4, 0,
+            /* array data: */ 1, 1, 1,
+            /* terminator: */ 0,
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>([:])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[6...])
+            XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
+        }
+    }
+
+    /// Asserts decoding a document that declares a nested array but offers fewer bytes left
+    /// than are declared throws `ParsedDocument<_>.Error.valueSizeMismatch` with the expected
+    /// attached values.
+    func testArrayValueSizeMismatch() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 11, 0, 0, 0,
+            /* document key: */ 4, 0,
+            /* document data: */ 10, 0, 0, 0,
+            /* terminator: */ 0,
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>([:])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[6...])
+            XCTAssertEqual(error, .valueSizeMismatch(10, "", progress))
+        }
+    }
 }
