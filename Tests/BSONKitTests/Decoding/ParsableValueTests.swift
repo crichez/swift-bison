@@ -65,4 +65,12 @@ class ParsableValueTests: XCTestCase {
             return
         }
     }
+
+    // MARK: Bool
+
+    func testBoolParsed() throws {
+        let value = Bool.random()
+        let decodedValue = try Bool(bsonBytes: value.bsonBytes)
+        XCTAssertEqual(value, decodedValue)
+    }
 }
