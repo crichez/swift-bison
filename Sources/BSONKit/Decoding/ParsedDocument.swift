@@ -275,6 +275,7 @@ extension ParsedDocument {
         let lastContentByte = data.index(data.endIndex, offsetBy: -1)
         while cursor < lastContentByte {
             // Get the type byte
+            let typeIndex = cursor
             let type = data[cursor]
             cursor = data.index(after: cursor)
             
@@ -295,6 +296,11 @@ extension ParsedDocument {
             guard type != 127 else {
                 maxKey = key
                 continue
+            }
+            guard type > 0 && type < 20 else {
+                let partialDoc = ParsedDocument(discovered, minKey: minKey, maxKey: maxKey)
+                let progress = Progress(parsed: partialDoc, remaining: data[typeIndex...])
+                throw Error.unknownType(type, key, progress)
             }
 
             // Compute the size of the value
