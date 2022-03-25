@@ -240,4 +240,25 @@ class ParsedDocumentTests: XCTestCase {
             XCTAssertEqual(error, .valueSizeMismatch(10, "", progress))
         }
     }
+
+    /// Asserts decoding a document that declares a binary value but offers fewer than 5 bytes
+    /// left throws `ParsedDocument<_>.Error.valueSizeMismatch` with the expected attached values.
+    func testBinaryValueDataTooShort() throws {
+        let faultyBytes: [UInt8] = [
+            /* size: */ 10, 0, 0, 0,
+            /* binary key: */ 4, 0,
+            /* binary data: */ 1, 1, 1,
+            /* terminator: */ 0,
+        ]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            let partialDoc = ParsedDocument<[UInt8]>([:])
+            let progress = ParsedDocument<[UInt8]>.Progress(
+                parsed: partialDoc, 
+                remaining: faultyBytes[6...])
+            XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
+        }
+    }
 }
