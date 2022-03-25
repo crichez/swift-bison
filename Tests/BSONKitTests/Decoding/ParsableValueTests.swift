@@ -68,6 +68,7 @@ class ParsableValueTests: XCTestCase {
 
     // MARK: Bool
 
+    /// Asserts decoding a `Bool` from valid data returns the expected value.
     func testBoolParsed() throws {
         let value = Bool.random()
         let decodedValue = try Bool(bsonBytes: value.bsonBytes)
