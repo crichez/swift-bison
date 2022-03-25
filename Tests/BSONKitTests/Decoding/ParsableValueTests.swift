@@ -94,4 +94,15 @@ class ParsableValueTests: XCTestCase {
         let decodedValue = try Int32(bsonBytes: value.bsonBytes)
         XCTAssertEqual(value, decodedValue)
     }
+
+    /// Asserts decoding an `Int32` from less than 4 bytes throws `Int32.Error.sizeMismatch`.
+    func testInt32SizeMismatch() throws {
+        let faultyBytes = [UInt8](repeating: 1, count: 3)
+        do {
+            let decodedValue = try Int32(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedValue)")
+        } catch Int32.Error.sizeMismatch {
+            // This is expected
+        }
+    }
 }
