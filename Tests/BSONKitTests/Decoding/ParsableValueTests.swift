@@ -85,4 +85,13 @@ class ParsableValueTests: XCTestCase {
             // This is expected
         }
     }
+
+    // MARK: Int32
+
+    /// Asserts decoding an `Int32` from valid data returns the expected value.
+    func testInt32Parsed() throws {
+        let value = Int32.random(in: .min ... .max)
+        let decodedValue = try Int32(bsonBytes: value.bsonBytes)
+        XCTAssertEqual(value, decodedValue)
+    }
 }
