@@ -246,7 +246,7 @@ class ParsedDocumentTests: XCTestCase {
     func testBinaryValueDataTooShort() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 10, 0, 0, 0,
-            /* binary key: */ 4, 0,
+            /* binary key: */ 5, 0,
             /* binary data: */ 1, 1, 1,
             /* terminator: */ 0,
         ]
