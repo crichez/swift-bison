@@ -105,4 +105,44 @@ class ParsableValueTests: XCTestCase {
             // This is expected
         }
     }
+
+    // MARK: UInt64
+
+    /// Asserts decoding a `UInt64` from valid data returns the expected value.
+    func testUInt64Parsed() throws {
+        let value = UInt64.random(in: .min ... .max)
+        let decodedValue = try UInt64(bsonBytes: value.bsonBytes)
+        XCTAssertEqual(value, decodedValue)
+    }
+
+    /// Asserts decoding a `UInt64` from less than 4 bytes throws `UInt64.Error.sizeMismatch`.
+    func testUInt64SizeMismatch() throws {
+        let faultyBytes = [UInt8](repeating: 1, count: 3)
+        do {
+            let decodedValue = try UInt64(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedValue)")
+        } catch UInt64.Error.sizeMismatch {
+            // This is expected
+        }
+    }
+
+    // MARK: Int64
+
+    /// Asserts decoding a `Int64` from valid data returns the expected value.
+    func testInt64Parsed() throws {
+        let value = Int64.random(in: .min ... .max)
+        let decodedValue = try Int64(bsonBytes: value.bsonBytes)
+        XCTAssertEqual(value, decodedValue)
+    }
+
+    /// Asserts decoding a `Int64` from less than 4 bytes throws `Int64.Error.sizeMismatch`.
+    func testInt64SizeMismatch() throws {
+        let faultyBytes = [UInt8](repeating: 1, count: 3)
+        do {
+            let decodedValue = try Int64(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedValue)")
+        } catch Int64.Error.sizeMismatch {
+            // This is expected
+        }
+    }
 }
