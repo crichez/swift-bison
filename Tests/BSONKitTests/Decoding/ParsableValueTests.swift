@@ -74,4 +74,15 @@ class ParsableValueTests: XCTestCase {
         let decodedValue = try Bool(bsonBytes: value.bsonBytes)
         XCTAssertEqual(value, decodedValue)
     }
+
+    /// Asserts decoding a `Bool` from more than 1 byte throws `Bool.Error.sizeMismatch`.
+    func testBoolSizeMismatch() throws {
+        let faultyBytes = [UInt8](repeating: 1, count: 3)
+        do {
+            let decodedValue = try Bool(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedValue)")
+        } catch Bool.Error.sizeMismatch {
+            // This is expected
+        }
+    }
 }
