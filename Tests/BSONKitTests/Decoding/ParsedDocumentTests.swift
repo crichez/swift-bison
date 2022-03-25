@@ -225,8 +225,8 @@ class ParsedDocumentTests: XCTestCase {
     func testArrayValueSizeMismatch() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 11, 0, 0, 0,
-            /* document key: */ 4, 0,
-            /* document data: */ 10, 0, 0, 0,
+            /* array key: */ 4, 0,
+            /* array data: */ 10, 0, 0, 0,
             /* terminator: */ 0,
         ]
         do {
