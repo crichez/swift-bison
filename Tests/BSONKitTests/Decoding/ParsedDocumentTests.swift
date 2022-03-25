@@ -92,7 +92,12 @@ class ParsedDocumentTests: XCTestCase {
     /// This test uses `Double` as its fixed-size type of choice. The logic is the same for other
     /// fixed-size types, so this test satisfies those requirements as well.
     func testFixedValueSizeMismatch() throws {
-        let faultyBytes = [10, 0, 0, 0, 1, 0] + [UInt8](repeating: 1, count: 3) + [0]
+        let faultyBytes: [UInt8] = [
+            /* size: */ 10, 0, 0, 0, 
+            /* Double key: */ 1, 0,
+            /* Double data: */ 1, 1, 1,
+            /* terminator: */ 0,
+        ]
         do {
             let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
