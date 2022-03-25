@@ -6,7 +6,8 @@
 //
 
 @testable 
-import BSONKit
+import BSONParse
+import BSONCompose
 import XCTest
 
 /// Tests internal functionality of the `ParsedDocument` type.

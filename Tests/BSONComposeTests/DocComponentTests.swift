@@ -6,7 +6,7 @@
 //
 
 @testable
-import BSONKit
+import BSONCompose
 import XCTest
 
 /// A test suite for `DocComponent` conforming types.

@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on March 20 2022
 //
 
-import BSONKit
+import BSONParse
 import XCTest
 
 /// A test suite for the `ParsableValue.init(bsonBytes:)` initializer's code branches.

@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on 2/6/22.
 //
 
-import BSONKit
+import BSONCompose
 import XCTest
 
 class DocBuilderTests: XCTestCase {

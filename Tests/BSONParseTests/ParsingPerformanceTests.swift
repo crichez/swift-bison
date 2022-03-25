@@ -5,7 +5,8 @@
 //  Created by Christopher Richez on March 18 2022
 //
 
-import BSONKit
+import BSONCompose
+import BSONParse
 import XCTest
 
 class ParsingPerformanceTests: XCTestCase {

@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import BSONKit
+import BSONCompose
 
 /// A test case that measures the time taken to encode documents of varying complexity.
 class EncodingPerformanceTests: XCTestCase {
