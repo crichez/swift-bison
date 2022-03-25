@@ -5,48 +5,62 @@
 //  Created by Christopher Richez on March 5 2022
 //
 
-import XCTest
+@testable 
 import BSONKit
+import XCTest
 
+/// Tests internal functionality of the `ParsedDocument` type.
 class ParsedDocumentTests: XCTestCase {
-    func testSingleValueDoc() throws {
+    /// Asserts encoding and decoding a valid document returns the same value.
+    func testDocParsed() throws {
         let doc = ComposedDocument {
             "test" => true
         }
-        let encodedDoc = Array(doc.bsonBytes)
-        let decodedDoc = try ParsedDocument(bsonBytes: encodedDoc)
-        let encodedValue = try XCTUnwrap(decodedDoc["test"])
-        let decodedValue = try Bool(bsonBytes: encodedValue)
-        XCTAssertTrue(decodedValue)
+        let decodedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let valueBytes = try XCTUnwrap(decodedDoc["test"])
+        XCTAssertTrue(try Bool(bsonBytes: valueBytes))
     }
 
-    func testMultiValueDoc() throws {
-        let doc = ComposedDocument {
-            "one" => Int64(1)
-            "two" => Int32(2)
-            "three" => UInt64(3)
-            "four" => Double(4)
-            "five" => "5"
-        }
-        let encodedDoc = Array(doc.bsonBytes)
+    /// Asserts decoding an empty document succeeds without errors.
+    func testEmptyDocParsed() throws {
+        let encodedDoc: [UInt8] = [5, 0, 0, 0, 0]
         let decodedDoc = try ParsedDocument(bsonBytes: encodedDoc)
+        XCTAssertNil(decodedDoc["test"])
+    }
 
-        let encodedOne = try XCTUnwrap(decodedDoc["one"])
-        let encodedTwo = try XCTUnwrap(decodedDoc["two"])
-        let encodedThree = try XCTUnwrap(decodedDoc["three"])
-        let encodedFour = try XCTUnwrap(decodedDoc["four"])
-        let encodedFive = try XCTUnwrap(decodedDoc["five"])
+    /// Asserts attempting to parse a document from less than 5 bytes throws 
+    /// `ParsedDocument<_>.Error.docTooShort`.
+    func testDocDataTooShort() throws {
+        let faultyBytes: [UInt8] = [4, 0, 0, 0]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch ParsedDocument<[UInt8]>.Error.docTooShort {
+            // This is expected
+        }
+    }
 
-        let decodedOne = try Int64(bsonBytes: encodedOne)
-        let decodedTwo = try Int32(bsonBytes: encodedTwo)
-        let decodedThree = try UInt64(bsonBytes: encodedThree)
-        let decodedFour = try Double(bsonBytes: encodedFour)
-        let decodedFive = try String(bsonBytes: encodedFive)
+    /// Asserts attempting to parse a document from non null-terminated data throws
+    /// `ParsedDocument<_>.Error.notTerminated`.
+    func testDocDataNotTerminated() throws {
+        let faultyBytes: [UInt8] = [10] + [UInt8](repeating: 1, count: 9)
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch ParsedDocument<[UInt8]>.Error.notTerminated {
+            // This is expected
+        }
+    }
 
-        XCTAssertEqual(decodedOne, 1)
-        XCTAssertEqual(decodedTwo, 2)
-        XCTAssertEqual(decodedThree, 3)
-        XCTAssertEqual(decodedFour, 4)
-        XCTAssertEqual(Array(decodedFive.utf8), Array("5".utf8))
+    /// Asserts attempting to parse a document with a declared size less than `data.count`
+    /// throws `.docTooShort` with the expected values.
+    func testDocSizeMismatch() throws {
+        let faultyBytes: [UInt8] = [3, 0, 0, 0, 0]
+        do {
+            let decodedDoc = try ParsedDocument(bsonBytes: faultyBytes)
+            XCTFail("expected decoding to fail, but returned \(decodedDoc)")
+        } catch let error as ParsedDocument<[UInt8]>.Error {
+            XCTAssertEqual(error, .docSizeMismatch(3))
+        }
     }
 }
