@@ -134,6 +134,9 @@ extension ParsedDocument {
         /// A variable size, determined by the encoded value itself.
         case variable((Data.SubSequence) -> Result)
 
+        /// The same size rules as the type at the provided index.
+        case recursive(UInt8)
+
         /// An unknown type.
         case none
 
@@ -177,17 +180,7 @@ extension ParsedDocument {
                 // Return the declared size of the document
                 return .success(size: size)
             },
-            /* [4] Array: */ .variable { data in 
-                // Ensure the document is at least 5 bytes long for the size and terminator
-                guard data.count >= 5 else { return .failure(needAtLeast: 5) }
-                // Read the size of the document
-                // try! since we already guaranteed four bytes
-                let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
-                // Ensure the data is at least as long as the declared size of the document
-                guard data.count >= size else { return .failure(needAtLeast: size) }
-                // Return the declared size of the document
-                return .success(size: size)
-            },
+            /* [4] Array: */ .recursive(3),
             /* [5] Binary: */ .variable { data in 
                 // Ensure there are at least 5 bytes for the size and subtype
                 guard data.count >= 5 else { return .failure(needAtLeast: 5) }
@@ -221,19 +214,7 @@ extension ParsedDocument {
                 }
             },
             /* [12] DBPointer (deprecated): */ .none,
-            /* [13] JavaScript Code: */ .variable { data in 
-                // Ensure the data is at least 5 bytes long for size and null terminator
-                guard data.count >= 5 else { return .failure(needAtLeast: 5) }
-                // Read the size of the string
-                // try! since we already guaranteed four bytes
-                let declaredSize = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
-                // Ensure the data is at least as long as the declared string size plus metadata
-                guard data.count >= declaredSize + 4 else { 
-                    return .failure(needAtLeast: declaredSize + 4) 
-                }
-                // Return the declared size of the string plus metadata
-                return .success(size: declaredSize + 4)
-            },
+            /* [13] JavaScript Code: */ .recursive(2),
             /* [14] Symbol (deprecated): */ .none,
             /* [15] JavaScript Code with Scope (Deprecated): */ .none,
             /* [16] Int32: */ .fixed(4),
@@ -350,6 +331,8 @@ extension ParsedDocument {
             return .success(size: size)
         case .variable(let sizeHandler):
             return sizeHandler(data)
+        case .recursive(let alias):
+            return measure(type: alias, in: data, using: typeMap)
         case .none:
             return nil
         }
