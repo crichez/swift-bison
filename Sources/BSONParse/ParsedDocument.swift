@@ -342,7 +342,7 @@ extension ParsedDocument {
 // MARK: Protocol Conformance
 
 extension ParsedDocument: Sequence {
-    public func makeIterator() -> some IteratorProtocol {
+    public func makeIterator() -> OrderedDictionary<String, Data.SubSequence>.Iterator {
         discovered.makeIterator()
     }
 }
