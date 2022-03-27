@@ -15,7 +15,7 @@ jobs:
       - name: Test
         run: swift test
 
-  test-apple-platforms:
+  test-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,15 +23,6 @@ jobs:
       - name: Test macOS
         run: swift test
 
-      - name: Test iOS
-        run: xcodebuild test -scheme swift-bson-Package -destination "platform=iOS Simulator,name=iPhone 8,OS=15.2"
-
-      - name: Test tvOS
-        run: xcodebuild test -scheme swift-bson-Package -destination "platform=tvOS Simulator,name=Apple TV,OS=15.2"
-
-      - name: Test watchOS
-        run: xcodebuild test -scheme swift-bson-Package -destination "platform=watchOS Simulator,name=Apple Watch Series 4 - 40mm,OS=8.3"
-      
   test-windows:
     runs-on: windows-latest
     steps:
