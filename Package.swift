@@ -44,5 +44,8 @@ let package = Package(
         .testTarget(
             name: "BSONParseTests",
             dependencies: ["BSONParse"]),
+        .target(
+            name: "BSONKit",
+            dependencies: ["BSONCompose", "BSONParse"]),
     ]
 )
