@@ -105,7 +105,9 @@ extension BSONUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     }
 
     func encode<T: Encodable>(_ value: T) throws {
-        fatalError("not implemented")
+        let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
+        try value.encode(to: encoder)
+        contents.append(encoder)
     }
 
     func encode(_ value: Bool) throws {
@@ -131,6 +133,8 @@ extension BSONUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     }
 
     func superEncoder() -> Encoder {
-        fatalError("not implemented")
+        let superEncoder = BSONEncodingContainerProvider(codingPath: codingPath)
+        contents.append(superEncoder)
+        return superEncoder
     }
 }

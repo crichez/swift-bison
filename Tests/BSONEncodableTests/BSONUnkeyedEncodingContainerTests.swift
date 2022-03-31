@@ -93,7 +93,6 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
     }
 
     func testEncodeOptional() throws {
-        try XCTSkipIf(true, "not implemented")
         let value: Int64? = Int64.random(in: .min ... .max)
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
@@ -119,13 +118,12 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
     }
 
     func testNestedUnkeyedContainer() throws {
-        try XCTSkipIf(true, "no array documents in BSONCompose yet")
         let value = "test"
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         var nestedContainer = container.nestedUnkeyedContainer()
         try nestedContainer.encode(value)
         let expectedBytes = ComposedDocument {
-            "0" => ComposedDocument {
+            "0" => ComposedArrayDocument {
                 "0" => value
             }
         }
@@ -134,7 +132,6 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
     }
 
     func testSuperEncoder() throws {
-        try XCTSkipIf(true, "not implemented")
         let value = false
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         let superEncoder = container.superEncoder()
