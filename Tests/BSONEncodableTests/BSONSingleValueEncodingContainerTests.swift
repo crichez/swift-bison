@@ -13,7 +13,7 @@ import XCTest
 class BSONSingleValueEncodingContainerTests: XCTestCase {
     func testEncodeDouble() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -22,7 +22,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     }
 
     func testEncodeNil() throws {
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encodeNil()
         let expectedBytes = Optional<Bool>.none.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -32,7 +32,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
 
     func testEncodeString() throws {
         let value = "test"
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -42,7 +42,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
 
     func testEncodeBool() throws {
         let value = Bool.random()
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -52,7 +52,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeInt32() throws {
         let value = Int32.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -62,7 +62,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeUInt64() throws {
         let value = UInt64.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -72,7 +72,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeInt64() throws {
         let value = Int64.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -82,7 +82,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeInt() throws {
         let value = Int.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bitWidth == 32 ? Int32(value).bsonBytes : Int64(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -92,7 +92,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeInt8() throws {
         let value = Int8.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = Int32(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -102,7 +102,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeInt16() throws {
         let value = Int16.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = Int32(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -112,7 +112,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeUInt8() throws {
         let value = UInt8.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = UInt64(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -122,7 +122,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeUInt16() throws {
         let value = UInt16.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = UInt64(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -132,7 +132,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeUInt32() throws {
         let value = UInt32.random(in: .min ... .max)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = UInt64(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -142,7 +142,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     
     func testEncodeFloat() throws {
         let value = Float.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = Double(value).bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
@@ -152,7 +152,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
 
     func testEncodeOptional() throws {
         let value: String? = "test"
-        var container = BSONSingleValueEncodingContainer(codingPath: [])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
         let expectedBytes = value.bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
