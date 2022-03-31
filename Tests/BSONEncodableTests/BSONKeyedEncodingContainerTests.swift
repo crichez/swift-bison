@@ -92,7 +92,6 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
     }
 
     func testEncodeOptional() throws {
-        try XCTSkipIf(true, "not implemented")
         let value: UInt64? = UInt64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
@@ -118,13 +117,12 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
     }
 
     func testNestedUnkeyedContainer() throws {
-        try XCTSkipIf(true, "we don't have a way to encode an array document in BSONCompose yet")
         let value: UInt64? = UInt64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         var nestedContainer = container.nestedUnkeyedContainer(forKey: .test)
         try nestedContainer.encode(value)
         let expectedBytes = ComposedDocument {
-            "test" => ComposedDocument {
+            "test" => ComposedArrayDocument {
                 "0" => value
             }
         }
@@ -133,7 +131,6 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
     }
 
     func testSuperEncoderNoKey() throws {
-        try XCTSkipIf(true, "reference semantics not yet implemented on this container")
         let value = UInt64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         let superEncoder = container.superEncoder()
@@ -146,7 +143,6 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
     }
 
     func testSuperEncoderForKey() throws {
-        try XCTSkipIf(true, "reference semantics not yet implemented on this container")
         let value = UInt64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         let superEncoder = container.superEncoder(forKey: .test)

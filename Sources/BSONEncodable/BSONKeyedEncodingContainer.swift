@@ -123,8 +123,10 @@ extension BSONKeyedEncodingContainer: KeyedEncodingContainerProtocol {
         codingPath.append(key)
     }
 
-    func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
-        fatalError("not implemented")
+    func encode<T: Encodable>(_ value: T, forKey key: Key) throws {
+        let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
+        try value.encode(to: encoder)
+        contents.append(key, encoder)
     }
 
     func nestedContainer<NestedKey: CodingKey>(
@@ -137,14 +139,20 @@ extension BSONKeyedEncodingContainer: KeyedEncodingContainerProtocol {
     }
 
     func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-        fatalError("not implemented")
+        let nestedContainer = BSONUnkeyedEncodingContainer(codingPath: codingPath)
+        contents.append(key, nestedContainer)
+        return nestedContainer
     }
 
     func superEncoder() -> Encoder {
-        fatalError("not implemented")
+        let superEncoder = BSONEncodingContainerProvider(codingPath: codingPath)
+        contents.append(("super", ValueBox(superEncoder)))
+        return superEncoder
     }
 
     func superEncoder(forKey key: Key) -> Encoder {
-        fatalError("not implemented")
+        let superEncoder = BSONEncodingContainerProvider(codingPath: codingPath)
+        contents.append(key, superEncoder)
+        return superEncoder
     }
 }
