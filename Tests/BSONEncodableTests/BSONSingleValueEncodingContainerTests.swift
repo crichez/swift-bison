@@ -1,5 +1,5 @@
 //
-//  BSONSingleValueContainerTests.swift
+//  BSONSingleValueEncodingContainerTests.swift
 //
 //
 //  Created by Christopher Richez on March 28th 2022
@@ -10,7 +10,7 @@ import BSONEncodable
 import BSONCompose
 import XCTest
 
-class BSONSingleValueContainerTests: XCTestCase {
+class BSONSingleValueEncodingContainerTests: XCTestCase {
     func testEncodeDouble() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         var container = BSONSingleValueEncodingContainer(codingPath: [])
