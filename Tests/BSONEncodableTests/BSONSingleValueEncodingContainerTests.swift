@@ -151,7 +151,6 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
     }
 
     func testEncodeOptional() throws {
-        try XCTSkipIf(true, "not implemented")
         let value: String? = "test"
         var container = BSONSingleValueEncodingContainer(codingPath: [])
         try container.encode(value)
