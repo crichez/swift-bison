@@ -7,13 +7,7 @@ the BSONKit project.
 ## Development Environment
 
 BSONKit is a pure Swift Package Manager Project that supports all Swift platforms for both 
-release and development. The maintainer of this repository uses Visual Studio Code with the 
-Swift Server Work Group's Swift language support extension.
-
-This project should build properly on Xcode, but you may encounter similar problems to
-those described in issue [#2](https://github.com/crichez/swift-bson/issues/2). These are related
-to differences between the Swift open-source toolchain and Xcode's toolchain and are out of my
-control for now.
+release and development.
 
 ## Discussions
 
