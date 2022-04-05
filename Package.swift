@@ -42,7 +42,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "BSONParseTests",
-            dependencies: ["BSONParse"]),
+            dependencies: ["BSONParse", "BSONCompose"]),
         .target(
             name: "BSONEncodable",
             dependencies: ["BSONCompose"]),
