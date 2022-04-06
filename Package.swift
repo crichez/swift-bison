@@ -33,12 +33,14 @@ let package = Package(
             dependencies: [
                 .product(name: "OrderedCollections", package: "swift-collections"),
             ]),
-        .testTarget(name: "BSONParseTests", dependencies: ["BSONParse"]),
+        .testTarget( name: "BSONParseTests", dependencies: ["BSONParse", "BSONCompose"]),
 
         .target(name: "BSONEncodable", dependencies: ["BSONCompose"]),
         .testTarget(name: "BSONEncodableTests", dependencies: ["BSONEncodable", "BSONCompose"]),
 
         .target(name: "BSONDecodable", dependencies: ["BSONParse"]),
-        .testTarget(name: "BSONDecodableTests", dependencies: ["BSONParse", "BSONDecodable"])
+        .testTarget(
+            name: "BSONDecodableTests", 
+            dependencies: ["BSONParse", "BSONDecodable", "BSONCompose"]),
     ]
 )

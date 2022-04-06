@@ -6,6 +6,7 @@
 //
 
 import BSONParse
+import BSONCompose
 import XCTest
 
 /// A test suite for the `ParsableValue.init(bsonBytes:)` initializer's code branches.
