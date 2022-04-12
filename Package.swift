@@ -41,6 +41,6 @@ let package = Package(
         .target(name: "BSONDecodable", dependencies: ["BSONParse"]),
         .testTarget(
             name: "BSONDecodableTests", 
-            dependencies: ["BSONParse", "BSONDecodable", "BSONCompose"]),
+            dependencies: ["BSONParse", "BSONEncodable", "BSONDecodable", "BSONCompose"]),
     ]
 )

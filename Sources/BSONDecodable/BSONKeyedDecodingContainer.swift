@@ -225,91 +225,27 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
         forKey key: Key
     ) throws -> KeyedDecodingContainer<NestedKey> {
         let encodedDoc = try valueData(forKey: key)
-        do {
-            let parsedDoc = try ParsedDocument(bsonBytes: encodedDoc)
-            let nestedContainer = BSONKeyedDecodingContainer<Data.SubSequence, NestedKey>(
-                doc: parsedDoc,
-                codingPath: codingPath)
-            return KeyedDecodingContainer(nestedContainer)
-        } catch NestedDocError.docTooShort {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: """
-                    expected at least 5 bytes for a document, but found \(encodedDoc.count)
-                """,
-                underlyingError: NestedDocError.docTooShort)
-            throw DecodingError.typeMismatch(KeyedDecodingContainer<NestedKey>.self, context)
-        } catch NestedDocError.notTerminated {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected a null byte at the end of the document",
-                underlyingError: NestedDocError.notTerminated)
-            throw DecodingError.dataCorrupted(context)
-        } catch NestedDocError.docSizeMismatch(let declared) {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: """
-                    declared document size is \(declared) but actual size is \(encodedDoc.count)
-                """,
-                underlyingError: NestedDocError.docSizeMismatch(declared))
-            throw DecodingError.typeMismatch(KeyedDecodingContainer<NestedKey>.self, context)
-        } catch NestedDocError.unknownType(let type, let key, let progress) {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "key \"\(key)\" has unknown type byte \(type)", 
-                underlyingError: NestedDocError.unknownType(type, key, progress))
-            throw DecodingError.dataCorrupted(context)
-        } catch NestedDocError.valueSizeMismatch(let need, let key, let progress) {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected at least \(need) bytes for value \"\(key)\"",
-                underlyingError: NestedDocError.valueSizeMismatch(need, key, progress))
-            throw DecodingError.dataCorrupted(context)
-        }
+        let parsedDoc = try ParsedDocument(
+            decoding: encodedDoc, 
+            codingPath: codingPath, 
+            for: KeyedDecodingContainer<NestedKey>.self)
+        codingPath.append(key)
+        let container = BSONKeyedDecodingContainer<Data.SubSequence, NestedKey>(
+            doc: parsedDoc, 
+            codingPath: codingPath)
+        return KeyedDecodingContainer(container)
     }
 
     func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
         let encodedDoc = try valueData(forKey: key)
-        do {
-            let parsedDoc = try ParsedDocument(bsonBytes: encodedDoc)
-            return BSONUnkeyedDecodingContainer<Data.SubSequence>(
-                doc: parsedDoc,
-                codingPath: codingPath)
-        } catch NestedDocError.docTooShort {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: """
-                    expected at least 5 bytes for a document, but found \(encodedDoc.count)
-                """,
-                underlyingError: NestedDocError.docTooShort)
-            throw DecodingError.typeMismatch(UnkeyedDecodingContainer.self, context)
-        } catch NestedDocError.notTerminated {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected a null byte at the end of the document",
-                underlyingError: NestedDocError.notTerminated)
-            throw DecodingError.dataCorrupted(context)
-        } catch NestedDocError.docSizeMismatch(let declared) {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: """
-                    declared document size is \(declared) but actual size is \(encodedDoc.count)
-                """,
-                underlyingError: NestedDocError.docSizeMismatch(declared))
-            throw DecodingError.typeMismatch(UnkeyedDecodingContainer.self, context)
-        } catch NestedDocError.unknownType(let type, let key, let progress) {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "key \"\(key)\" has unknown type byte \(type)", 
-                underlyingError: NestedDocError.unknownType(type, key, progress))
-            throw DecodingError.dataCorrupted(context)
-        } catch NestedDocError.valueSizeMismatch(let need, let key, let progress) {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected at least \(need) bytes for value \"\(key)\"",
-                underlyingError: NestedDocError.valueSizeMismatch(need, key, progress))
-            throw DecodingError.dataCorrupted(context)
-        }
+        let parsedDoc = try ParsedDocument(
+            decoding: encodedDoc, 
+            codingPath: codingPath, 
+            for: UnkeyedDecodingContainer.self)
+        codingPath.append(key)
+        return BSONUnkeyedDecodingContainer<Data.SubSequence>(
+            doc: parsedDoc, 
+            codingPath: codingPath)
     }
 
     private enum MissingKey: CodingKey {
