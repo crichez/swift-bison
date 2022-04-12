@@ -225,10 +225,9 @@ extension BSONUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     }
 
     mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-        fatalError("not implemented")
-        // let encodedValue = try nextValueData()
-        // var decoder = DecodingContainerProvider(data: encodedValue, codingPath: codingPath)
-        // return try type.init(from: decoder)
+        let encodedValue = try nextValueData()
+        let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
+        return try type.init(from: decoder)
     }
 
     /// The error expected from parsing a nested keyed document.
@@ -326,7 +325,6 @@ extension BSONUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     }
 
     mutating func superDecoder() throws -> Decoder {
-        fatalError("not implemented")
-        // return DecodingContainerProvider(data: try nextValueData(), codingPath: codingPath)
+        DecodingContainerProvider(encodedValue: try nextValueData(), codingPath: codingPath)
     }
 }

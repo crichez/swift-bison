@@ -211,11 +211,10 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     func decode<T: Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
-        fatalError("not implemented")
-        // let encodedValue = try valueData(forKey: key)
-        // codingPath.append(key)
-        // var decoder = DecodingContainerProvider(data: encodedValue, codingPath: codingPath)
-        // return try type.init(from: decoder)
+        let encodedValue = try valueData(forKey: key)
+        codingPath.append(key)
+        let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
+        return try type.init(from: decoder)
     }
 
     /// The error expected from parsing a nested keyed document.
@@ -313,15 +312,21 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
         }
     }
 
+    private enum MissingKey: CodingKey {
+        case `super`
+    }
+
     func superDecoder() throws -> Decoder {
-        fatalError("not implemented")
-        // return DecodingContainerProvider(data: doc["super"], codingPath: codingPath)
+        guard let encodedValue = doc["super"] else {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: "no key named \"super\" in document")
+            throw DecodingError.keyNotFound(MissingKey.super, context)
+        }
+        return DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
     }
 
     func superDecoder(forKey key: Key) throws -> Decoder {
-        fatalError("not implemented")
-        // let valueData = try valueData(forKey: key)
-        // codingPath.append(key)
-        // return DecodingContainerProvider(data: valueData, codingPath: codingPath)
+        DecodingContainerProvider(encodedValue: try valueData(forKey: key), codingPath: codingPath)
     }
 }

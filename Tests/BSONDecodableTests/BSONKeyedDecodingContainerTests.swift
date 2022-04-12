@@ -231,7 +231,6 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testOptional() throws {
-        try XCTSkipIf(true, "not implemented")
         let value: Int64? = .random(in: .min ... .max)
         let doc = ComposedDocument {
             "test" => value
@@ -287,7 +286,6 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testSuperDecoderNoKey() throws {
-        try XCTSkipIf(true, "not implemented")
         let value = Bool.random()
         let doc = ComposedDocument {
             "super" => value
@@ -299,7 +297,6 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testSuperDecoderWithKey() throws {
-        try XCTSkipIf(true, "not implemented")
         let value = Bool.random()
         let doc = ComposedDocument {
             "test" => value

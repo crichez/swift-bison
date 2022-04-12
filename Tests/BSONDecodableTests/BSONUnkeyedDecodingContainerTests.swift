@@ -202,7 +202,6 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     }
 
     func testOptional() throws {
-        try XCTSkipIf(true, "not implemented")
         let value: String? = "test"
         let doc = ComposedDocument { "0" => value }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -241,7 +240,6 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     }
 
     func testSuperDecoder() throws {
-        try XCTSkipIf(true, "not implemented")
         let value = Bool.random()
         let doc = ComposedDocument { 
             "0" => value

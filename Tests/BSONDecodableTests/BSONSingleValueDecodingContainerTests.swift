@@ -165,7 +165,6 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     // MARK: Optional
 
     func testOptional() throws {
-        try XCTSkipIf(true, "not implemented")
         let value: Int32? = .random(in: .min ... .max)
         let container = BSONSingleValueDecodingContainer(contents: value.bsonBytes, codingPath: [])
         XCTAssertEqual(try container.decode(Int32?.self), value)

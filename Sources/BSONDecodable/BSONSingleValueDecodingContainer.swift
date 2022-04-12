@@ -207,8 +207,7 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
     }
 
     func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-        fatalError("not implemented")
-        // let decoder = DecodingContainerProvider(bsonBytes: contents, codingPath: codingPath)
-        // return try T(from: decoder)
+        let decoder = DecodingContainerProvider(encodedValue: contents, codingPath: codingPath)
+        return try T(from: decoder)
     }
 }
