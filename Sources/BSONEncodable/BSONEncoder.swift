@@ -5,6 +5,8 @@
 //  Created by Christopher Richez on March 31 2022
 //
 
+import Foundation
+
 /// Use `BSONEncoder` to encode `Encodable` values into fully-formed BSON documents.
 /// 
 /// - Note: 
@@ -29,9 +31,9 @@ public struct BSONEncoder {
     /// 
     /// - Returns: 
     /// The bytes of the resulting BSON document.
-    public func encode<T: Encodable>(_ value: T) throws -> [UInt8] {
+    public func encode<T: Encodable>(_ value: T) throws -> Data {
         let containerProvider = BSONEncodingContainerProvider(codingPath: [])
         try value.encode(to: containerProvider)
-        return containerProvider.bsonBytes
+        return Data(containerProvider.bsonBytes)
     }
 }
