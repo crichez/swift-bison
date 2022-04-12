@@ -274,7 +274,6 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testNestedUnkeyedContainer() throws {
-        try XCTSkipIf(true, "not implemented")
         let value = "passed?"
         let doc = ComposedDocument {
             "test" => ComposedArrayDocument {
