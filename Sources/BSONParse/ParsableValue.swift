@@ -21,7 +21,7 @@ public protocol ParsableValue {
 
 extension Int32: ParsableValue {
     /// The error type thrown by `Int32.init(bsonBytes:)`.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// The data passed to the initializer was not 4 bytes long.
         case sizeMismatch
     }
@@ -41,7 +41,7 @@ extension Int32: ParsableValue {
 
 extension Int64: ParsableValue {
     /// The error type thrown by `Int64.init(bsonBytes:)`.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// The data passed to the initializer was not 8 bytes long.
         case sizeMismatch
     }
@@ -61,7 +61,7 @@ extension Int64: ParsableValue {
 
 extension UInt64: ParsableValue {
     /// The error type thrown by `UInt64.init(bsonBytes:)`.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// The data passed to the initializer was not 8 bytes long.
         case sizeMismatch
     }
@@ -81,7 +81,7 @@ extension UInt64: ParsableValue {
 
 extension Double: ParsableValue {
     /// The error type thrown by `Double.init(bsonBytes:)`.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// The data passed to the initializer was not 8 bytes long.
         case sizeMismatch
     }
@@ -101,7 +101,7 @@ extension Double: ParsableValue {
 
 extension Bool: ParsableValue {
     /// The error type thrown by `Bool.init(bsonBytes:)`.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// The data passed to the initializer was not 1 byte long.
         case sizeMismatch
     }
@@ -119,7 +119,7 @@ extension Bool: ParsableValue {
 
 extension String: ParsableValue {
     /// The error type thrown by `String.init(bsonBytes:)`.
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         /// Less than 5 bytes were provided to the initializer.
         case dataTooShort
 
