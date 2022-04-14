@@ -4,12 +4,25 @@ Binary JSON encoding and decoding in Swift.
 
 ## Overview
 
-BSONKit is a Swift Package Manager project that exposes three modules:
-* `BSONCompose` to encode BSON documents into byte arrays.
-* `BSONParse` to decode BSON documents from raw data.
-* `BSONKit` for both encoding and decoding functionality.
+The BSONKit package exposes two main modules:
+* `BSONKit` for fast, flexible and type-safe document encoding and decoding.
+* `BSONCodable` to adapt existing Swift `Codable` code already in your project.
 
-You can import this package by adding the following line to your Package.swift dependencies:
+Each of these modules is available for encoding or decoding only by importing:
+* `BSONCompose` & `BSONParse` as alternatives to the full `BSONKit`.
+* `BSONEncodable` & `BSONDecodable` as alternatives to the full `BSONCodable`.
+
+This project is tested in continuous integration on the following platforms:
+* macOS 11
+* iOS 15
+* tvOS 15
+* watchOS 8
+* ubuntu 20.04
+* Windows Server 2022
+
+## Usage
+
+You can import this package by adding the following line to your `Package.swift` dependencies:
 ```swift
 .package(url: "https://github.com/crichez/swift-bson", .upToNextMinor("0.0.1"))
 ```
@@ -20,7 +33,7 @@ versioning rules will apply.
 
 ### BSONCompose
 
-Document encoding is done through `DocBuilder` declarations.
+When using `BSONCompose`, document structure is declared using a custom result builder.
 ```swift
 import BSONCompose
 
@@ -41,9 +54,9 @@ let encodedDoc: [UInt8] = doc.bsonBytes
 
 ### BSONParse
 
-Document decoding is done in two steps:
-1. Parse the document's structure using `ParsedDocument`
-2. Decode individual values using their `init(bsonBytes:)` initializer.
+When using `BSONParse`, decoding is done in two steps:
+1. Validate the document's structure by intializing a `ParsedDocument`
+2. Decode individual values using their `init(bsonBytes:)` initializer
 
 ```swift
 import BSONParse
@@ -62,4 +75,23 @@ let nestedDoc = try ParsedDocument(bsonBytes: doc["doc"])
 // And they expose their contents the same way
 let flag = try Bool(bsonBytes: nestedDoc["flag"])
 let maybe = try String?(bsonBytes: nestedDoc["maybe?"])
+```
+
+### BSONCodable
+
+`BSONCodable` is meant as a drop-in replacement for `PropertyListEncoder` or `JSONDecoder`,
+including error handling using Swift `EncodingError` and `DecodingError`.
+You can use the `BSONEncoder` and `BSONDecoder` types as analogs that produce BSON documents.
+
+```swift
+import BSONCodable
+
+struct Person: Codable {
+    let name: String
+    let age: Int
+}
+
+let person = Person(name: "Bob Belcher", age: 41)
+let encodedPerson = try BSONEncoder().encode(person)
+let decodedPerson = try BSONDecoder().decode(Person.self, from: encodedPerson)
 ```
