@@ -18,6 +18,7 @@ let package = Package(
         .library(name: "BSONKit", targets: ["BSONCompose", "BSONParse"]),
         .library(name: "BSONDecodable", targets: ["BSONDecodable"]),
         .library(name: "BSONEncodable", targets: ["BSONEncodable"]),
+        .library(name: "BSONCodable", targets: ["BSONEncodable", "BSONDecodable"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-collections", .upToNextMajor(from: "1.0.0"))
