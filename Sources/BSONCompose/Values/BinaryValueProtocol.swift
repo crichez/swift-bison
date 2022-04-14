@@ -1,0 +1,33 @@
+//
+//  BinaryValueProtocol.swift
+//
+//
+//  Created by Christopher Richez on April 14 2022
+//
+
+/// A BSON value that declares the `binary` type (5).
+/// 
+/// Conform to `BinaryValueProtocol` instead of `ValueProtocol` for binary values.
+/// Size and subtype metadata are generated for you, and you only need to return the value's
+/// content data.
+public protocol BinaryValueProtocol: ValueProtocol {
+    /// The subtype byte to declare.
+    var bsonSubtype: UInt8 { get }
+
+    /// The bytes of the value itself, not including its size and subtype.
+    var bsonValueBytes: [UInt8] { get }
+}
+
+extension BinaryValueProtocol {
+    public var bsonType: UInt8 {
+        5
+    }
+
+    public var bsonBytes: [UInt8] {
+        let valueBytes = bsonValueBytes
+        var bsonBytes = Int32(valueBytes.count).bsonBytes
+        bsonBytes.append(bsonSubtype)
+        bsonBytes.append(contentsOf: valueBytes)
+        return bsonBytes
+    }
+}
