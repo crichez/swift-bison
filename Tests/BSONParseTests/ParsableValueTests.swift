@@ -20,15 +20,16 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
-    /// Asserts attempting to decode a `Double` from other than 8 bytes throws
-    /// `Double.Error.sizeMismatch`.
+    /// Asserts attempting to decode a `Double` from other than 8 bytes throws the appropriate
+    /// error with the expected attached values.
     func testDoubleSizeMismatch() throws {
+        let faultyBytes: [UInt8] = [0, 1, 2, 3]
         do {
-            let faultyBytes: [UInt8] = [0, 1, 2, 3]
             let decodedValue = try Double(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch Double.Error.sizeMismatch {
-            return
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            XCTAssertEqual(need, MemoryLayout<Double>.size)
+            XCTAssertEqual(have, faultyBytes.count)
         }
     }
 
@@ -41,29 +42,31 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
-    /// Asserts attempting to decode a `String` from less than 5 bytes throws
-    /// `String.Error.dataTooShort`.
+    /// Asserts attempting to decode a `String` from less than 5 bytes throws the appropriate
+    /// error with the expected attached values.
     func testStringDataTooShort() throws {
+        let faultyBytes: [UInt8] = [0, 1, 2]
         do {
-            let faultyBytes: [UInt8] = [0, 1, 2]
             let decodedValue = try String(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch String.Error.dataTooShort {
-            return
+        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+            XCTAssertEqual(needAtLeast, 5)
+            XCTAssertEqual(have, faultyBytes.count)
         }
     }
 
     /// Asserts attempting to decode a `String` with a declared size different from its
-    /// actual size throws `String.Error.sizeMismatch`.
+    /// actual size throws the appropriate error with the expected attached values.
     func testStringSizeMismatch() throws {
+        let value = "this is a test! \u{10097}"
+        var encodedValue = value.bsonBytes
         do {
-            let value = "this is a test! \u{10097}"
-            var encodedValue = value.bsonBytes
-            encodedValue.replaceSubrange(0..<4, with: Int32(5).bsonBytes)
+            encodedValue.replaceSubrange(0..<4, with: Int32(100).bsonBytes)
             let decodedValue = try String(bsonBytes: encodedValue)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch String.Error.sizeMismatch {
-            return
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            XCTAssertEqual(need, 104)
+            XCTAssertEqual(have, encodedValue.count)
         }
     }
 
@@ -76,14 +79,16 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
-    /// Asserts decoding a `Bool` from more than 1 byte throws `Bool.Error.sizeMismatch`.
+    /// Asserts decoding a `Bool` from more than 1 byte throws the appropriate error with the
+    /// expected attached values.
     func testBoolSizeMismatch() throws {
         let faultyBytes = [UInt8](repeating: 1, count: 3)
         do {
             let decodedValue = try Bool(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch Bool.Error.sizeMismatch {
-            // This is expected
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            XCTAssertEqual(need, MemoryLayout<Bool>.size)
+            XCTAssertEqual(have, faultyBytes.count)
         }
     }
 
@@ -96,14 +101,16 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
-    /// Asserts decoding an `Int32` from less than 4 bytes throws `Int32.Error.sizeMismatch`.
+    /// Asserts decoding an `Int32` from less than 4 bytes throws the appropriate error with the
+    /// expected attached values.
     func testInt32SizeMismatch() throws {
         let faultyBytes = [UInt8](repeating: 1, count: 3)
         do {
             let decodedValue = try Int32(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch Int32.Error.sizeMismatch {
-            // This is expected
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            XCTAssertEqual(need, MemoryLayout<Int32>.size)
+            XCTAssertEqual(have, faultyBytes.count)
         }
     }
 
@@ -116,14 +123,16 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
-    /// Asserts decoding a `UInt64` from less than 4 bytes throws `UInt64.Error.sizeMismatch`.
+    /// Asserts decoding a `UInt64` from less than 4 bytes throws the appropriate error with the
+    /// expected attached values.
     func testUInt64SizeMismatch() throws {
         let faultyBytes = [UInt8](repeating: 1, count: 3)
         do {
             let decodedValue = try UInt64(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch UInt64.Error.sizeMismatch {
-            // This is expected
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            XCTAssertEqual(need, MemoryLayout<UInt64>.size)
+            XCTAssertEqual(have, faultyBytes.count)
         }
     }
 
@@ -136,14 +145,16 @@ class ParsableValueTests: XCTestCase {
         XCTAssertEqual(value, decodedValue)
     }
 
-    /// Asserts decoding a `Int64` from less than 4 bytes throws `Int64.Error.sizeMismatch`.
+    /// Asserts decoding a `Int64` from less than 4 bytes throws the appropriate error with the 
+    /// expected attached values.
     func testInt64SizeMismatch() throws {
         let faultyBytes = [UInt8](repeating: 1, count: 3)
         do {
             let decodedValue = try Int64(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch Int64.Error.sizeMismatch {
-            // This is expected
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            XCTAssertEqual(need, MemoryLayout<Int64>.size)
+            XCTAssertEqual(have, faultyBytes.count)
         }
     }
 }

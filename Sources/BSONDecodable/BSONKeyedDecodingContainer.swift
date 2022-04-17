@@ -44,177 +44,98 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     func decodeNil(forKey key: Key) throws -> Bool {
-        defer { codingPath.append(key) }
-        return try valueData(forKey: key).isEmpty
+        try valueData(forKey: key).isEmpty
+    }
+
+    private func read<T: ParsableValue>(_ type: T.Type, forKey key: Key) throws -> T {
+        let valueData = try valueData(forKey: key)
+        do {
+            let decodedValue = try type.init(bsonBytes: valueData)
+            codingPath.append(key)
+            return decodedValue
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
+                underlyingError: ValueParseError.sizeMismatch(need, have))
+            throw DecodingError.typeMismatch(type, context)
+        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: """
+                    expected at least\(needAtLeast) bytes for a \(type) but found \(have)
+                """,
+                underlyingError: ValueParseError.dataTooShort(needAtLeast, have))
+            throw DecodingError.typeMismatch(type, context)
+        }
     }
 
     func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
-        defer { codingPath.append(key) }
-        let encodedValue = try valueData(forKey: key)
-        do {
-            return try Bool(bsonBytes: encodedValue)
-        } catch Bool.Error.sizeMismatch {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected 1 byte but found \(encodedValue.count)",
-                underlyingError: Bool.Error.sizeMismatch)
-            throw DecodingError.typeMismatch(type, context)
-        }
+        try read(type, forKey: key)
     }
 
     func decode(_ type: String.Type, forKey key: Key) throws -> String {
-        defer { codingPath.append(key) }
-        let encodedValue = try valueData(forKey: key)
-        do {
-            return try String(bsonBytes: encodedValue)
-        } catch String.Error.dataTooShort {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected at least 5 bytes, but found \(encodedValue.count)",
-                underlyingError: String.Error.dataTooShort)
-            throw DecodingError.typeMismatch(type, context)
-        } catch String.Error.sizeMismatch {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "String actual size different from declared size",
-                underlyingError: String.Error.sizeMismatch)
-            throw DecodingError.typeMismatch(type, context)
-        }
+        try read(type, forKey: key)
     }
 
     func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
-        defer { codingPath.append(key) }
-        let encodedValue = try valueData(forKey: key)
-        do {
-            return try Double(bsonBytes: encodedValue)
-        } catch Double.Error.sizeMismatch {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected 8 bytes, but found \(encodedValue.count)",
-                underlyingError: Double.Error.sizeMismatch)
-            throw DecodingError.typeMismatch(type, context)
-        }
+        try read(type, forKey: key)
     }
 
     func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
-        do {
-            return Float(try decode(Double.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        Float(try read(Double.self, forKey: key))
     }
 
     func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
         if MemoryLayout<Int>.size == 4 {
-            do {
-                return Int(try decode(Int32.self, forKey: key))
-            } catch DecodingError.typeMismatch(_, let context) {
-                throw DecodingError.typeMismatch(type, context)
-            }
+            return Int(try read(Int32.self, forKey: key))
         } else {
-            do {
-                return Int(try decode(Int64.self, forKey: key))
-            } catch DecodingError.typeMismatch(_, let context) {
-                throw DecodingError.typeMismatch(type, context)
-            }
+            return Int(try read(Int64.self, forKey: key))
         }
     }
 
     func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
-        do {
-            return Int8(try decode(Int32.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        Int8(try read(Int32.self, forKey: key))
     }
 
     func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
-        do {
-            return Int16(try decode(Int32.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        Int16(try read(Int32.self, forKey: key))
     }
 
     func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
-        defer { codingPath.append(key) }
-        let encodedValue = try valueData(forKey: key)
-        do {
-            return try type.init(bsonBytes: encodedValue)
-        } catch Int32.Error.sizeMismatch {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected 4 bytes, but found \(encodedValue.count)",
-                underlyingError: Int32.Error.sizeMismatch)
-            throw DecodingError.typeMismatch(type, context)
-        }
+        try read(type, forKey: key)
     }
 
     func decode(_ type: Int64.Type, forKey key: Key) throws -> Int64 {
-        defer { codingPath.append(key) }
-        let encodedValue = try valueData(forKey: key)
-        do {
-            return try type.init(bsonBytes: encodedValue)
-        } catch Int64.Error.sizeMismatch {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected 8 bytes, but found \(encodedValue.count)",
-                underlyingError: Int64.Error.sizeMismatch)
-            throw DecodingError.typeMismatch(type, context)
-        }
+        try read(type, forKey: key)
     }
 
     func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
-        do {
-            return UInt(try decode(UInt64.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        UInt(try read(UInt64.self, forKey: key))
     }
 
     func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
-        do {
-            return UInt8(try decode(UInt64.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        UInt8(try read(UInt64.self, forKey: key))
     }
 
     func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
-        do {
-            return UInt16(try decode(UInt64.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        UInt16(try read(UInt64.self, forKey: key))
     }
 
     func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
-        do {
-            return UInt32(try decode(UInt64.self, forKey: key))
-        } catch DecodingError.typeMismatch(_, let context) {
-            throw DecodingError.typeMismatch(type, context)
-        }
+        UInt32(try read(UInt64.self, forKey: key))
     }
 
     func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
-        defer { codingPath.append(key) }
-        let encodedValue = try valueData(forKey: key)
-        do {
-            return try type.init(bsonBytes: encodedValue)
-        } catch UInt64.Error.sizeMismatch {
-            let context = DecodingError.Context(
-                codingPath: codingPath, 
-                debugDescription: "expected 8 bytes, but found \(encodedValue.count)",
-                underlyingError: UInt64.Error.sizeMismatch)
-            throw DecodingError.typeMismatch(type, context)
-        }
+        try read(type, forKey: key)
     }
 
     func decode<T: Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
         let encodedValue = try valueData(forKey: key)
-        codingPath.append(key)
         let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
-        return try type.init(from: decoder)
+        let decodedValue = try type.init(from: decoder)
+        codingPath.append(key)
+        return decodedValue
     }
 
     /// The error expected from parsing a nested keyed document.
@@ -263,6 +184,8 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     func superDecoder(forKey key: Key) throws -> Decoder {
-        DecodingContainerProvider(encodedValue: try valueData(forKey: key), codingPath: codingPath)
+        let encodedValue = try valueData(forKey: key)
+        codingPath.append(key)
+        return DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
     }
 }

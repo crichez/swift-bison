@@ -30,15 +30,17 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     }
 
     func testBoolSizeMismatch() throws {
+        let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
             let decodedValue = try container.decode(Bool.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Bool.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Bool.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Bool>.size, container.contents.count))
         }
     }
 
@@ -51,15 +53,17 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     }
 
     func testDoubleSizeMismatch() throws {
+        let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
             let decodedValue = try container.decode(Double.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Double.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Double.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Double>.size, container.contents.count))
         }
     }
 
@@ -72,30 +76,34 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     }
 
     func testStringDataTooShort() throws {
+        let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
             let decodedValue = try container.decode(String.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? String.Error)
-            XCTAssertEqual(underlyingError, .dataTooShort)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .dataTooShort(5, container.contents.count))
         }
     }
 
     func testStringSizeMismatch() throws {
+        let container = BSONSingleValueDecodingContainer(
+            contents: [9, 0, 0, 0, 0], 
+            codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(
-                contents: [9, 0, 0, 0, 0], 
-                codingPath: [])
             let decodedValue = try container.decode(String.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? String.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(13, container.contents.count))
         }
     }
 
@@ -108,15 +116,17 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     }
 
     func testInt32SizeMismatch() throws {
+        let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
             let decodedValue = try container.decode(Int32.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Int32.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Int32.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Int32>.size, container.contents.count))
         }
     }
 
@@ -129,15 +139,17 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     }
 
     func testUInt64SizeMismatch() throws {
+        let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
             let decodedValue = try container.decode(UInt64.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == UInt64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? UInt64.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<UInt64>.size, container.contents.count))
         }
     }
 
@@ -150,15 +162,17 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     }
 
     func testInt64SizeMismatch() throws {
+        let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
         do {
-            let container = BSONSingleValueDecodingContainer(contents: [1, 2, 3], codingPath: [])
             let decodedValue = try container.decode(Int64.self)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Int64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Int64.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Int64>.size, container.contents.count))
         }
     }
 
