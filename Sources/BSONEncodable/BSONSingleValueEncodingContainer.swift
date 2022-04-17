@@ -125,9 +125,14 @@ extension BSONSingleValueEncodingContainer: SingleValueEncodingContainer {
     }
 
     func encode<T>(_ value: T) throws where T : Encodable {
-        let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
-        try value.encode(to: encoder)
-        encodedValue = encoder.bsonBytes
-        encodedType = encoder.bsonType
+        if let bsonValue = value as? ValueProtocol {
+            encodedValue = bsonValue.bsonBytes
+            encodedType = bsonValue.bsonType
+        } else {
+            let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
+            try value.encode(to: encoder)
+            encodedValue = encoder.bsonBytes
+            encodedType = encoder.bsonType
+        }
     }
 }

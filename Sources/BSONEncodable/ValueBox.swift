@@ -16,6 +16,11 @@ struct ValueBox {
     init<T: ValueProtocol>(_ value: T) {
         self.value = value
     }
+
+    /// Boxes the provided existential value.
+    init(_ value: ValueProtocol) {
+        self.value = value
+    }
 }
 
 extension ValueBox: ValueProtocol {
