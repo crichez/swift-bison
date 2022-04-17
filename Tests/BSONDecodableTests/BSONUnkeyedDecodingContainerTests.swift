@@ -54,8 +54,10 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == Double.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? Double.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Double>.size, MemoryLayout<Bool>.size))
         }
     }
 
@@ -79,13 +81,13 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? String.Error)
-            XCTAssertEqual(underlyingError, .dataTooShort)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(underlyingError, .dataTooShort(5, MemoryLayout<Bool>.size))
         }
     }
 
     func testStringSizeMismatch() throws {
-        let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
+        let value = Int64(9)
         let doc = ComposedDocument { "0" => value }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
@@ -96,8 +98,8 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? String.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(underlyingError, .sizeMismatch(13, MemoryLayout<Int64>.size))
         }
     }
 
@@ -121,8 +123,10 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == Bool.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? Bool.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Bool>.size, MemoryLayout<Double>.size))
         }
     }
 
@@ -146,8 +150,10 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == Int32.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? Int32.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Int32>.size, MemoryLayout<Double>.size))
         }
     }
 
@@ -171,8 +177,10 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == Int64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? Int64.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Int64>.size, MemoryLayout<Int32>.size))
         }
     }
 
@@ -196,8 +204,10 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == UInt64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
-                context.underlyingError as? UInt64.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+                context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<UInt64>.size, MemoryLayout<Int32>.size))
         }
     }
 

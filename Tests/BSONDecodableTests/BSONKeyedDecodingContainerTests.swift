@@ -75,8 +75,10 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Double.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Double.Error)
-            XCTAssertEqual(underlyingError, Double.Error.sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                ValueParseError.sizeMismatch(MemoryLayout<Double>.size, MemoryLayout<Int32>.size))
         }
     }
 
@@ -101,8 +103,8 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? String.Error)
-            XCTAssertEqual(underlyingError, .dataTooShort)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(underlyingError, .dataTooShort(5, MemoryLayout<Int32>.size))
         }
     }
 
@@ -118,8 +120,8 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? String.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(underlyingError, .sizeMismatch(6, 8))
         }
     }
 
@@ -144,8 +146,10 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == Bool.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Bool.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Bool>.size, MemoryLayout<UInt64>.size))
         }
     }
 
@@ -171,8 +175,10 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == Int32.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Int32.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Int32>.size, MemoryLayout<UInt64>.size))
         }
     }
 
@@ -198,8 +204,10 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == Int64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? Int64.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<Int64>.size, MemoryLayout<Int32>.size))
         }
     }
 
@@ -225,8 +233,10 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == UInt64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? UInt64.Error)
-            XCTAssertEqual(underlyingError, .sizeMismatch)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            XCTAssertEqual(
+                underlyingError, 
+                .sizeMismatch(MemoryLayout<UInt64>.size, MemoryLayout<Int32>.size))
         }
     }
 
