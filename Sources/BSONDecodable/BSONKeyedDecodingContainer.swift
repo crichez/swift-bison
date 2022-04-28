@@ -70,6 +70,32 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
         }
     }
 
+    private func readExistential<T>(
+        _ type: ParsableValue.Type, 
+        forKey key: Key, as unwrappedType: T.Type
+    ) throws -> T where T : Decodable {
+        let valueData = try valueData(forKey: key)
+        do {
+            let decodedValue = try type.init(bsonBytes: valueData)
+            codingPath.append(key)
+            return decodedValue as! T
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
+                underlyingError: ValueParseError.sizeMismatch(need, have))
+            throw DecodingError.typeMismatch(type, context)
+        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: """
+                    expected at least\(needAtLeast) bytes for a \(type) but found \(have)
+                """,
+                underlyingError: ValueParseError.dataTooShort(needAtLeast, have))
+            throw DecodingError.typeMismatch(type, context)
+        }
+    }
+
     func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
         try read(type, forKey: key)
     }
@@ -131,11 +157,20 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     func decode<T: Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
-        let encodedValue = try valueData(forKey: key)
-        let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
-        let decodedValue = try type.init(from: decoder)
-        codingPath.append(key)
-        return decodedValue
+        if type is ParsableValue.Type {
+            let decodedValue = try readExistential(
+                (type as! ParsableValue.Type), 
+                forKey: key, 
+                as: type)
+            codingPath.append(key)
+            return decodedValue
+        } else {
+            let encodedValue = try valueData(forKey: key)
+            let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
+            let decodedValue = try type.init(from: decoder)
+            codingPath.append(key)
+            return decodedValue
+        }
     }
 
     /// The error expected from parsing a nested keyed document.
