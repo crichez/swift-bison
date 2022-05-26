@@ -105,9 +105,13 @@ extension BSONUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     }
 
     func encode<T: Encodable>(_ value: T) throws {
-        let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
-        try value.encode(to: encoder)
-        contents.append(encoder)
+        if let bsonValue = value as? ValueProtocol {
+            contents.append(ValueBox(bsonValue))
+        } else {
+            let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
+            try value.encode(to: encoder)
+            contents.append(encoder)
+        }
     }
 
     func encode(_ value: Bool) throws {

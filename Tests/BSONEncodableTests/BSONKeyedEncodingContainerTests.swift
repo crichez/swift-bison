@@ -9,6 +9,7 @@
 import BSONEncodable
 import BSONCompose
 import XCTest
+import Foundation
 
 class BSONKeyedEncodingContainerTests: XCTestCase {
     enum Key: CodingKey {
@@ -100,6 +101,20 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         }
         .bsonBytes
         XCTAssertEqual(container.bsonBytes, expectedBytes)
+    }
+
+    /// Asserts encoding a value that is both `Encodable` and conforms to `ValueProtocol` uses
+    /// its BSON representation instead of its `Encodable` representation.
+    /// 
+    /// This test uses `Foundation.UUID`, which is usually encoded as its `uuidString`.
+    func testEncodeBSONValue() throws {
+        let value = UUID()
+        let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
+        try container.encode(value, forKey: .test)
+        let expectedDoc = ComposedDocument {
+            "test" => value
+        }
+        XCTAssertEqual(expectedDoc.bsonBytes, container.bsonBytes)
     }
 
     func testNestedKeyedContainer() throws {

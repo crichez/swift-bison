@@ -9,6 +9,7 @@
 import BSONEncodable
 import BSONCompose
 import XCTest
+import Foundation
 
 class BSONSingleValueEncodingContainerTests: XCTestCase {
     func testEncodeDouble() throws {
@@ -158,5 +159,18 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
         XCTAssertEqual(container.bsonBytes, expectedBytes)
         let expectedType = value.bsonType
         XCTAssertEqual(container.bsonType, expectedType)
+    }
+
+    /// Asserts encoding a value that conforms to both `Encodable` and `ValueProtocol` uses its
+    /// BSON representation.
+    /// 
+    /// This test uses `Foundation.Data`, which would normally be encoded as a nested array
+    /// document of `UInt64` values.
+    func testEncodeBSONValue() throws {
+        let value = Data([1, 2, 3, 4])
+        let container = BSONSingleValueEncodingContainer(codingPath: [])
+        try container.encode(value)
+        XCTAssertEqual(container.bsonBytes, value.bsonBytes)
+        XCTAssertEqual(container.bsonType, value.bsonType)
     }
 }

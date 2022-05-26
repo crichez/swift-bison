@@ -124,9 +124,15 @@ extension BSONKeyedEncodingContainer: KeyedEncodingContainerProtocol {
     }
 
     func encode<T: Encodable>(_ value: T, forKey key: Key) throws {
-        let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
-        try value.encode(to: encoder)
-        contents.append(key, encoder)
+        if let bsonValue = value as? ValueProtocol {
+            contents.append(key, ValueBox(bsonValue))
+            codingPath.append(key)
+        } else {
+            let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
+            try value.encode(to: encoder)
+            contents.append(key, encoder)
+            codingPath.append(key)
+        }
     }
 
     func nestedContainer<NestedKey: CodingKey>(

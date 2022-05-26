@@ -219,6 +219,20 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
         XCTAssertEqual(try container.decode(String?.self), value)
     }
 
+    /// Asserts decoding a value that conforms to both `Decodable` and `ParsableValue` returns
+    /// the expected value even when it is encoded using its BSON representation.
+    /// 
+    /// This test uses `Foundation.UUID`, which would normally be decoded as its `uuidString`.
+    func testDecodeBSONValue() throws {
+        let value = UUID()
+        let doc = ComposedDocument {
+            "0" => value
+        }
+        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        var container = BSONUnkeyedDecodingContainer<[UInt8]>(doc: parsedDoc)
+        XCTAssertEqual(try container.decode(UUID.self), value)
+    }
+
     enum Key: CodingKey {
         case test
     }

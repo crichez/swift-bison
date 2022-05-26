@@ -176,11 +176,24 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         }
     }
 
-    // MARK: Optional
+    // MARK: Generic
 
     func testOptional() throws {
         let value: Int32? = .random(in: .min ... .max)
         let container = BSONSingleValueDecodingContainer(contents: value.bsonBytes, codingPath: [])
         XCTAssertEqual(try container.decode(Int32?.self), value)
+    }
+
+    /// Asserts decoding a value that conforms to both `Decodable` and `ParsableValue` returns
+    /// the expected value even when it is encoded using its BSON representation.
+    /// 
+    /// This test uses `Foundation.Data`, which would normally be decoded as a nested
+    /// array document of `UInt64` values.
+    func testDecodeBSONValue() throws {
+        let value = Data([1, 2, 3, 4])
+        let container = BSONSingleValueDecodingContainer<[UInt8]>(
+            contents: value.bsonBytes, 
+            codingPath: [])
+        XCTAssertEqual(try container.decode(Data.self), value)
     }
 }

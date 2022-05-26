@@ -250,6 +250,21 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         XCTAssertEqual(try container.decode(Int64?.self, forKey: .test), value)
     }
 
+    /// Asserts decoding a value that conforms to both `Decodable` and `ParsableValue` returns
+    /// the expected value even when it is encoded using its BSON representation.
+    /// 
+    /// This test uses `Foundation.Data`, which would normally be decoded as a nested
+    /// array document of `UInt64` values.
+    func testDecodeBSONValue() throws {
+        let value = Data([1, 2, 3, 4])
+        let doc = ComposedDocument {
+            "test" => value
+        }
+        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
+        XCTAssertEqual(try container.decode(Data.self, forKey: .test), value)
+    }
+
     func testNestedContainer() throws {
         let value = "passed?"
         let doc = ComposedDocument {
