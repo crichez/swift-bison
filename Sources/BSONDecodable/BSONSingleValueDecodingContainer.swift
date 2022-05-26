@@ -42,6 +42,30 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
         }
     }
 
+    private func readExistential<T>(
+        _ type: ParsableValue.Type, 
+        as unwrappedType: T.Type
+    ) throws -> T where T : Decodable {
+        do {
+            let decodedValue = try type.init(bsonBytes: contents)
+            return decodedValue as! T
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
+                underlyingError: ValueParseError.sizeMismatch(need, have))
+            throw DecodingError.typeMismatch(type, context)
+        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+             let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: """
+                    expected at least\(needAtLeast) bytes for a \(type) but found \(have)
+                """,
+                underlyingError: ValueParseError.dataTooShort(needAtLeast, have))
+            throw DecodingError.typeMismatch(type, context)
+        }
+    }
+
     func decode(_ type: Bool.Type) throws -> Bool {
         try read(type)
     }
@@ -101,9 +125,14 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
     func decode(_ type: UInt64.Type) throws -> UInt64 {
         try read(type)
     }
-
+    
     func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-        let decoder = DecodingContainerProvider(encodedValue: contents, codingPath: codingPath)
-        return try T(from: decoder)
+        if type is ParsableValue.Type {
+            let decodedValue = try readExistential(type as! ParsableValue.Type, as: type)
+            return decodedValue
+        } else {
+            let decoder = DecodingContainerProvider(encodedValue: contents, codingPath: codingPath)
+            return try T(from: decoder)
+        }
     }
 }
