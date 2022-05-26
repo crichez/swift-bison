@@ -157,4 +157,16 @@ class ParsableValueTests: XCTestCase {
             XCTAssertEqual(have, faultyBytes.count)
         }
     }
+
+    // MARK: Date
+
+    func testDateParsed() throws {
+        let value = Date()
+        let decodedValue = try Date(bsonBytes: value.bsonBytes)
+        let minTolerated = value - 0.001
+        let maxTolerated = value + 0.001
+        // The BSON date is a millisecond-precision value, so allow for some error
+        XCTAssertTrue(decodedValue >= minTolerated) 
+        XCTAssertTrue(decodedValue <= maxTolerated)
+    }
 }
