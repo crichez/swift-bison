@@ -157,3 +157,22 @@ extension ObjectID: Hashable {
         withUnsafeBytes(of: self) { hasher.combine(bytes: $0) }
     }
 }
+
+extension ObjectID: Codable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(description)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let hex = try container.decode(String.self)
+        guard let idFromHex = ObjectID(hex) else {
+            let context = DecodingError.Context(
+                codingPath: decoder.codingPath, 
+                debugDescription: "the decoded ID was not a valid hex ObjectID")
+            throw DecodingError.typeMismatch(ObjectID.self, context)
+        }
+        self = idFromHex
+    }
+}
