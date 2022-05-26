@@ -72,4 +72,15 @@ class ObjectIDTests: XCTestCase {
         id.incrementByOne()
         XCTAssertEqual(originalIncrement + 1, id.increment)
     }
+
+    /// Asserts encoding an `ObjectID` using a non-BSON `Encoder` 
+    /// encodes the appropriate hex string, and decoding it results in the same ID.
+    func testNonBSONEncoding() throws {
+        let id = ObjectID()
+        let encoder = JSONEncoder()
+        let encodedID = try encoder.encode(id)
+        let decoder = JSONDecoder()
+        let decodedID = try decoder.decode(ObjectID.self, from: encodedID)
+        XCTAssertEqual(id, decodedID)
+    }
 }
