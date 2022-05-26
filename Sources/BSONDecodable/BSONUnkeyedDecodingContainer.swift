@@ -91,6 +91,31 @@ extension BSONUnkeyedDecodingContainer: UnkeyedDecodingContainer {
         }
     }
 
+    private mutating func readExistential<T: Decodable>(
+        _ type: ParsableValue.Type, 
+        as unwrappedType: T.Type
+    ) throws -> T {
+        let valueData = try nextValueData()
+        do {
+            let decodedValue = try type.init(bsonBytes: valueData)
+            return decodedValue as! T
+        } catch ValueParseError.sizeMismatch(let need, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
+                underlyingError: ValueParseError.sizeMismatch(need, have))
+            throw DecodingError.typeMismatch(type, context)
+        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+            let context = DecodingError.Context(
+                codingPath: codingPath, 
+                debugDescription: """
+                    expected at least\(needAtLeast) bytes for a \(type) but found \(have)
+                """,
+                underlyingError: ValueParseError.dataTooShort(needAtLeast, have))
+            throw DecodingError.typeMismatch(type, context)
+        }
+    }
+
     mutating func decode(_ type: Bool.Type) throws -> Bool {
         try read(type)
     }
@@ -152,9 +177,14 @@ extension BSONUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     }
 
     mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-        let encodedValue = try nextValueData()
-        let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
-        return try type.init(from: decoder)
+        if type is ParsableValue.Type {
+            let decodedValue = try readExistential(type as! ParsableValue.Type, as: type)
+            return decodedValue
+        } else {
+            let encodedValue = try nextValueData()
+            let decoder = DecodingContainerProvider(encodedValue: encodedValue, codingPath: codingPath)
+            return try type.init(from: decoder)
+        }
     }
 
     /// The error expected from parsing a nested keyed document.
