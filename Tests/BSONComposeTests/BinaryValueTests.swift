@@ -41,4 +41,10 @@ class BinaryValueTests: XCTestCase {
         ]
         XCTAssertEqual(doc.bsonBytes, expectedDoc)
     }
+
+    func testDate() {
+        let value = Date(timeIntervalSince1970: 3600.0).bsonBytes
+        let expectedValue = Int64(3_600_000).bsonBytes
+        XCTAssertEqual(value, expectedValue)
+    }
 }
