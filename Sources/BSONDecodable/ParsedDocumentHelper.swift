@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on April 11 2022
 //
 
-import BSONParse
+import BisonRead
 
 extension ParsedDocument {
     /// Parses the provided document, but maps all errors to `DecodingError`.

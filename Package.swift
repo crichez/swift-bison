@@ -14,8 +14,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(name: "BisonWrite", targets: ["BisonWrite"]),
-        .library(name: "BSONParse", targets: ["BSONParse"]),
-        .library(name: "BSONKit", targets: ["BisonWrite", "BSONParse"]),
+        .library(name: "BisonRead", targets: ["BisonRead"]),
+        .library(name: "BSONKit", targets: ["BisonWrite", "BisonRead"]),
         .library(name: "BSONDecodable", targets: ["BSONDecodable"]),
         .library(name: "BSONEncodable", targets: ["BSONEncodable"]),
         .library(name: "BSONCodable", targets: ["BSONEncodable", "BSONDecodable"]),
@@ -33,20 +33,20 @@ let package = Package(
         .testTarget(name: "BisonWriteTests", dependencies: ["BisonWrite"]),
 
         .target(
-            name: "BSONParse",
+            name: "BisonRead",
             dependencies: [
                 .product(name: "OrderedCollections", package: "swift-collections"),
                 "ObjectID"
             ]),
-        .testTarget( name: "BSONParseTests", dependencies: ["BSONParse", "BisonWrite"]),
+        .testTarget( name: "BisonReadTests", dependencies: ["BisonRead", "BisonWrite"]),
 
         .target(name: "BSONEncodable", dependencies: ["BisonWrite"]),
         .testTarget(name: "BSONEncodableTests", dependencies: ["BSONEncodable", "BisonWrite"]),
 
-        .target(name: "BSONDecodable", dependencies: ["BSONParse"]),
+        .target(name: "BSONDecodable", dependencies: ["BisonRead"]),
         .testTarget(
             name: "BSONDecodableTests", 
-            dependencies: ["BSONParse", "BSONEncodable", "BSONDecodable", "BisonWrite"]),
+            dependencies: ["BisonRead", "BSONEncodable", "BSONDecodable", "BisonWrite"]),
         
     ]
 )

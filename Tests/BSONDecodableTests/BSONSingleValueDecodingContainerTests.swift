@@ -8,7 +8,7 @@
 @testable
 import BSONDecodable
 import BisonWrite
-import BSONParse
+import BisonRead
 import XCTest
 
 class BSONSingleValueDecodingContainerTests: XCTestCase {

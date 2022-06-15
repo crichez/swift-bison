@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on April 11 2022
 //
 
-import BSONParse
+import BisonRead
 
 struct DecodingContainerProvider<Data: Collection> where Data.Element == UInt8 {
     let encodedValue: Data

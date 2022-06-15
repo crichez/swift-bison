@@ -7,7 +7,7 @@
 
 import Foundation
 import XCTest
-import BSONParse
+import BisonRead
 import BisonWrite
 
 class BinaryParsableValueTests: XCTestCase {

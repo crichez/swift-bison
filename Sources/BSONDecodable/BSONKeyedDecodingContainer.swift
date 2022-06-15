@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on April 4 2022
 //
 
-import BSONParse
+import BisonRead
 
 class BSONKeyedDecodingContainer<Data: Collection, Key: CodingKey> where Data.Element == UInt8 {
     /// The parsed document to decode from. 

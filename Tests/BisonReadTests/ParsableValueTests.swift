@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on March 20 2022
 //
 
-import BSONParse
+import BisonRead
 import BisonWrite
 import XCTest
 

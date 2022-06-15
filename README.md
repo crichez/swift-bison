@@ -9,7 +9,7 @@ The BSONKit package exposes two main modules:
 * `BSONCodable` to adapt existing Swift `Codable` code already in your project.
 
 Each of these modules is available for encoding or decoding only by importing:
-* `BisonWrite` & `BSONParse` as alternatives to the full `BSONKit`.
+* `BisonWrite` & `BisonRead` as alternatives to the full `BSONKit`.
 * `BSONEncodable` & `BSONDecodable` as alternatives to the full `BSONCodable`.
 
 This project is tested in continuous integration on the following platforms:
@@ -52,14 +52,14 @@ let doc = ComposedDocument {
 let encodedDoc: [UInt8] = doc.bsonBytes
 ```
 
-### BSONParse
+### BisonRead
 
-When using `BSONParse`, decoding is done in two steps:
+When using `BisonRead`, decoding is done in two steps:
 1. Validate the document's structure by intializing a `ParsedDocument`
 2. Decode individual values using their `init(bsonBytes:)` initializer
 
 ```swift
-import BSONParse
+import BisonRead
 
 // Parse the keys and structure first
 let doc = try ParsedDocument(bsonBytes: encodedDoc)
