@@ -19,7 +19,7 @@ class BSONEncoderTests: XCTestCase {
     func testEncodesAsExpected() throws {
         let value = TestType(name: "test", value: 1.23, list: [true, false, true])
         let encodedValue = try BSONEncoder().encode(value)
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             "name" => "test"
             "value" => 1.23
             "list" => ComposedArrayDocument {

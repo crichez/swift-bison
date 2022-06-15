@@ -60,7 +60,7 @@ class BSONValueEncodingTests: XCTestCase {
 
     /// This test asserts the content, size and terminator of the document are property encoded.
     func testComposedDoc() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => true
         }
         let encodedDoc = doc.bsonBytes

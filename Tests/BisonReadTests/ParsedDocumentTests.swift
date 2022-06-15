@@ -16,7 +16,7 @@ class ParsedDocumentTests: XCTestCase {
 
     /// Asserts encoding and decoding a valid document returns the same value.
     func testDocParsed() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => true
         }
         let decodedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)

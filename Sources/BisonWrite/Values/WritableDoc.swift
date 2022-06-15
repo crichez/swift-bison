@@ -1,12 +1,12 @@
 //
-//  Document.swift
-//  Document
+//  WritableDoc.swift
+//
 //
 //  Created by Christopher Richez on March 1 2022
 //
 
 /// A BSON document used exclusively for encoding.
-public struct ComposedDocument<Body: DocComponent> {
+public struct WritableDoc<Body: DocComponent> {
     /// The contents of this document.
     let body: Body
     
@@ -16,7 +16,7 @@ public struct ComposedDocument<Body: DocComponent> {
     }
 }
 
-extension ComposedDocument: ValueProtocol {
+extension WritableDoc: ValueProtocol {
     public var bsonBytes: [UInt8] {
         let encodedBody = body.bsonBytes + [0]
         let encodedSize = Int32(encodedBody.count + 4).bsonBytes

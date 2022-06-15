@@ -23,7 +23,7 @@ class BSONKeyedEncodingContainer<Key: CodingKey> {
 extension BSONKeyedEncodingContainer: ValueProtocol {
     var bsonBytes: [UInt8] {
         let contents = self.contents
-        return ComposedDocument {
+        return WritableDoc {
             ForEach(contents) { key, value in 
                 key => value
             }

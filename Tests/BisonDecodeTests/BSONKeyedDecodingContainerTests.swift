@@ -17,7 +17,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testKeyNotFound() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "hello" => "world!"
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -35,7 +35,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testDecodeNil() throws {
         let value = Double?.none
-        let doc = ComposedDocument { 
+        let doc = WritableDoc { 
             "test" => value 
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -45,7 +45,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testDecodeNilFalse() throws {
         let value: Double? = .random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -55,7 +55,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testDouble() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -64,7 +64,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testDoubleSizeMismatch() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => Int32(0)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -83,7 +83,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testString() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => "passed?"
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -92,7 +92,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testStringDataTooShort() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => Int32(0)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -109,7 +109,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testStringSizeMismatch() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => Int64(2)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -126,7 +126,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testBool() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => false
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -135,7 +135,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testBoolSizeMismatch() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => UInt64(0)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -155,7 +155,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testInt32() throws {
         let value = Int32.random(in: .min ... .max)
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -164,7 +164,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testInt32SizeMismatch() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => UInt64(0)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -184,7 +184,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testInt64() throws {
         let value = Int64.random(in: .min ... .max)
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -193,7 +193,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testInt64SizeMismatch() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => Int32(0)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -213,7 +213,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testUInt64() throws {
         let value = UInt64.random(in: .min ... .max)
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -222,7 +222,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testUInt64SizeMismatch() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => Int32(0)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -242,7 +242,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testOptional() throws {
         let value: Int64? = .random(in: .min ... .max)
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -257,7 +257,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     /// array document of `UInt64` values.
     func testDecodeBSONValue() throws {
         let value = Data([1, 2, 3, 4])
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -267,8 +267,8 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testNestedContainer() throws {
         let value = "passed?"
-        let doc = ComposedDocument {
-            "test" => ComposedDocument {
+        let doc = WritableDoc {
+            "test" => WritableDoc {
                 "test" => value
             }
         }
@@ -279,7 +279,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     }
 
     func testNestedContainerDataTooShort() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => Int32.random(in: .min ... .max)
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -299,7 +299,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testNestedUnkeyedContainer() throws {
         let value = "passed?"
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => ComposedArrayDocument {
                 "0" => value
             }
@@ -312,7 +312,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testSuperDecoderNoKey() throws {
         let value = Bool.random()
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "super" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
@@ -323,7 +323,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
 
     func testSuperDecoderWithKey() throws {
         let value = Bool.random()
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => value
         }
         let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)

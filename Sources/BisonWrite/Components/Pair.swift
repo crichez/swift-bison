@@ -9,7 +9,7 @@
 /// 
 /// To create a `Pair`, use the `=>` operator on a `String` and a `ValueProtocol` conforming value:
 /// ```swift
-/// let doc = ComposedDocument {
+/// let doc = WritableDoc {
 ///     "key" => "value"
 /// }
 /// ```

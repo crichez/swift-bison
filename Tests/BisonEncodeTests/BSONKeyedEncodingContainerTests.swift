@@ -19,7 +19,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
     func testEncodeNil() throws {
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encodeNil(forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => Int32?.none
         }
         .bsonBytes
@@ -30,7 +30,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -41,7 +41,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = "test"
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -52,7 +52,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = Bool.random()
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -63,7 +63,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = Int32.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -74,7 +74,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = Int64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -85,7 +85,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = UInt64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -96,7 +96,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value: UInt64? = UInt64.random(in: .min ... .max)
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes
@@ -111,7 +111,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let value = UUID()
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         try container.encode(value, forKey: .test)
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             "test" => value
         }
         XCTAssertEqual(expectedDoc.bsonBytes, container.bsonBytes)
@@ -122,8 +122,8 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         var nestedContainer = container.nestedContainer(keyedBy: Key.self, forKey: .test)
         try nestedContainer.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
-            "test" => ComposedDocument {
+        let expectedBytes = WritableDoc {
+            "test" => WritableDoc {
                 "test" => value
             }
         }
@@ -136,7 +136,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         var nestedContainer = container.nestedUnkeyedContainer(forKey: .test)
         try nestedContainer.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => ComposedArrayDocument {
                 "0" => value
             }
@@ -150,7 +150,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         let superEncoder = container.superEncoder()
         try value.encode(to: superEncoder)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "super" => value
         }
         .bsonBytes
@@ -162,7 +162,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         let container = BSONKeyedEncodingContainer<Key>(codingPath: [])
         let superEncoder = container.superEncoder(forKey: .test)
         try value.encode(to: superEncoder)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "test" => value
         }
         .bsonBytes

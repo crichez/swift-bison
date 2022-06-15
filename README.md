@@ -38,11 +38,11 @@ When using `BisonWrite`, document structure is declared using a custom result bu
 import BisonWrite
 
 // Use the => operator to pair keys and values
-let doc = ComposedDocument {
+let doc = WritableDoc {
     "one" => 1
     "two" => 2.0
     "three" => "3"
-    "doc" => ComposedDocument { 
+    "doc" => WritableDoc { 
         "flag" => true
         "maybe?" => String?.none
     }

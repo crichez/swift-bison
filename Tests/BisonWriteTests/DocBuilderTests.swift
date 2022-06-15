@@ -11,14 +11,14 @@ import XCTest
 class DocBuilderTests: XCTestCase {
     func testConditional() throws {
         let flag = true
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             if flag {
                 "test" => "passed"
             } else {
                 "test" => "failed"
             }
         }
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             "test" => "passed"
         }
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
@@ -26,7 +26,7 @@ class DocBuilderTests: XCTestCase {
 
     func testOptional() throws {
         let flag = false
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             if flag {
                 "zero" => Int64(0)
             }
@@ -34,7 +34,7 @@ class DocBuilderTests: XCTestCase {
                 "one" => Int64(1)
             }
         }
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             "one" => Int64(1)
         }
         XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)
@@ -42,12 +42,12 @@ class DocBuilderTests: XCTestCase {
 
     func testLimitedAvailability() throws {
         if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
-            let doc = ComposedDocument {
+            let doc = WritableDoc {
                 if #available(macOS 11, iOS 14, tvOS 14, watchOS 7, *) {
                     "isOn2020ReleaseOrGreater" => true
                 }
             }
-            let expectedDoc = ComposedDocument {
+            let expectedDoc = WritableDoc {
                 "isOn2020ReleaseOrGreater" => true
             }
             XCTAssertEqual(doc.bsonBytes, expectedDoc.bsonBytes)

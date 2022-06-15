@@ -12,7 +12,7 @@ import Foundation
 class BinaryValueTests: XCTestCase {
     func testUUID() {
         let id = UUID()
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "" => id
         }
         var expectedDoc: [UInt8] = [
@@ -28,7 +28,7 @@ class BinaryValueTests: XCTestCase {
 
     func testData() {
         let data = Data([0, 1, 2, 3])
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "" => data
         }
         let expectedDoc: [UInt8] = [

@@ -17,7 +17,7 @@ class DecodingContainerProviderTests: XCTestCase {
     }
 
     func testKeyedContainer() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "test" => "passed?"
         }
         let decoder = DecodingContainerProvider(encodedValue: doc.bsonBytes)
@@ -26,7 +26,7 @@ class DecodingContainerProviderTests: XCTestCase {
     }
 
     func testUnkeyedContainer() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             "0" => false
         }
         let decoder = DecodingContainerProvider(encodedValue: doc.bsonBytes)

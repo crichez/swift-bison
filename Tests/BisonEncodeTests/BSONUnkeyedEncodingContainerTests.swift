@@ -20,7 +20,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -31,7 +31,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = "test"
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -42,7 +42,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = Bool.random()
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -53,7 +53,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = Int32?.none
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encodeNil()
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -64,7 +64,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = Int32.random(in: .min ... .max)
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -75,7 +75,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = UInt64.random(in: .min ... .max)
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -86,7 +86,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = Int64.random(in: .min ... .max)
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -97,7 +97,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value: Int64? = Int64.random(in: .min ... .max)
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes
@@ -112,7 +112,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let value = UUID()
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         try container.encode(value)
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             "0" => value
         }
         XCTAssertEqual(expectedDoc.bsonBytes, container.bsonBytes)
@@ -123,8 +123,8 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         var nestedContainer = container.nestedContainer(keyedBy: Key.self)
         try nestedContainer.encode(value, forKey: .test)
-        let expectedBytes = ComposedDocument {
-            "0" => ComposedDocument {
+        let expectedBytes = WritableDoc {
+            "0" => WritableDoc {
                 "test" => value
             }
         }
@@ -137,7 +137,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         var nestedContainer = container.nestedUnkeyedContainer()
         try nestedContainer.encode(value)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => ComposedArrayDocument {
                 "0" => value
             }
@@ -151,7 +151,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         let container = BSONUnkeyedEncodingContainer(codingPath: [])
         let superEncoder = container.superEncoder()
         try value.encode(to: superEncoder)
-        let expectedBytes = ComposedDocument {
+        let expectedBytes = WritableDoc {
             "0" => value
         }
         .bsonBytes

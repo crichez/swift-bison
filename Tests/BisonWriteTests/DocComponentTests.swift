@@ -19,12 +19,12 @@ class DocComponentTests: XCTestCase {
 
     /// This test asserts content from a loop is encoded as expected.
     func testForEach() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             ForEach([Int64]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) { number in
                 String(describing: number) => number
             }
         }
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             "0" => Int64(0)
             "1" => Int64(1)
             "2" => Int64(2)
@@ -40,7 +40,7 @@ class DocComponentTests: XCTestCase {
     }
 
     func testGroup() throws {
-        let doc = ComposedDocument {
+        let doc = WritableDoc {
             Group {
                 "0" => Int64(0)
                 "1" => Int64(1)
@@ -59,7 +59,7 @@ class DocComponentTests: XCTestCase {
                 "12" => Int64(12)
             }
         }
-        let expectedDoc = ComposedDocument {
+        let expectedDoc = WritableDoc {
             ForEach(Int64(0)...12) { number in
                 String(describing: number) => number
             }

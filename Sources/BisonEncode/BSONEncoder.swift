@@ -12,7 +12,7 @@ import Foundation
 /// - Note: 
 /// This encoder does not respect custom `ValueProtocol` implementations.
 /// To encode custom BSON values differently than their `Encodable` implementation,
-/// Use `ComposedDocument` or `ComposedArrayDocument`.
+/// Use `WritableDoc` or `ComposedArrayDocument`.
 public struct BSONEncoder {
     /// Initializes an encoder.
     public init() {}
@@ -22,7 +22,7 @@ public struct BSONEncoder {
     /// - Note: 
     /// This encoder does not respect custom ``ValueProtocol`` implementations.
     /// To encode custom BSON values differently than their `Encodable` implementation,
-    /// Use ``ComposedDocument`` or ``ComposedArrayDocument``.
+    /// Use ``WritableDoc`` or ``ComposedArrayDocument``.
     /// 
     /// - Throws: 
     /// Re-throws any errors thrown in the value's `encode(to:)` method.

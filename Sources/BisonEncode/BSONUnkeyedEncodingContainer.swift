@@ -29,7 +29,7 @@ extension Array where Element == ValueBox {
 extension BSONUnkeyedEncodingContainer: ValueProtocol {
     var bsonBytes: [UInt8] {
         let contents = self.contents
-        return ComposedDocument {
+        return WritableDoc {
             ForEach(contents.enumerated()) { index, value in 
                 String(describing: index) => value
             }
