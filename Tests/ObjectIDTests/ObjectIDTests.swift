@@ -5,9 +5,7 @@
 //  Created by Christopher Richez on April 14 2022
 //
 
-import BSONObjectID
-import BSONCompose
-import BSONParse
+import ObjectID
 import XCTest
 import Foundation
 
@@ -18,23 +16,7 @@ class ObjectIDTests: XCTestCase {
         let originalID = ObjectID()
         let hexID = originalID.description
         let decodedID = ObjectID(hexID)
-        XCTAssertEqual(originalID.bsonBytes, decodedID.bsonBytes)
-    }
-
-    /// Asserts `ObjectID.bsonBytes` returns the expected bytes for a known id.
-    func testBSONBytes() {
-        let id = ObjectID()
-        let encodedID = id.bsonBytes
-        withUnsafeBytes(of: id) { idBytes in 
-            XCTAssertEqual(encodedID, Array(idBytes))
-        }
-    }
-
-    /// Asserts `ObjectID.init(bsonBytes:)` initializes the expected id for known data.
-    func testInitFromBSONBytes() throws {
-        let id = ObjectID()
-        let decodedID = try ObjectID(bsonBytes: id.bsonBytes)
-        XCTAssertEqual(id.bsonBytes, decodedID.bsonBytes)
+        XCTAssertEqual(originalID, decodedID)
     }
 
     /// Asserts the creation timestamp of the ID is roughly that of the current date,

@@ -19,22 +19,24 @@ let package = Package(
         .library(name: "BSONDecodable", targets: ["BSONDecodable"]),
         .library(name: "BSONEncodable", targets: ["BSONEncodable"]),
         .library(name: "BSONCodable", targets: ["BSONEncodable", "BSONDecodable"]),
-        .library(name: "BSONObjectID", targets: ["BSONObjectID"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-collections", .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(name: "BSONCompose", dependencies: ["BSONObjectID"]),
+        // The target that declares the ObjectID type. This excludes Bison integration.
+        .target(name: "ObjectID", dependencies: []),
+        .testTarget(name: "ObjectIDTests", dependencies: ["ObjectID"]),
+
+
+        .target(name: "BSONCompose", dependencies: ["ObjectID"]),
         .testTarget(name: "BSONComposeTests", dependencies: ["BSONCompose"]),
 
         .target(
             name: "BSONParse",
             dependencies: [
                 .product(name: "OrderedCollections", package: "swift-collections"),
-                "BSONObjectID"
+                "ObjectID"
             ]),
         .testTarget( name: "BSONParseTests", dependencies: ["BSONParse", "BSONCompose"]),
 
@@ -46,7 +48,5 @@ let package = Package(
             name: "BSONDecodableTests", 
             dependencies: ["BSONParse", "BSONEncodable", "BSONDecodable", "BSONCompose"]),
         
-        .target(name: "BSONObjectID", dependencies: []),
-        .testTarget(name: "BSONObjectIDTests", dependencies: ["BSONCompose", "BSONParse"]),
     ]
 )

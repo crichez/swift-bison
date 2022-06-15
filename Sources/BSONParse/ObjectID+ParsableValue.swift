@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on April 16 2022
 //
 
-import BSONObjectID
+import ObjectID
 
 extension ObjectID: ParsableValue {
     public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
