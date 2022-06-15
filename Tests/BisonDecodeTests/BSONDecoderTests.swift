@@ -5,8 +5,8 @@
 //  Created by Christopher Richez on April 11 2022
 //
 
-import BSONDecodable
-import BSONEncodable
+import BisonDecode
+import BisonEncode
 import XCTest
 
 class BSONDecoderTests: XCTestCase {

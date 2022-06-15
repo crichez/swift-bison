@@ -10,7 +10,7 @@ The Bison package exposes two main modules:
 
 Each of these modules is available for encoding or decoding only by importing:
 * `BisonWrite` & `BisonRead` as alternatives to the full `Bison`.
-* `BSONEncodable` & `BSONDecodable` as alternatives to the full `BSONCodable`.
+* `BisonEncode` & `BisonDecode` as alternatives to the full `BSONCodable`.
 
 This project is tested in continuous integration on the following platforms:
 * macOS 11

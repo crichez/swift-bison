@@ -6,7 +6,7 @@
 //
 
 @testable
-import BSONDecodable
+import BisonDecode
 import BisonWrite
 import BisonRead
 import XCTest

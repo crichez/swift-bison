@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on March 31 2022
 //
 
-import BSONEncodable
+import BisonEncode
 import BisonWrite
 import XCTest
 

@@ -12,13 +12,15 @@ let package = Package(
         .tvOS(.v13),
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
+        // The core modules for composition and parsing, or both.
         .library(name: "BisonWrite", targets: ["BisonWrite"]),
         .library(name: "BisonRead", targets: ["BisonRead"]),
         .library(name: "Bison", targets: ["BisonWrite", "BisonRead"]),
-        .library(name: "BSONDecodable", targets: ["BSONDecodable"]),
-        .library(name: "BSONEncodable", targets: ["BSONEncodable"]),
-        .library(name: "BSONCodable", targets: ["BSONEncodable", "BSONDecodable"]),
+
+        // Adapters for Swift Encodable and Decodable, or both.
+        .library(name: "BisonDecode", targets: ["BisonDecode"]),
+        .library(name: "BisonEncode", targets: ["BisonEncode"]),
+        .library(name: "BisonCodable", targets: ["BisonEncode", "BisonDecode"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-collections", .upToNextMajor(from: "1.0.0"))
@@ -32,21 +34,22 @@ let package = Package(
         .target(name: "BisonWrite", dependencies: ["ObjectID"]),
         .testTarget(name: "BisonWriteTests", dependencies: ["BisonWrite"]),
 
-        .target(
-            name: "BisonRead",
-            dependencies: [
-                .product(name: "OrderedCollections", package: "swift-collections"),
-                "ObjectID"
-            ]),
+        // The target for parsing and decoding documents.
+        .target(name: "BisonRead", dependencies: [
+            .product(name: "OrderedCollections", package: "swift-collections"),
+            "ObjectID",
+        ]),
         .testTarget( name: "BisonReadTests", dependencies: ["BisonRead", "BisonWrite"]),
 
-        .target(name: "BSONEncodable", dependencies: ["BisonWrite"]),
-        .testTarget(name: "BSONEncodableTests", dependencies: ["BSONEncodable", "BisonWrite"]),
+        // The target that exposes BSONEncoder.
+        .target(name: "BisonEncode", dependencies: ["BisonWrite"]),
+        .testTarget(name: "BisonEncodeTests", dependencies: ["BisonEncode", "BisonWrite"]),
 
-        .target(name: "BSONDecodable", dependencies: ["BisonRead"]),
+        // The target that exposes BSONDecoder.
+        .target(name: "BisonDecode", dependencies: ["BisonRead"]),
         .testTarget(
-            name: "BSONDecodableTests", 
-            dependencies: ["BisonRead", "BSONEncodable", "BSONDecodable", "BisonWrite"]),
-        
+            name: "BisonDecodeTests", 
+            dependencies: ["BisonRead", "BisonEncode", "BisonDecode", "BisonWrite"]
+        ),
     ]
 )
