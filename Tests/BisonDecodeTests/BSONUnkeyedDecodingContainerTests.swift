@@ -240,7 +240,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testNestedContainer() throws {
         let value = Bool.random()
         let doc = WritableDoc { 
-            "0" => ComposedArrayDocument {
+            "0" => WritableArray {
                 "test" => value
             }
         }
@@ -253,7 +253,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testNestedUnkeyedContainer() throws {
         let value = Bool.random()
         let doc = WritableDoc { 
-            "0" => ComposedArrayDocument {
+            "0" => WritableArray {
                 "0" => value
             }
         }

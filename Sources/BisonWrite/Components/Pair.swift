@@ -7,13 +7,13 @@
 
 /// A key-value pair used to compose a BSON document.
 /// 
-/// To create a `Pair`, use the `=>` operator on a `String` and a `ValueProtocol` conforming value:
+/// To create a `Pair`, use the `=>` operator on a `String` and a `WritableValue` conforming value:
 /// ```swift
 /// let doc = WritableDoc {
 ///     "key" => "value"
 /// }
 /// ```
-public struct Pair<T: ValueProtocol>: DocComponent {
+public struct Pair<T: WritableValue>: DocComponent {
     let key: String
     let value: T
     

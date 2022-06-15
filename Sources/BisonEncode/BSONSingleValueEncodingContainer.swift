@@ -23,7 +23,7 @@ class BSONSingleValueEncodingContainer {
     }
 }
 
-extension BSONSingleValueEncodingContainer: ValueProtocol {
+extension BSONSingleValueEncodingContainer: WritableValue {
     var bsonBytes: [UInt8] {
         encodedValue!
     }
@@ -125,7 +125,7 @@ extension BSONSingleValueEncodingContainer: SingleValueEncodingContainer {
     }
 
     func encode<T>(_ value: T) throws where T : Encodable {
-        if let bsonValue = value as? ValueProtocol {
+        if let bsonValue = value as? WritableValue {
             encodedValue = bsonValue.bsonBytes
             encodedType = bsonValue.bsonType
         } else {

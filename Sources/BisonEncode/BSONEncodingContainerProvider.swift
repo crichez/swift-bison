@@ -23,7 +23,7 @@ class BSONEncodingContainerProvider {
     }
 }
 
-extension BSONEncodingContainerProvider: ValueProtocol {
+extension BSONEncodingContainerProvider: WritableValue {
     var bsonBytes: [UInt8] {
         container!.bsonBytes
     }

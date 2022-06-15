@@ -1,12 +1,12 @@
 //
-//  ComposedArrayDocument.swift
+//  WritableArray.swift
 //
 //
 //  Created by Christopher Richez on March 31 2022
 //
 
 /// A BSON document used exclusively for encoding.
-public struct ComposedArrayDocument<Body: DocComponent> {
+public struct WritableArray<Body: DocComponent> {
     /// The contents of this document.
     let body: Body
     
@@ -16,7 +16,7 @@ public struct ComposedArrayDocument<Body: DocComponent> {
     }
 }
 
-extension ComposedArrayDocument: ValueProtocol {
+extension WritableArray: WritableValue {
     public var bsonBytes: [UInt8] {
         let encodedBody = body.bsonBytes + [0]
         let encodedSize = Int32(encodedBody.count + 4).bsonBytes

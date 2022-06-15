@@ -161,7 +161,7 @@ class BSONSingleValueEncodingContainerTests: XCTestCase {
         XCTAssertEqual(container.bsonType, expectedType)
     }
 
-    /// Asserts encoding a value that conforms to both `Encodable` and `ValueProtocol` uses its
+    /// Asserts encoding a value that conforms to both `Encodable` and `WritableValue` uses its
     /// BSON representation.
     /// 
     /// This test uses `Foundation.Data`, which would normally be encoded as a nested array

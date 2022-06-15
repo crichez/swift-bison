@@ -16,7 +16,7 @@ public struct WritableDoc<Body: DocComponent> {
     }
 }
 
-extension WritableDoc: ValueProtocol {
+extension WritableDoc: WritableValue {
     public var bsonBytes: [UInt8] {
         let encodedBody = body.bsonBytes + [0]
         let encodedSize = Int32(encodedBody.count + 4).bsonBytes

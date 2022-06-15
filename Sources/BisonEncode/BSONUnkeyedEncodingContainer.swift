@@ -21,12 +21,12 @@ class BSONUnkeyedEncodingContainer {
 }
 
 extension Array where Element == ValueBox {
-    mutating func append<T: ValueProtocol>(_ value: T) {
+    mutating func append<T: WritableValue>(_ value: T) {
         append(ValueBox(value))
     }
 }
 
-extension BSONUnkeyedEncodingContainer: ValueProtocol {
+extension BSONUnkeyedEncodingContainer: WritableValue {
     var bsonBytes: [UInt8] {
         let contents = self.contents
         return WritableDoc {
@@ -105,7 +105,7 @@ extension BSONUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     }
 
     func encode<T: Encodable>(_ value: T) throws {
-        if let bsonValue = value as? ValueProtocol {
+        if let bsonValue = value as? WritableValue {
             contents.append(ValueBox(bsonValue))
         } else {
             let encoder = BSONEncodingContainerProvider(codingPath: codingPath)

@@ -1,5 +1,5 @@
 //
-//  BinaryValueProtocol.swift
+//  CustomWritableValue.swift
 //
 //
 //  Created by Christopher Richez on April 14 2022
@@ -7,10 +7,10 @@
 
 /// A BSON value that declares the `binary` type (5).
 /// 
-/// Conform to `BinaryValueProtocol` instead of `ValueProtocol` for binary values.
+/// Conform to `CustomWritableValue` instead of `WritableValue` for binary values.
 /// Size and subtype metadata are generated for you, and you only need to return the value's
 /// content data.
-public protocol BinaryValueProtocol: ValueProtocol {
+public protocol CustomWritableValue: WritableValue {
     /// The subtype byte to declare.
     var bsonSubtype: UInt8 { get }
 
@@ -18,7 +18,7 @@ public protocol BinaryValueProtocol: ValueProtocol {
     var bsonValueBytes: [UInt8] { get }
 }
 
-extension BinaryValueProtocol {
+extension CustomWritableValue {
     public var bsonType: UInt8 {
         5
     }

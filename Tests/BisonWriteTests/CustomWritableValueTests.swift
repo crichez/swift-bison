@@ -1,5 +1,5 @@
 //
-//  BinaryValueTests.swift
+//  CustomWritableValueTests.swift
 //
 //
 //  Created by Christopher Richez on April 14 2022
@@ -9,7 +9,7 @@ import BisonWrite
 import XCTest
 import Foundation
 
-class BinaryValueTests: XCTestCase {
+class CustomWritableValueTests: XCTestCase {
     func testUUID() {
         let id = UUID()
         let doc = WritableDoc {

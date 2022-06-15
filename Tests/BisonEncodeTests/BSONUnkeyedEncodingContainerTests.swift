@@ -104,7 +104,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         XCTAssertEqual(container.bsonBytes, expectedBytes)
     }
 
-    /// Asserts encoding a value that conforms to both `Encodable` and `ValueProtocol` uses its 
+    /// Asserts encoding a value that conforms to both `Encodable` and `WritableValue` uses its 
     /// BSON representation.
     /// 
     /// This test uses `Foundation.UUID` which is usually encoded as its `uuidString`.
@@ -138,7 +138,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         var nestedContainer = container.nestedUnkeyedContainer()
         try nestedContainer.encode(value)
         let expectedBytes = WritableDoc {
-            "0" => ComposedArrayDocument {
+            "0" => WritableArray {
                 "0" => value
             }
         }

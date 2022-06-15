@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on 3/16/22.
 //
 
-/// An operator used to assign a BSON `String` key to a `ValueProtocol` conforming value.
+/// An operator used to assign a BSON `String` key to a `WritableValue` conforming value.
 infix operator => : AssignmentPrecedence
 
 extension String {
@@ -13,11 +13,11 @@ extension String {
     ///
     /// - Parameters:
     ///     - key: a `String` key
-    ///     - value: a `ValueProtocol` conforming value
+    ///     - value: a `WritableValue` conforming value
     ///
     /// - Returns:
     /// A `Pair` value constructed from the provided key and value.
-    public static func => <T: ValueProtocol>(key: String, value: T) -> Pair<T> {
+    public static func => <T: WritableValue>(key: String, value: T) -> Pair<T> {
         Pair(key: key, value: value)
     }
 }

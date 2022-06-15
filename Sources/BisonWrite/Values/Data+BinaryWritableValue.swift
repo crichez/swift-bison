@@ -1,5 +1,5 @@
 //
-//  Data+BinaryValueProtocol.swift
+//  Data+CustomWritableValue.swift
 //
 //
 //  Created by Christopher Richez on April 14 2022
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Data: BinaryValueProtocol {
+extension Data: CustomWritableValue {
     public var bsonSubtype: UInt8 {
         0
     }

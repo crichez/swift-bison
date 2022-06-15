@@ -22,7 +22,7 @@ class BSONEncoderTests: XCTestCase {
         let expectedDoc = WritableDoc {
             "name" => "test"
             "value" => 1.23
-            "list" => ComposedArrayDocument {
+            "list" => WritableArray {
                 "0" => true
                 "1" => false
                 "2" => true

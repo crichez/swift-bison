@@ -1,6 +1,6 @@
 //
-//  BSONValueTests.swift
-//  BSONValueTests
+//  WritableValueTests.swift
+//
 //
 //  Created by Christopher Richez on 3/16/22.
 //
@@ -8,8 +8,8 @@
 import BisonWrite
 import XCTest
 
-/// A test suite for all `ValueProtocol` conforming types.
-class BSONValueEncodingTests: XCTestCase {
+/// A test suite for all `WritableValue` conforming types.
+class WritableValueTests: XCTestCase {
     func testDouble() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         let expectedType: UInt8 = 1

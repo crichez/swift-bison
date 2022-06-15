@@ -300,7 +300,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
     func testNestedUnkeyedContainer() throws {
         let value = "passed?"
         let doc = WritableDoc {
-            "test" => ComposedArrayDocument {
+            "test" => WritableArray {
                 "0" => value
             }
         }

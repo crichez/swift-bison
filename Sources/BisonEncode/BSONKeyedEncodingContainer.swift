@@ -20,7 +20,7 @@ class BSONKeyedEncodingContainer<Key: CodingKey> {
     }
 }
 
-extension BSONKeyedEncodingContainer: ValueProtocol {
+extension BSONKeyedEncodingContainer: WritableValue {
     var bsonBytes: [UInt8] {
         let contents = self.contents
         return WritableDoc {
@@ -38,7 +38,7 @@ extension BSONKeyedEncodingContainer: ValueProtocol {
 
 extension Array where Element == (String, ValueBox) {
     /// Appends the provided key-value pair to the container's storage.
-    fileprivate mutating func append<T: ValueProtocol, K: CodingKey>(_ key: K, _ value: T) {
+    fileprivate mutating func append<T: WritableValue, K: CodingKey>(_ key: K, _ value: T) {
         self.append((key.stringValue, ValueBox(value)))
     }
 }
@@ -124,7 +124,7 @@ extension BSONKeyedEncodingContainer: KeyedEncodingContainerProtocol {
     }
 
     func encode<T: Encodable>(_ value: T, forKey key: Key) throws {
-        if let bsonValue = value as? ValueProtocol {
+        if let bsonValue = value as? WritableValue {
             contents.append(key, ValueBox(bsonValue))
             codingPath.append(key)
         } else {

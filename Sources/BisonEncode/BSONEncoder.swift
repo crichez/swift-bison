@@ -10,9 +10,9 @@ import Foundation
 /// Use `BSONEncoder` to encode `Encodable` values into fully-formed BSON documents.
 /// 
 /// - Note: 
-/// This encoder does not respect custom `ValueProtocol` implementations.
+/// This encoder does not respect custom `WritableValue` implementations.
 /// To encode custom BSON values differently than their `Encodable` implementation,
-/// Use `WritableDoc` or `ComposedArrayDocument`.
+/// Use `WritableDoc` or `WritableArray`.
 public struct BSONEncoder {
     /// Initializes an encoder.
     public init() {}
@@ -20,9 +20,9 @@ public struct BSONEncoder {
     /// Encodes the provided value into a BSON document.
     /// 
     /// - Note: 
-    /// This encoder does not respect custom ``ValueProtocol`` implementations.
+    /// This encoder does not respect custom ``WritableValue`` implementations.
     /// To encode custom BSON values differently than their `Encodable` implementation,
-    /// Use ``WritableDoc`` or ``ComposedArrayDocument``.
+    /// Use ``WritableDoc`` or ``WritableArray``.
     /// 
     /// - Throws: 
     /// Re-throws any errors thrown in the value's `encode(to:)` method.

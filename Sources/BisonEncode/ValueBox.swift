@@ -7,23 +7,23 @@
 
 import BisonWrite
 
-/// A box around a value conforming to `ValueProtocol`.
+/// A box around a value conforming to `WritableValue`.
 struct ValueBox {
     /// The value in this box.
-    let value: ValueProtocol
+    let value: WritableValue
 
     /// Boxes the provided value.
-    init<T: ValueProtocol>(_ value: T) {
+    init<T: WritableValue>(_ value: T) {
         self.value = value
     }
 
     /// Boxes the provided existential value.
-    init(_ value: ValueProtocol) {
+    init(_ value: WritableValue) {
         self.value = value
     }
 }
 
-extension ValueBox: ValueProtocol {
+extension ValueBox: WritableValue {
     var bsonBytes: [UInt8] {
         value.bsonBytes
     }

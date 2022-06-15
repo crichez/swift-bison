@@ -1,12 +1,12 @@
 //
-//  ValueProtocol.swift
+//  WritableValue.swift
 //  
 //
 //  Created by Christopher Richez on 2/6/22.
 //
 
 /// A value that can be assigned to a ``Pair`` in a BSON document.
-public protocol ValueProtocol {
+public protocol WritableValue {
     /// The BSON type byte for this type.
     var bsonType: UInt8 { get }
     
@@ -14,7 +14,7 @@ public protocol ValueProtocol {
     var bsonBytes: [UInt8] { get }
 }
 
-extension Int32: ValueProtocol {
+extension Int32: WritableValue {
     public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
@@ -26,7 +26,7 @@ extension Int32: ValueProtocol {
     }
 }
 
-extension String: ValueProtocol {
+extension String: WritableValue {
     public var bsonBytes: [UInt8] {
         let content = Array(utf8) + [0]
         guard let size = Int32(exactly: content.count)?.bsonBytes else {
@@ -40,7 +40,7 @@ extension String: ValueProtocol {
     }
 }
 
-extension Bool: ValueProtocol {
+extension Bool: WritableValue {
     public var bsonBytes: [UInt8] {
         self ? [1] : [0]
     }
@@ -50,7 +50,7 @@ extension Bool: ValueProtocol {
     }
 }
 
-extension Int64: ValueProtocol {
+extension Int64: WritableValue {
     public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
@@ -62,7 +62,7 @@ extension Int64: ValueProtocol {
     }
 }
 
-extension UInt64: ValueProtocol {
+extension UInt64: WritableValue {
     public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: self) { bytes in
             Array(bytes)
@@ -74,7 +74,7 @@ extension UInt64: ValueProtocol {
     }
 }
 
-extension Double: ValueProtocol {
+extension Double: WritableValue {
     public var bsonBytes: [UInt8] {
         withUnsafeBytes(of: bitPattern) { bytes in
             Array(bytes)
@@ -86,7 +86,7 @@ extension Double: ValueProtocol {
     }
 }
 
-extension Optional: ValueProtocol where Wrapped : ValueProtocol {
+extension Optional: WritableValue where Wrapped : WritableValue {
     public var bsonBytes: [UInt8] {
         switch self {
         case .some(let value):
