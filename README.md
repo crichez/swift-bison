@@ -1,15 +1,15 @@
-# BSONKit
+# Bison
 
 Binary JSON encoding and decoding in Swift.
 
 ## Overview
 
-The BSONKit package exposes two main modules:
-* `BSONKit` for fast, flexible and type-safe document encoding and decoding.
+The Bison package exposes two main modules:
+* `Bison` for fast, flexible and type-safe document encoding and decoding.
 * `BSONCodable` to adapt existing Swift `Codable` code already in your project.
 
 Each of these modules is available for encoding or decoding only by importing:
-* `BisonWrite` & `BisonRead` as alternatives to the full `BSONKit`.
+* `BisonWrite` & `BisonRead` as alternatives to the full `Bison`.
 * `BSONEncodable` & `BSONDecodable` as alternatives to the full `BSONCodable`.
 
 This project is tested in continuous integration on the following platforms:

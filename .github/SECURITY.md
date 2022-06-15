@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Security advisories will not be published while BSONKit is in pre-release. Once the project 
+Security advisories will not be published while Bison is in pre-release. Once the project 
 graduates to 1.0.0, the list below will include versions actively receiving security advisories.
 
 | Version | Security Advisories |

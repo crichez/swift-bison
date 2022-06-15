@@ -15,7 +15,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(name: "BisonWrite", targets: ["BisonWrite"]),
         .library(name: "BisonRead", targets: ["BisonRead"]),
-        .library(name: "BSONKit", targets: ["BisonWrite", "BisonRead"]),
+        .library(name: "Bison", targets: ["BisonWrite", "BisonRead"]),
         .library(name: "BSONDecodable", targets: ["BSONDecodable"]),
         .library(name: "BSONEncodable", targets: ["BSONEncodable"]),
         .library(name: "BSONCodable", targets: ["BSONEncodable", "BSONDecodable"]),
