@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 import BSONParse
-import BSONCompose
+import BisonWrite
 
 class BinaryParsableValueTests: XCTestCase {
     func testUUID() throws {

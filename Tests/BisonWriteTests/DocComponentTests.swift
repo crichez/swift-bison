@@ -6,7 +6,7 @@
 //
 
 @testable
-import BSONCompose
+import BisonWrite
 import XCTest
 
 /// A test suite for `DocComponent` conforming types.

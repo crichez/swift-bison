@@ -7,7 +7,7 @@
 
 @testable 
 import BSONParse
-import BSONCompose
+import BisonWrite
 import XCTest
 
 /// Tests internal functionality of the `ParsedDocument` type.

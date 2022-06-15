@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on 3/16/22.
 //
 
-import BSONCompose
+import BisonWrite
 import XCTest
 
 /// A test suite for all `ValueProtocol` conforming types.

@@ -13,9 +13,9 @@ let package = Package(
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(name: "BSONCompose", targets: ["BSONCompose"]),
+        .library(name: "BisonWrite", targets: ["BisonWrite"]),
         .library(name: "BSONParse", targets: ["BSONParse"]),
-        .library(name: "BSONKit", targets: ["BSONCompose", "BSONParse"]),
+        .library(name: "BSONKit", targets: ["BisonWrite", "BSONParse"]),
         .library(name: "BSONDecodable", targets: ["BSONDecodable"]),
         .library(name: "BSONEncodable", targets: ["BSONEncodable"]),
         .library(name: "BSONCodable", targets: ["BSONEncodable", "BSONDecodable"]),
@@ -28,9 +28,9 @@ let package = Package(
         .target(name: "ObjectID", dependencies: []),
         .testTarget(name: "ObjectIDTests", dependencies: ["ObjectID"]),
 
-
-        .target(name: "BSONCompose", dependencies: ["ObjectID"]),
-        .testTarget(name: "BSONComposeTests", dependencies: ["BSONCompose"]),
+        // The target for composing and encoding documents.
+        .target(name: "BisonWrite", dependencies: ["ObjectID"]),
+        .testTarget(name: "BisonWriteTests", dependencies: ["BisonWrite"]),
 
         .target(
             name: "BSONParse",
@@ -38,15 +38,15 @@ let package = Package(
                 .product(name: "OrderedCollections", package: "swift-collections"),
                 "ObjectID"
             ]),
-        .testTarget( name: "BSONParseTests", dependencies: ["BSONParse", "BSONCompose"]),
+        .testTarget( name: "BSONParseTests", dependencies: ["BSONParse", "BisonWrite"]),
 
-        .target(name: "BSONEncodable", dependencies: ["BSONCompose"]),
-        .testTarget(name: "BSONEncodableTests", dependencies: ["BSONEncodable", "BSONCompose"]),
+        .target(name: "BSONEncodable", dependencies: ["BisonWrite"]),
+        .testTarget(name: "BSONEncodableTests", dependencies: ["BSONEncodable", "BisonWrite"]),
 
         .target(name: "BSONDecodable", dependencies: ["BSONParse"]),
         .testTarget(
             name: "BSONDecodableTests", 
-            dependencies: ["BSONParse", "BSONEncodable", "BSONDecodable", "BSONCompose"]),
+            dependencies: ["BSONParse", "BSONEncodable", "BSONDecodable", "BisonWrite"]),
         
     ]
 )

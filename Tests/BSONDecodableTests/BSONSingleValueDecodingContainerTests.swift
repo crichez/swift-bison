@@ -7,7 +7,7 @@
 
 @testable
 import BSONDecodable
-import BSONCompose
+import BisonWrite
 import BSONParse
 import XCTest
 

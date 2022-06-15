@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on March 28 2022
 //
 
-import BSONCompose
+import BisonWrite
 
 class BSONSingleValueEncodingContainer {
     /// The value assigned to this container.

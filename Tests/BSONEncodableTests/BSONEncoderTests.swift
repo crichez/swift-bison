@@ -6,7 +6,7 @@
 //
 
 import BSONEncodable
-import BSONCompose
+import BisonWrite
 import XCTest
 
 class BSONEncoderTests: XCTestCase {

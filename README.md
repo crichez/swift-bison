@@ -9,7 +9,7 @@ The BSONKit package exposes two main modules:
 * `BSONCodable` to adapt existing Swift `Codable` code already in your project.
 
 Each of these modules is available for encoding or decoding only by importing:
-* `BSONCompose` & `BSONParse` as alternatives to the full `BSONKit`.
+* `BisonWrite` & `BSONParse` as alternatives to the full `BSONKit`.
 * `BSONEncodable` & `BSONDecodable` as alternatives to the full `BSONCodable`.
 
 This project is tested in continuous integration on the following platforms:
@@ -31,11 +31,11 @@ You can import this package by adding the following line to your `Package.swift`
 introduced with a minor version bump. Once the project graduates to 1.0.0, regular semantic
 versioning rules will apply.
 
-### BSONCompose
+### BisonWrite
 
-When using `BSONCompose`, document structure is declared using a custom result builder.
+When using `BisonWrite`, document structure is declared using a custom result builder.
 ```swift
-import BSONCompose
+import BisonWrite
 
 // Use the => operator to pair keys and values
 let doc = ComposedDocument {

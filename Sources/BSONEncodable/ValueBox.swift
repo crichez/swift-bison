@@ -5,7 +5,7 @@
 //  Created by Christopher Richez on March 31 2022
 //
 
-import BSONCompose
+import BisonWrite
 
 /// A box around a value conforming to `ValueProtocol`.
 struct ValueBox {
