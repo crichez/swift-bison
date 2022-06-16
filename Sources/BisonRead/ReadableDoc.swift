@@ -100,10 +100,10 @@ extension ReadableDoc {
     /// The context in which an error occured.
     public struct Progress {
         /// The partially parsed key-value pairs.
-        internal(set) public var parsed: ReadableDoc
+        public let parsed: ReadableDoc
 
         /// The remaining unparsed data.
-        internal(set) public var remaining: Data.SubSequence
+        public let remaining: Data.SubSequence
     }
 }
 
