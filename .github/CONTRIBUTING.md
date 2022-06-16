@@ -2,11 +2,11 @@
 
 Hi, thanks for considering making a contribution to this project! 
 This document hopes to give potential contributors some best practices that are specific to
-the BSONKit project.
+the Bison project.
 
 ## Development Environment
 
-BSONKit is a pure Swift Package Manager Project that supports all Swift platforms for both 
+Bison is a pure Swift Package Manager Project that supports all Swift platforms for both 
 release and development.
 
 ## Discussions

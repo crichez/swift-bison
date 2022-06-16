@@ -1,16 +1,16 @@
-# BSONKit
+# Bison
 
 Binary JSON encoding and decoding in Swift.
 
 ## Overview
 
-The BSONKit package exposes two main modules:
-* `BSONKit` for fast, flexible and type-safe document encoding and decoding.
+The Bison package exposes two main modules:
+* `Bison` for fast, flexible and type-safe document encoding and decoding.
 * `BSONCodable` to adapt existing Swift `Codable` code already in your project.
 
 Each of these modules is available for encoding or decoding only by importing:
-* `BSONCompose` & `BSONParse` as alternatives to the full `BSONKit`.
-* `BSONEncodable` & `BSONDecodable` as alternatives to the full `BSONCodable`.
+* `BisonWrite` & `BisonRead` as alternatives to the full `Bison`.
+* `BisonEncode` & `BisonDecode` as alternatives to the full `BSONCodable`.
 
 This project is tested in continuous integration on the following platforms:
 * macOS 11
@@ -31,18 +31,18 @@ You can import this package by adding the following line to your `Package.swift`
 introduced with a minor version bump. Once the project graduates to 1.0.0, regular semantic
 versioning rules will apply.
 
-### BSONCompose
+### BisonWrite
 
-When using `BSONCompose`, document structure is declared using a custom result builder.
+When using `BisonWrite`, document structure is declared using a custom result builder.
 ```swift
-import BSONCompose
+import BisonWrite
 
 // Use the => operator to pair keys and values
-let doc = ComposedDocument {
+let doc = WritableDoc {
     "one" => 1
     "two" => 2.0
     "three" => "3"
-    "doc" => ComposedDocument { 
+    "doc" => WritableDoc { 
         "flag" => true
         "maybe?" => String?.none
     }
@@ -52,17 +52,17 @@ let doc = ComposedDocument {
 let encodedDoc: [UInt8] = doc.bsonBytes
 ```
 
-### BSONParse
+### BisonRead
 
-When using `BSONParse`, decoding is done in two steps:
-1. Validate the document's structure by intializing a `ParsedDocument`
+When using `BisonRead`, decoding is done in two steps:
+1. Validate the document's structure by intializing a `ReadableDoc`
 2. Decode individual values using their `init(bsonBytes:)` initializer
 
 ```swift
-import BSONParse
+import BisonRead
 
 // Parse the keys and structure first
-let doc = try ParsedDocument(bsonBytes: encodedDoc)
+let doc = try ReadableDoc(bsonBytes: encodedDoc)
 
 // Get values individually from the document
 let one = try Int(bsonBytes: doc["one"])
@@ -70,7 +70,7 @@ let two = try Double(bsonBytes: doc["two"])
 let three = try String(bsonBytes: doc["three"])
 
 // Nested documents are treated as values
-let nestedDoc = try ParsedDocument(bsonBytes: doc["doc"])
+let nestedDoc = try ReadableDoc(bsonBytes: doc["doc"])
 
 // And they expose their contents the same way
 let flag = try Bool(bsonBytes: nestedDoc["flag"])
