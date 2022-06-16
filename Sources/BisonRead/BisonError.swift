@@ -1,12 +1,12 @@
 //
-//  ValueParseError.swift
+//  BisonError.swift
 //
 //
 //  Created by Christopher Richez on April 16 2022
 //
 
 /// An error that occured while parsing a BSON value.
-public enum ValueParseError: Error, Equatable {
+public enum BisonError: Error, Equatable {
     /// The data passed to the initializer was shorter than the required metadata for this value.
     /// 
     /// This case provides the expected and actual size of the data passed to the initializer.

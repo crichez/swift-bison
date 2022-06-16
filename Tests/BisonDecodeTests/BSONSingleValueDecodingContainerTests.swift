@@ -37,7 +37,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Bool.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Bool>.size, container.contents.count))
@@ -60,7 +60,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Double.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Double>.size, container.contents.count))
@@ -83,7 +83,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .dataTooShort(5, container.contents.count))
@@ -100,7 +100,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(13, container.contents.count))
@@ -123,7 +123,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Int32.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Int32>.size, container.contents.count))
@@ -146,7 +146,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == UInt64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<UInt64>.size, container.contents.count))
@@ -169,7 +169,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Int64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Int64>.size, container.contents.count))

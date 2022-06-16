@@ -23,21 +23,21 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
     private func read<T: ReadableValue>(_ type: T.Type) throws -> T {
         do {
             return try type.init(bsonBytes: contents)
-        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+        } catch BisonError.dataTooShort(let needAtLeast, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     expected at least \(needAtLeast) bytes for a \(type), but found \(contents.count)
                 """,
-                underlyingError: ValueParseError.dataTooShort(needAtLeast, have))
+                underlyingError: BisonError.dataTooShort(needAtLeast, have))
             throw DecodingError.typeMismatch(type, context)
-        } catch ValueParseError.sizeMismatch(let need, let have) {
+        } catch BisonError.sizeMismatch(let need, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     expected \(need) bytes for a \(type), but found \(contents.count)
                 """,
-                underlyingError: ValueParseError.sizeMismatch(need, have))
+                underlyingError: BisonError.sizeMismatch(need, have))
             throw DecodingError.typeMismatch(type, context)
         }
     }
@@ -49,19 +49,19 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
         do {
             let decodedValue = try type.init(bsonBytes: contents)
             return decodedValue as! T
-        } catch ValueParseError.sizeMismatch(let need, let have) {
+        } catch BisonError.sizeMismatch(let need, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
-                underlyingError: ValueParseError.sizeMismatch(need, have))
+                underlyingError: BisonError.sizeMismatch(need, have))
             throw DecodingError.typeMismatch(type, context)
-        } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
+        } catch BisonError.dataTooShort(let needAtLeast, let have) {
              let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     expected at least\(needAtLeast) bytes for a \(type) but found \(have)
                 """,
-                underlyingError: ValueParseError.dataTooShort(needAtLeast, have))
+                underlyingError: BisonError.dataTooShort(needAtLeast, have))
             throw DecodingError.typeMismatch(type, context)
         }
     }

@@ -10,7 +10,7 @@ import Foundation
 extension UUID: CustomReadableValue {
     public init<Data: Collection>(bsonValueBytes: Data) throws where Data.Element == UInt8 {
         guard bsonValueBytes.count == 16 else {
-            throw ValueParseError.sizeMismatch(16, bsonValueBytes.count)
+            throw BisonError.sizeMismatch(16, bsonValueBytes.count)
         }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 16, alignment: 1)
         copyBuffer.copyBytes(from: bsonValueBytes)

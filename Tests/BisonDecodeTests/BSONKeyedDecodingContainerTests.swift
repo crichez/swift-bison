@@ -75,10 +75,10 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attemptedType, let context) {
             XCTAssert(attemptedType == Double.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
-                ValueParseError.sizeMismatch(MemoryLayout<Double>.size, MemoryLayout<Int32>.size))
+                BisonError.sizeMismatch(MemoryLayout<Double>.size, MemoryLayout<Int32>.size))
         }
     }
 
@@ -103,7 +103,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(underlyingError, .dataTooShort(5, MemoryLayout<Int32>.size))
         }
     }
@@ -120,7 +120,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(underlyingError, .sizeMismatch(6, 8))
         }
     }
@@ -146,7 +146,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == Bool.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Bool>.size, MemoryLayout<UInt64>.size))
@@ -175,7 +175,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == Int32.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Int32>.size, MemoryLayout<UInt64>.size))
@@ -204,7 +204,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == Int64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<Int64>.size, MemoryLayout<Int32>.size))
@@ -233,7 +233,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         } catch DecodingError.typeMismatch(let attempted, let context) {
             XCTAssert(attempted == UInt64.self)
             XCTAssertTrue(context.codingPath.isEmpty)
-            let underlyingError = try XCTUnwrap(context.underlyingError as? ValueParseError)
+            let underlyingError = try XCTUnwrap(context.underlyingError as? BisonError)
             XCTAssertEqual(
                 underlyingError, 
                 .sizeMismatch(MemoryLayout<UInt64>.size, MemoryLayout<Int32>.size))
