@@ -1,6 +1,6 @@
 //
-//  ParsedDocument.swift
-//  ParsedDocument
+//  ReadableDoc.swift
+//  ReadableDoc
 //
 //  Created by Christopher Richez on March 4th 2022
 //
@@ -10,7 +10,7 @@ import OrderedCollections
 // MARK: Public API & Storage
 
 /// A document where keys and values have been discovered and can be retrieved.
-public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
+public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// The keys and discovered values in this document.
     let discovered: OrderedDictionary<String, Data.SubSequence>
 
@@ -63,7 +63,7 @@ public struct ParsedDocument<Data: Collection> where Data.Element == UInt8 {
 
 // MARK: Errors
 
-extension ParsedDocument {
+extension ReadableDoc {
     /// An error that occured while parsing this BSON document during initialization.
     public enum Error: Swift.Error {
         /// Less than 5 bytes were passed to the initializer.
@@ -100,32 +100,32 @@ extension ParsedDocument {
     /// The context in which an error occured.
     public struct Progress {
         /// The partially parsed key-value pairs.
-        internal(set) public var parsed: ParsedDocument
+        internal(set) public var parsed: ReadableDoc
 
         /// The remaining unparsed data.
         internal(set) public var remaining: Data.SubSequence
     }
 }
 
-extension ParsedDocument.Progress: Equatable where Data.SubSequence : Equatable {
+extension ReadableDoc.Progress: Equatable where Data.SubSequence : Equatable {
     // This conformance is inherited from `Data.SubSequence`.
 }
 
-extension ParsedDocument.Error: Equatable where Data.SubSequence : Equatable {
+extension ReadableDoc.Error: Equatable where Data.SubSequence : Equatable {
     // This conformance is inherited from `Progress`.
 }
 
-extension ParsedDocument.Progress: Hashable where Data.SubSequence : Hashable {
+extension ReadableDoc.Progress: Hashable where Data.SubSequence : Hashable {
     // This conformance is inherited from `Data.SubSequence`.
 }
 
-extension ParsedDocument.Error: Hashable where Data.SubSequence : Hashable {
+extension ReadableDoc.Error: Hashable where Data.SubSequence : Hashable {
     // This conformance is inherited from `Progress`.
 }
 
 // MARK: Type Maps & Parsing
 
-extension ParsedDocument {
+extension ReadableDoc {
     /// A type that describes the size of an encoded value.
     enum ValueSize {
         /// A fixed size, independent of the encoded value.
@@ -231,7 +231,7 @@ extension ParsedDocument {
     /// 
     /// - Parameter data: a collection of BSON-encoded bytes that represent a full document
     /// 
-    /// - Throws: A `ParsedDocument<_>.Error` where `_` is the type of `data` if parsing fails.
+    /// - Throws: A `ReadableDoc<_>.Error` where `_` is the type of `data` if parsing fails.
     public init(bsonBytes data: Data) throws {
         // Ensure there are at least 5 bytes for the size and terminator
         guard data.count >= 5 else { throw Error.docTooShort }
@@ -279,7 +279,7 @@ extension ParsedDocument {
                 continue
             }
             guard type > 0 && type < 20 else {
-                let partialDoc = ParsedDocument(discovered, minKey: minKey, maxKey: maxKey)
+                let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[typeIndex...])
                 throw Error.unknownType(type, key, progress)
             }
@@ -290,7 +290,7 @@ extension ParsedDocument {
                 in: data[cursor...], 
                 using: typeMap
             ) else {
-                let partialDoc = ParsedDocument(discovered, minKey: minKey, maxKey: maxKey)
+                let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
                 throw Error.unknownType(type, key, progress)
             }
@@ -304,7 +304,7 @@ extension ParsedDocument {
                 cursor = valueEnd
             case .failure(let needAtLeast):
                 // If not, compose context and throw
-                let partialDoc = ParsedDocument(discovered, minKey: minKey, maxKey: maxKey)
+                let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
                 throw Error.valueSizeMismatch(needAtLeast, key, progress)
             }
@@ -341,16 +341,16 @@ extension ParsedDocument {
 
 // MARK: Protocol Conformance
 
-extension ParsedDocument: Sequence {
+extension ReadableDoc: Sequence {
     public func makeIterator() -> OrderedDictionary<String, Data.SubSequence>.Iterator {
         discovered.makeIterator()
     }
 }
 
-extension ParsedDocument: Equatable where Data.SubSequence : Equatable {
+extension ReadableDoc: Equatable where Data.SubSequence : Equatable {
     // This conformance is inherited from `OrderedDictionary`.
 }
 
-extension ParsedDocument: Hashable where Data.SubSequence : Hashable {
+extension ReadableDoc: Hashable where Data.SubSequence : Hashable {
     // This conformance is inherited from `OrderedDictionary`.
 }

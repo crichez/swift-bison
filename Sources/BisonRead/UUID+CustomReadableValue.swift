@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension UUID: BinaryParsableValue {
+extension UUID: CustomReadableValue {
     public init<Data: Collection>(bsonValueBytes: Data) throws where Data.Element == UInt8 {
         guard bsonValueBytes.count == 16 else {
             throw ValueParseError.sizeMismatch(16, bsonValueBytes.count)

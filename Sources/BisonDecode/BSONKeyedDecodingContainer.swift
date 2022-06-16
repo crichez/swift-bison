@@ -9,13 +9,13 @@ import BisonRead
 
 class BSONKeyedDecodingContainer<Data: Collection, Key: CodingKey> where Data.Element == UInt8 {
     /// The parsed document to decode from. 
-    let doc: ParsedDocument<Data>
+    let doc: ReadableDoc<Data>
 
     /// The path the decoder took to this point.
     var codingPath: [CodingKey]
 
     /// Initializes a container from a parsed document and optionally a previous coding path.
-    init(doc: ParsedDocument<Data>, codingPath: [CodingKey] = []) {
+    init(doc: ReadableDoc<Data>, codingPath: [CodingKey] = []) {
         self.doc = doc
         self.codingPath = codingPath
     }
@@ -47,7 +47,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
         try valueData(forKey: key).isEmpty
     }
 
-    private func read<T: ParsableValue>(_ type: T.Type, forKey key: Key) throws -> T {
+    private func read<T: ReadableValue>(_ type: T.Type, forKey key: Key) throws -> T {
         let valueData = try valueData(forKey: key)
         do {
             let decodedValue = try type.init(bsonBytes: valueData)
@@ -71,7 +71,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     private func readExistential<T>(
-        _ type: ParsableValue.Type, 
+        _ type: ReadableValue.Type, 
         forKey key: Key, as unwrappedType: T.Type
     ) throws -> T where T : Decodable {
         let valueData = try valueData(forKey: key)
@@ -157,9 +157,9 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     func decode<T: Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
-        if type is ParsableValue.Type {
+        if type is ReadableValue.Type {
             let decodedValue = try readExistential(
-                (type as! ParsableValue.Type), 
+                (type as! ReadableValue.Type), 
                 forKey: key, 
                 as: type)
             codingPath.append(key)
@@ -174,14 +174,14 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     /// The error expected from parsing a nested keyed document.
-    private typealias NestedDocError = ParsedDocument<Data.SubSequence>.Error
+    private typealias NestedDocError = ReadableDoc<Data.SubSequence>.Error
 
     func nestedContainer<NestedKey: CodingKey>(
         keyedBy type: NestedKey.Type, 
         forKey key: Key
     ) throws -> KeyedDecodingContainer<NestedKey> {
         let encodedDoc = try valueData(forKey: key)
-        let parsedDoc = try ParsedDocument(
+        let parsedDoc = try ReadableDoc(
             decoding: encodedDoc, 
             codingPath: codingPath, 
             for: KeyedDecodingContainer<NestedKey>.self)
@@ -194,7 +194,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
 
     func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
         let encodedDoc = try valueData(forKey: key)
-        let parsedDoc = try ParsedDocument(
+        let parsedDoc = try ReadableDoc(
             decoding: encodedDoc, 
             codingPath: codingPath, 
             for: UnkeyedDecodingContainer.self)

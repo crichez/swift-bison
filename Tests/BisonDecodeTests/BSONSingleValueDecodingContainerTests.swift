@@ -184,7 +184,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
         XCTAssertEqual(try container.decode(Int32?.self), value)
     }
 
-    /// Asserts decoding a value that conforms to both `Decodable` and `ParsableValue` returns
+    /// Asserts decoding a value that conforms to both `Decodable` and `ReadableValue` returns
     /// the expected value even when it is encoded using its BSON representation.
     /// 
     /// This test uses `Foundation.Data`, which would normally be decoded as a nested

@@ -1,5 +1,5 @@
 //
-//  BinaryParsableValueTests.swift
+//  CustomReadableValueTests.swift
 //  
 //
 //  Created by Christopher Richez on 4/28/22.
@@ -10,7 +10,7 @@ import XCTest
 import BisonRead
 import BisonWrite
 
-class BinaryParsableValueTests: XCTestCase {
+class CustomReadableValueTests: XCTestCase {
     func testUUID() throws {
         let value = UUID()
         let encodedValue = value.bsonBytes

@@ -17,7 +17,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "0" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertTrue(try container.decodeNil())
     }
@@ -27,7 +27,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "0" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertFalse(try container.decodeNil())
     }
@@ -37,7 +37,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "0" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Double.self), value)
     }
@@ -45,7 +45,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testDoubleSizeMismatch() throws {
         let value = Bool.random()
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Double.self)
@@ -64,7 +64,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testString() throws {
         let value = "test"
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(String.self), value)
     }
@@ -72,7 +72,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testStringDataTooShort() throws {
         let value = Bool.random()
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(String.self)
@@ -89,7 +89,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testStringSizeMismatch() throws {
         let value = Int64(9)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(String.self)
@@ -106,7 +106,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testBool() throws {
         let value = Bool.random()
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Bool.self), value)
     }
@@ -114,7 +114,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testBoolSizeMismatch() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Bool.self)
@@ -133,7 +133,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testInt32() throws {
         let value = Int32.random(in: .min ... .max)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Int32.self), value)
     }
@@ -141,7 +141,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testInt32SizeMismatch() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Int32.self)
@@ -160,7 +160,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testInt64() throws {
         let value = Int64.random(in: .min ... .max)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Int64.self), value)
     }
@@ -168,7 +168,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testInt64SizeMismatch() throws {
         let value = Int32.random(in: .min ... .max)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Int64.self)
@@ -187,7 +187,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testUInt64() throws {
         let value = UInt64.random(in: .min ... .max)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(UInt64.self), value)
     }
@@ -195,7 +195,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testUInt64SizeMismatch() throws {
         let value = Int32.random(in: .min ... .max)
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(UInt64.self)
@@ -214,12 +214,12 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
     func testOptional() throws {
         let value: String? = "test"
         let doc = WritableDoc { "0" => value }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         XCTAssertEqual(try container.decode(String?.self), value)
     }
 
-    /// Asserts decoding a value that conforms to both `Decodable` and `ParsableValue` returns
+    /// Asserts decoding a value that conforms to both `Decodable` and `ReadableValue` returns
     /// the expected value even when it is encoded using its BSON representation.
     /// 
     /// This test uses `Foundation.UUID`, which would normally be decoded as its `uuidString`.
@@ -228,7 +228,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "0" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer<[UInt8]>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(UUID.self), value)
     }
@@ -244,7 +244,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
                 "test" => value
             }
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         let nestedContainer = try container.nestedContainer(keyedBy: Key.self)
         XCTAssertEqual(try nestedContainer.decode(Bool.self, forKey: .test), value)
@@ -257,7 +257,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
                 "0" => value
             }
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         var nestedContainer = try container.nestedUnkeyedContainer()
         XCTAssertEqual(try nestedContainer.decode(Bool.self), value)
@@ -268,7 +268,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc { 
             "0" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         var container = BSONUnkeyedDecodingContainer(doc: parsedDoc)
         let superDecoder = try container.superDecoder()
         XCTAssertEqual(try Bool(from: superDecoder), value)

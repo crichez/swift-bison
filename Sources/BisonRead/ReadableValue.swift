@@ -1,22 +1,22 @@
 //
-//  ParsableValue.swift
-//  ParsableValue
+//  ReadableValue.swift
+//  ReadableValue
 //
 //  Created by Christopher Richez on March 4 2022
 //
 
 /// A value that can be parsed from its encoded BSON representation.
-public protocol ParsableValue {
+public protocol ReadableValue {
     /// Initializes this value from the provided BSON bytes.
     /// 
-    /// - Parameter data: the encoded value, usually returned by the `ParsedDocument` subscript
+    /// - Parameter data: the encoded value, usually returned by the `ReadableDoc` subscript
     /// 
     /// - Throws:
     /// A `ValueParseError` appropriate for the type to initialize.
     init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8
 }
 
-extension Int32: ParsableValue {
+extension Int32: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 4 else { throw ValueParseError.sizeMismatch(4, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
@@ -25,7 +25,7 @@ extension Int32: ParsableValue {
     }
 }
 
-extension Int64: ParsableValue {
+extension Int64: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 8 else { throw ValueParseError.sizeMismatch(8, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
@@ -34,7 +34,7 @@ extension Int64: ParsableValue {
     }
 }
 
-extension UInt64: ParsableValue {
+extension UInt64: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 8 else { throw ValueParseError.sizeMismatch(8, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
@@ -43,7 +43,7 @@ extension UInt64: ParsableValue {
     }
 }
 
-extension Double: ParsableValue {
+extension Double: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 8 else { throw ValueParseError.sizeMismatch(8, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
@@ -52,14 +52,14 @@ extension Double: ParsableValue {
     }
 }
 
-extension Bool: ParsableValue {
+extension Bool: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count == 1 else { throw ValueParseError.sizeMismatch(1, data.count) }
         self = data[data.startIndex] == 0 ? false : true
     }
 }
 
-extension String: ParsableValue {
+extension String: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
         guard data.count > 4 else { throw ValueParseError.dataTooShort(5, data.count) }
         let sizeStart = data.startIndex

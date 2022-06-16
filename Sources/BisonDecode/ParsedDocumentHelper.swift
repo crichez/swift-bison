@@ -1,5 +1,5 @@
 //
-//  ParsedDocumentHelper.swift
+//  ReadableDocHelper.swift
 //
 //
 //  Created by Christopher Richez on April 11 2022
@@ -7,7 +7,7 @@
 
 import BisonRead
 
-extension ParsedDocument {
+extension ReadableDoc {
     /// Parses the provided document, but maps all errors to `DecodingError`.
     init(decoding data: Data, codingPath: [CodingKey], for type: Any.Type) throws {
         do {

@@ -20,7 +20,7 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
         contents.isEmpty
     }
 
-    private func read<T: ParsableValue>(_ type: T.Type) throws -> T {
+    private func read<T: ReadableValue>(_ type: T.Type) throws -> T {
         do {
             return try type.init(bsonBytes: contents)
         } catch ValueParseError.dataTooShort(let needAtLeast, let have) {
@@ -43,7 +43,7 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
     }
 
     private func readExistential<T>(
-        _ type: ParsableValue.Type, 
+        _ type: ReadableValue.Type, 
         as unwrappedType: T.Type
     ) throws -> T where T : Decodable {
         do {
@@ -127,8 +127,8 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
     }
     
     func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-        if type is ParsableValue.Type {
-            let decodedValue = try readExistential(type as! ParsableValue.Type, as: type)
+        if type is ReadableValue.Type {
+            let decodedValue = try readExistential(type as! ReadableValue.Type, as: type)
             return decodedValue
         } else {
             let decoder = DecodingContainerProvider(encodedValue: contents, codingPath: codingPath)

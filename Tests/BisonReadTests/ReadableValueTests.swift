@@ -1,6 +1,6 @@
 //
-//  ParsableValueTests.swift
-//  ParsableValueTests
+//  ReadableValueTests.swift
+//  ReadableValueTests
 //
 //  Created by Christopher Richez on March 20 2022
 //
@@ -9,8 +9,8 @@ import BisonRead
 import BisonWrite
 import XCTest
 
-/// A test suite for the `ParsableValue.init(bsonBytes:)` initializer's code branches.
-class ParsableValueTests: XCTestCase {
+/// A test suite for the `ReadableValue.init(bsonBytes:)` initializer's code branches.
+class ReadableValueTests: XCTestCase {
     // MARK: Double
 
     /// Asserts encoding and decoding a valid `Double` returns the same value.

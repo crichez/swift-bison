@@ -55,14 +55,14 @@ let encodedDoc: [UInt8] = doc.bsonBytes
 ### BisonRead
 
 When using `BisonRead`, decoding is done in two steps:
-1. Validate the document's structure by intializing a `ParsedDocument`
+1. Validate the document's structure by intializing a `ReadableDoc`
 2. Decode individual values using their `init(bsonBytes:)` initializer
 
 ```swift
 import BisonRead
 
 // Parse the keys and structure first
-let doc = try ParsedDocument(bsonBytes: encodedDoc)
+let doc = try ReadableDoc(bsonBytes: encodedDoc)
 
 // Get values individually from the document
 let one = try Int(bsonBytes: doc["one"])
@@ -70,7 +70,7 @@ let two = try Double(bsonBytes: doc["two"])
 let three = try String(bsonBytes: doc["three"])
 
 // Nested documents are treated as values
-let nestedDoc = try ParsedDocument(bsonBytes: doc["doc"])
+let nestedDoc = try ReadableDoc(bsonBytes: doc["doc"])
 
 // And they expose their contents the same way
 let flag = try Bool(bsonBytes: nestedDoc["flag"])

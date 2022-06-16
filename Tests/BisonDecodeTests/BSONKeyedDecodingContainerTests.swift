@@ -20,7 +20,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "hello" => "world!"
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(String.self, forKey: .test)
@@ -38,7 +38,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc { 
             "test" => value 
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertTrue(try container.decodeNil(forKey: .test))
     }
@@ -48,7 +48,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertFalse(try container.decodeNil(forKey: .test))
     }
@@ -58,7 +58,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Double.self, forKey: .test), value)
     }
@@ -67,7 +67,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => Int32(0)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Double.self, forKey: .test)
@@ -86,7 +86,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => "passed?"
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(String.self, forKey: .test), "passed?")
     }
@@ -95,7 +95,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => Int32(0)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(String.self, forKey: .test)
@@ -112,7 +112,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => Int64(2)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(String.self, forKey: .test)
@@ -129,7 +129,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => false
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertFalse(try container.decode(Bool.self, forKey: .test))
     }
@@ -138,7 +138,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => UInt64(0)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Bool.self, forKey: .test)
@@ -158,7 +158,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Int32.self, forKey: .test), value)
     }
@@ -167,7 +167,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => UInt64(0)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Int32.self, forKey: .test)
@@ -187,7 +187,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Int64.self, forKey: .test), value)
     }
@@ -196,7 +196,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => Int32(0)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(Int64.self, forKey: .test)
@@ -216,7 +216,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(UInt64.self, forKey: .test), value)
     }
@@ -225,7 +225,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => Int32(0)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.decode(UInt64.self, forKey: .test)
@@ -245,12 +245,12 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Int64?.self, forKey: .test), value)
     }
 
-    /// Asserts decoding a value that conforms to both `Decodable` and `ParsableValue` returns
+    /// Asserts decoding a value that conforms to both `Decodable` and `ReadableValue` returns
     /// the expected value even when it is encoded using its BSON representation.
     /// 
     /// This test uses `Foundation.Data`, which would normally be decoded as a nested
@@ -260,7 +260,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(Data.self, forKey: .test), value)
     }
@@ -272,7 +272,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
                 "test" => value
             }
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         let nestedContainer = try container.nestedContainer(keyedBy: Key.self, forKey: .test)
         XCTAssertEqual(try nestedContainer.decode(String.self, forKey: .test), value)
@@ -282,7 +282,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => Int32.random(in: .min ... .max)
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         do {
             let decodedValue = try container.nestedContainer(keyedBy: Key.self, forKey: .test)
@@ -291,7 +291,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == KeyedDecodingContainer<Key>.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = context.underlyingError 
-                as? ParsedDocument<Array<UInt8>.SubSequence>.Error
+                as? ReadableDoc<Array<UInt8>.SubSequence>.Error
             let unwrappedError = try XCTUnwrap(underlyingError)
             XCTAssertEqual(unwrappedError, .docTooShort)
         }
@@ -304,7 +304,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
                 "0" => value
             }
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         var nestedContainer = try container.nestedUnkeyedContainer(forKey: .test)
         XCTAssertEqual(try nestedContainer.decode(String.self), value)
@@ -315,7 +315,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "super" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         let superDecoder = try container.superDecoder()
         XCTAssertEqual(try Bool(from: superDecoder), value)
@@ -326,7 +326,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let doc = WritableDoc {
             "test" => value
         }
-        let parsedDoc = try ParsedDocument(bsonBytes: doc.bsonBytes)
+        let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
         let container = BSONKeyedDecodingContainer<[UInt8], Key>(doc: parsedDoc)
         let superDecoder = try container.superDecoder(forKey: .test)
         XCTAssertEqual(try Bool(from: superDecoder), value)
