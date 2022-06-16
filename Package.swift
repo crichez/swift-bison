@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-bson",
+    name: "swift-bison",
     platforms: [
         // We need to explicitly declare the minimum macOS version to support opaque return types
         .macOS(.v10_15),
