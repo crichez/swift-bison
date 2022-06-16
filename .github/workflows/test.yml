@@ -26,8 +26,8 @@ jobs:
       - name: Install Swift
         if: ${{ matrix.platform == 'windows-latest' }}
         uses: MaxDesiatov/swift-windows-action@v1
-          with:
-            shell-action: swift -h
+        with:
+          shell-action: swift -h
       - name: Build Sources
         run: swift build
       - name: Build Tests
