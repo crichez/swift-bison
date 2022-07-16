@@ -6,6 +6,7 @@
 //
 
 import BisonWrite
+import Foundation
 
 class BSONEncodingContainerProvider {
     /// The container selected by the object to encode.
@@ -21,10 +22,10 @@ class BSONEncodingContainerProvider {
     init(codingPath: [CodingKey]) {
         self.codingPath = codingPath
     }
-}
+} 
 
 extension BSONEncodingContainerProvider: WritableValue {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         container!.bsonBytes
     }
 

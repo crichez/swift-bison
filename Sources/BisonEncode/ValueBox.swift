@@ -6,6 +6,7 @@
 //
 
 import BisonWrite
+import Foundation
 
 /// A box around a value conforming to `WritableValue`.
 struct ValueBox {
@@ -24,7 +25,7 @@ struct ValueBox {
 }
 
 extension ValueBox: WritableValue {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         value.bsonBytes
     }
 

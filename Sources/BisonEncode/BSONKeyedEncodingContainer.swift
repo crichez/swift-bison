@@ -6,6 +6,7 @@
 //
 
 import BisonWrite
+import Foundation
 
 class BSONKeyedEncodingContainer<Key: CodingKey> {
     /// The contents of this container.
@@ -21,7 +22,7 @@ class BSONKeyedEncodingContainer<Key: CodingKey> {
 }
 
 extension BSONKeyedEncodingContainer: WritableValue {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         let contents = self.contents
         return WritableDoc {
             ForEach(contents) { key, value in 

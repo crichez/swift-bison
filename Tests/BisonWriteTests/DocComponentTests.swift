@@ -13,7 +13,7 @@ import XCTest
 class DocComponentTests: XCTestCase {
     func testPair() {
         let pair = "\0" => true
-        let expectedPair: [UInt8] = [8, 0, 0, 1]
+        let expectedPair = Data([8, 0, 0, 1])
         XCTAssertEqual(pair.bsonBytes, expectedPair)
     }
 
@@ -73,6 +73,6 @@ class DocComponentTests: XCTestCase {
         XCTAssertEqual(some.bsonBytes, expectedSome.bsonBytes)
 
         let none = OptionalComponent<Pair<Bool>>.none
-        XCTAssertEqual(none.bsonBytes, [])
+        XCTAssertEqual(none.bsonBytes, Data())
     }
 }

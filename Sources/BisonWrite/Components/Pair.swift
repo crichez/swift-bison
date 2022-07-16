@@ -5,6 +5,8 @@
 //  Created by Christopher Richez on March 1 2022
 //
 
+import Foundation
+
 /// A key-value pair used to compose a BSON document.
 /// 
 /// To create a `Pair`, use the `=>` operator on a `String` and a `WritableValue` conforming value:
@@ -17,10 +19,10 @@ public struct Pair<T: WritableValue>: DocComponent {
     let key: String
     let value: T
     
-    public var bsonBytes: [UInt8] {
+    public var bsonBytes: Data {
         // Copy the key bytes
         let keyCodeUnits = key.utf8
-        var pairBytes: [UInt8] = []
+        var pairBytes = Data()
         pairBytes.reserveCapacity(key.count + 2)
         pairBytes.append(value.bsonType)
         pairBytes.append(contentsOf: keyCodeUnits)

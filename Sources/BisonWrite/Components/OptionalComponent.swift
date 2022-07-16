@@ -5,6 +5,8 @@
 //  Created by Christopher Richez on March 16 2022
 //
 
+import Foundation
+
 /// A wrapper type for an optional component used exclusively by ``DocBuilder/buildOptional(_:)``.
 enum OptionalComponent<T: DocComponent>: DocComponent {
     /// A non-nil component.
@@ -23,12 +25,12 @@ enum OptionalComponent<T: DocComponent>: DocComponent {
         }
     }
 
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         switch self {
         case .some(let component):
             return component.bsonBytes
         case .none:
-            return []
+            return Data()
         }
     }
 }

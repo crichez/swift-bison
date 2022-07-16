@@ -6,6 +6,7 @@
 //
 
 import BisonWrite
+import Foundation
 
 class BSONUnkeyedEncodingContainer {
     /// The contents of this container.
@@ -27,7 +28,7 @@ extension Array where Element == ValueBox {
 }
 
 extension BSONUnkeyedEncodingContainer: WritableValue {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         let contents = self.contents
         return WritableDoc {
             ForEach(contents.enumerated()) { index, value in 

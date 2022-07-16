@@ -13,7 +13,7 @@ class WritableValueTests: XCTestCase {
     func testDouble() throws {
         let value = Double.random(in: .leastNonzeroMagnitude ... .greatestFiniteMagnitude)
         let expectedType: UInt8 = 1
-        let expectedBytes = withUnsafeBytes(of: value.bitPattern) { Array($0) }
+        let expectedBytes = withUnsafeBytes(of: value.bitPattern) { Data($0) }
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
@@ -21,7 +21,7 @@ class WritableValueTests: XCTestCase {
     func testString() throws {
         let value = "this is a test! \u{10097}"
         let expectedType: UInt8 = 2
-        let expectedBytes = Int32(value.utf8.count + 1).bsonBytes + Array(value.utf8) + [0]
+        let expectedBytes = Int32(value.utf8.count + 1).bsonBytes + Data(value.utf8) + [0]
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
@@ -29,7 +29,7 @@ class WritableValueTests: XCTestCase {
     func testBool() throws {
         let value = Bool.random()
         let expectedType: UInt8 = 8
-        let expectedBytes: [UInt8] = value ? [1] : [0]
+        let expectedBytes = value ? Data([1]) : Data([0])
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
@@ -37,7 +37,7 @@ class WritableValueTests: XCTestCase {
     func testInt32() throws {
         let value = Int32.random(in: .min ... .max)
         let expectedType: UInt8 = 16
-        let expectedBytes = withUnsafeBytes(of: value) { Array($0) }
+        let expectedBytes = withUnsafeBytes(of: value) { Data($0) }
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
@@ -45,7 +45,7 @@ class WritableValueTests: XCTestCase {
     func testUInt64() throws {
         let value = UInt64.random(in: .min ... .max)
         let expectedType: UInt8 = 17
-        let expectedBytes = withUnsafeBytes(of: value) { Array($0) }
+        let expectedBytes = withUnsafeBytes(of: value) { Data($0) }
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }
@@ -53,7 +53,7 @@ class WritableValueTests: XCTestCase {
     func testInt64() throws {
         let value = Int64.random(in: .min ... .max)
         let expectedType: UInt8 = 18
-        let expectedBytes = withUnsafeBytes(of: value) { Array($0) }
+        let expectedBytes = withUnsafeBytes(of: value) { Data($0) }
         XCTAssertEqual(value.bsonType, expectedType)
         XCTAssertEqual(value.bsonBytes, expectedBytes)
     }

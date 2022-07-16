@@ -5,6 +5,8 @@
 //  Created by Christopher Richez on March 1 2022
 //
 
+import Foundation
+
 /// A group of document components values.
 /// 
 /// Use a `Group` when you need to declare more than 10 components in a document.
@@ -26,7 +28,7 @@ public struct Group<Body: DocComponent>: DocComponent {
         self.body = try body()
     }
 
-    public var bsonBytes: [UInt8] {
+    public var bsonBytes: Data {
         body.bsonBytes
     }
 }
