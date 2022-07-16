@@ -5,6 +5,8 @@
 //  Created by Christopher Richez on March 1 2022
 //
 
+import Foundation
+
 /// Encodes a sequence into a document using the provided closure.
 public struct ForEach<Base: Sequence, Element: DocComponent>: DocComponent {
     /// The transformed elements of this loop.
@@ -26,7 +28,11 @@ public struct ForEach<Base: Sequence, Element: DocComponent>: DocComponent {
         self.elements = base.lazy.map(transform)
     }
     
-    public var bsonBytes: [UInt8] {
-        elements.flatMap { $0.bsonBytes }
+    public var bsonBytes: Data {
+        var encodedElements = Data()
+        for component in elements {
+            encodedElements.append(component.bsonBytes)
+        }
+        return encodedElements
     }
 }

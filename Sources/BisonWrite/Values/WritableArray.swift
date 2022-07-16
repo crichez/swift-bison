@@ -5,6 +5,8 @@
 //  Created by Christopher Richez on March 31 2022
 //
 
+import Foundation
+
 /// A BSON document used exclusively for encoding.
 public struct WritableArray<Body: DocComponent> {
     /// The contents of this document.
@@ -17,8 +19,9 @@ public struct WritableArray<Body: DocComponent> {
 }
 
 extension WritableArray: WritableValue {
-    public var bsonBytes: [UInt8] {
-        let encodedBody = body.bsonBytes + [0]
+    public var bsonBytes: Data {
+        var encodedBody = body.bsonBytes
+        encodedBody.append(0)
         let encodedSize = Int32(encodedBody.count + 4).bsonBytes
         return encodedSize + encodedBody
     }

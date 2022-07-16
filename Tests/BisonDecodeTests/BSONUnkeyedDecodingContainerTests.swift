@@ -229,7 +229,7 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             "0" => value
         }
         let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)
-        var container = BSONUnkeyedDecodingContainer<[UInt8]>(doc: parsedDoc)
+        var container = BSONUnkeyedDecodingContainer<Data>(doc: parsedDoc)
         XCTAssertEqual(try container.decode(UUID.self), value)
     }
 

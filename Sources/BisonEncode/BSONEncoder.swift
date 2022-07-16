@@ -34,6 +34,6 @@ public struct BSONEncoder {
     public func encode<T: Encodable>(_ value: T) throws -> Data {
         let containerProvider = BSONEncodingContainerProvider(codingPath: [])
         try value.encode(to: containerProvider)
-        return Data(containerProvider.bsonBytes)
+        return containerProvider.bsonBytes
     }
 }

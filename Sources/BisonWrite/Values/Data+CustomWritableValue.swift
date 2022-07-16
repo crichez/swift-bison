@@ -12,7 +12,7 @@ extension Data: CustomWritableValue {
         0
     }
 
-    public var bsonValueBytes: [UInt8] {
-        Array(self)
+    public var bsonValueBytes: Data {
+        self
     }
 }

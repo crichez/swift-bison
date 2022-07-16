@@ -6,10 +6,11 @@
 //
 
 import BisonWrite
+import Foundation
 
 class BSONSingleValueEncodingContainer {
     /// The value assigned to this container.
-    var encodedValue: [UInt8]? = nil
+    var encodedValue: Data? = nil
 
     /// The type byte declared by the value assigned to this container.
     var encodedType: UInt8? = nil
@@ -24,7 +25,7 @@ class BSONSingleValueEncodingContainer {
 }
 
 extension BSONSingleValueEncodingContainer: WritableValue {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         encodedValue!
     }
 
@@ -35,7 +36,7 @@ extension BSONSingleValueEncodingContainer: WritableValue {
 
 extension BSONSingleValueEncodingContainer: SingleValueEncodingContainer {
     func encodeNil() throws {
-        encodedValue = []
+        encodedValue = Data()
         encodedType = 10
     }
 

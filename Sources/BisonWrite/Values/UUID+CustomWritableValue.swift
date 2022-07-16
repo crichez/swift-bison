@@ -12,9 +12,9 @@ extension UUID: CustomWritableValue {
         4
     }
 
-    public var bsonValueBytes: [UInt8] {
+    public var bsonValueBytes: Data {
         withUnsafeBytes(of: self) { bytes in 
-            Array(bytes)
+            Data(bytes)
         }
     }
 }

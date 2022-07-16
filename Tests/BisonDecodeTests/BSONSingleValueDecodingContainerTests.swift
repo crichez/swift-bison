@@ -191,7 +191,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
     /// array document of `UInt64` values.
     func testDecodeBSONValue() throws {
         let value = Data([1, 2, 3, 4])
-        let container = BSONSingleValueDecodingContainer<[UInt8]>(
+        let container = BSONSingleValueDecodingContainer<Data>(
             contents: value.bsonBytes, 
             codingPath: [])
         XCTAssertEqual(try container.decode(Data.self), value)

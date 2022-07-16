@@ -5,8 +5,10 @@
 //  Created by Christopher Richez on March 15 2022
 //
 
+import Foundation
+
 extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         return concatenatedComponents
@@ -19,7 +21,7 @@ extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
 }
 
 extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -35,7 +37,7 @@ extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -53,7 +55,7 @@ extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -73,7 +75,7 @@ extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -95,7 +97,7 @@ extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -119,7 +121,7 @@ extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -146,7 +148,7 @@ extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, 
   T8: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
@@ -175,7 +177,7 @@ extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 extension Tuple10: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent,
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent,
   T8: DocComponent, T9: DocComponent {
-    var bsonBytes: [UInt8] {
+    var bsonBytes: Data {
         var concatenatedComponents = t0.bsonBytes
         concatenatedComponents.append(contentsOf: t1.bsonBytes)
         concatenatedComponents.append(contentsOf: t2.bsonBytes)
