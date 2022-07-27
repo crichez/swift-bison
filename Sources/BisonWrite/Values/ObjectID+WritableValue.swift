@@ -8,6 +8,14 @@
 import ObjectID
 
 extension ObjectID: WritableValue {
-    public var bsonType: UInt8 { 7 }
-    public var bsonBytes: [UInt8] { withUnsafeBytes(of: self) { Array($0) } }
+    public var bsonType: UInt8 { 
+        0x07 
+    }
+
+    public func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 { 
+        withUnsafeBytes(of: self) { bytes in
+            document.append(contentsOf: bytes)
+        }
+    }
 }

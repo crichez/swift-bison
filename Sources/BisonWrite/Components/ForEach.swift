@@ -26,7 +26,10 @@ public struct ForEach<Base: Sequence, Element: DocComponent>: DocComponent {
         self.elements = base.lazy.map(transform)
     }
     
-    public var bsonBytes: [UInt8] {
-        elements.flatMap { $0.bsonBytes }
+    public func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        for transformedElement in elements {
+            transformedElement.append(to: &document)
+        }
     }
 }

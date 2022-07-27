@@ -1,6 +1,6 @@
 //
 //  WritableValue.swift
-//  
+//
 //
 //  Created by Christopher Richez on 2/6/22.
 //
@@ -8,16 +8,25 @@
 /// A value that can be assigned to a ``Pair`` in a BSON document.
 public protocol WritableValue {
     /// The BSON type byte for this type.
+    /// 
+    /// This is the number that will be prefixed to keys that declare this value type.
     var bsonType: UInt8 { get }
     
-    /// This value's BSON-encoded bytes.
-    var bsonBytes: [UInt8] { get }
+    /// Appends this value to the end of a BSON document.
+    /// 
+    /// In most cases, implementations should only call `append(contentsOf:)`
+    /// on the document and pass in the BSON representation of their value.
+    /// 
+    /// - Parameter document: a BSON document to which this value should be appended
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8
 }
 
 extension Int32: WritableValue {
-    public var bsonBytes: [UInt8] {
+    public func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
         withUnsafeBytes(of: self) { bytes in
-            Array(bytes)
+            document.append(contentsOf: bytes)
         }
     }
 
@@ -27,12 +36,15 @@ extension Int32: WritableValue {
 }
 
 extension String: WritableValue {
-    public var bsonBytes: [UInt8] {
-        let content = Array(utf8) + [0]
-        guard let size = Int32(exactly: content.count)?.bsonBytes else {
-            fatalError("string too long")
-        }
-        return size + content
+    public func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        let utf8 = utf8
+        let longSize = utf8.count + 1
+        guard let size = Int32(exactly: longSize) else { fatalError("string too long") }
+        document.reserveCapacity(longSize + 4)
+        size.append(to: &document)
+        document.append(contentsOf: utf8)
+        document.append(0)
     }
 
     public var bsonType: UInt8 {
@@ -41,8 +53,9 @@ extension String: WritableValue {
 }
 
 extension Bool: WritableValue {
-    public var bsonBytes: [UInt8] {
-        self ? [1] : [0]
+    public func append<Doc>(to document: inout Doc) 
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        self ? document.append(1) : document.append(0)
     }
     
     public var bsonType: UInt8 {
@@ -51,9 +64,10 @@ extension Bool: WritableValue {
 }
 
 extension Int64: WritableValue {
-    public var bsonBytes: [UInt8] {
+    public func append<Doc>(to document: inout Doc) 
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
         withUnsafeBytes(of: self) { bytes in
-            Array(bytes)
+            document.append(contentsOf: bytes)
         }
     }
     
@@ -63,9 +77,10 @@ extension Int64: WritableValue {
 }
 
 extension UInt64: WritableValue {
-    public var bsonBytes: [UInt8] {
+    public func append<Doc>(to document: inout Doc) 
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
         withUnsafeBytes(of: self) { bytes in
-            Array(bytes)
+            document.append(contentsOf: bytes)
         }
     }
     
@@ -75,9 +90,10 @@ extension UInt64: WritableValue {
 }
 
 extension Double: WritableValue {
-    public var bsonBytes: [UInt8] {
+    public func append<Doc>(to document: inout Doc) 
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
         withUnsafeBytes(of: bitPattern) { bytes in
-            Array(bytes)
+            document.append(contentsOf: bytes)
         }
     }
     
@@ -87,12 +103,13 @@ extension Double: WritableValue {
 }
 
 extension Optional: WritableValue where Wrapped : WritableValue {
-    public var bsonBytes: [UInt8] {
+    public func append<Doc>(to document: inout Doc) 
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
         switch self {
         case .some(let value):
-            return value.bsonBytes
+            value.append(to: &document)
         case .none:
-            return []
+            return
         }
     }
 

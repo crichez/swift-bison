@@ -11,6 +11,14 @@ import BisonWrite
 import BisonRead
 import XCTest
 
+extension WritableValue {
+    var bsonBytes: [UInt8] {
+        var buffer: [UInt8] = []
+        append(to: &buffer)
+        return buffer
+    }
+}
+
 class BSONKeyedDecodingContainerTests: XCTestCase {
     enum Key: CodingKey, Equatable {
         case test

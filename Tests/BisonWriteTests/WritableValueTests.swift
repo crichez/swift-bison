@@ -8,6 +8,14 @@
 import BisonWrite
 import XCTest
 
+extension WritableValue {
+    var bsonBytes: [UInt8] {
+        var buffer: [UInt8] = []
+        append(to: &buffer)
+        return buffer
+    }
+}
+
 /// A test suite for all `WritableValue` conforming types.
 class WritableValueTests: XCTestCase {
     func testDouble() throws {

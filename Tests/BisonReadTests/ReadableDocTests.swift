@@ -10,6 +10,14 @@ import BisonRead
 import BisonWrite
 import XCTest
 
+extension WritableValue {
+    var bsonBytes: [UInt8] {
+        var buffer: [UInt8] = []
+        append(to: &buffer)
+        return buffer
+    }
+}
+
 /// Tests internal functionality of the `ReadableDoc` type.
 class ReadableDocTests: XCTestCase {
     let typeMap = ReadableDoc<[UInt8]>.typeMap

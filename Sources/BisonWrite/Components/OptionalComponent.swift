@@ -23,12 +23,13 @@ enum OptionalComponent<T: DocComponent>: DocComponent {
         }
     }
 
-    var bsonBytes: [UInt8] {
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
         switch self {
         case .some(let component):
-            return component.bsonBytes
+            return component.append(to: &document)
         case .none:
-            return []
+            return
         }
     }
 }

@@ -21,14 +21,14 @@ class BSONKeyedEncodingContainer<Key: CodingKey> {
 }
 
 extension BSONKeyedEncodingContainer: WritableValue {
-    var bsonBytes: [UInt8] {
-        let contents = self.contents
-        return WritableDoc {
-            ForEach(contents) { key, value in 
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        WritableDoc {
+            ForEach(self.contents) { key, value in 
                 key => value
             }
         }
-        .bsonBytes
+        .append(to: &document)
     }
 
     var bsonType: UInt8 {

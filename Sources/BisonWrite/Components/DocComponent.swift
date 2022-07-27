@@ -7,6 +7,7 @@
 
 /// A basic building block of a BSON document.
 public protocol DocComponent {
-    /// This component's BSON-encoded bytes.
-    var bsonBytes: [UInt8] { get }
+    /// Appends this components BSON bytes to the end of a document.
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8
 }

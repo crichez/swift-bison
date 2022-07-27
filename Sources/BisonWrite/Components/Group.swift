@@ -26,7 +26,8 @@ public struct Group<Body: DocComponent>: DocComponent {
         self.body = try body()
     }
 
-    public var bsonBytes: [UInt8] {
-        body.bsonBytes
+    public func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        body.append(to: &document)
     }
 }

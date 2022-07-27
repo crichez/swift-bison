@@ -9,6 +9,14 @@
 import BisonWrite
 import XCTest
 
+extension DocComponent {
+    var bsonBytes: [UInt8] {
+        var buffer: [UInt8] = []
+        append(to: &buffer)
+        return buffer
+    }
+}
+
 /// A test suite for `DocComponent` conforming types.
 class DocComponentTests: XCTestCase {
     func testPair() {

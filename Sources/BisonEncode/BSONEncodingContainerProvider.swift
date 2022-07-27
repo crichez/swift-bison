@@ -24,8 +24,9 @@ class BSONEncodingContainerProvider {
 }
 
 extension BSONEncodingContainerProvider: WritableValue {
-    var bsonBytes: [UInt8] {
-        container!.bsonBytes
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        container!.append(to: &document)
     }
 
     var bsonType: UInt8 {
