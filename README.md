@@ -10,7 +10,7 @@ The Bison package exposes two main modules:
 
 Each of these modules is available for encoding or decoding only by importing:
 * `BisonWrite` & `BisonRead` as alternatives to the full `Bison`.
-* `BisonEncode` & `BisonDecode` as alternatives to the full `BSONCodable`.
+* `BisonEncode` & `BisonDecode` as alternatives to the full `BisonCodable`.
 
 This project is tested in continuous integration on the following platforms:
 * macOS 11
@@ -48,8 +48,8 @@ let doc = WritableDoc {
     }
 }
 
-// Encode the final document using the bsonBytes computed property
-let encodedDoc: [UInt8] = doc.bsonBytes
+// Encode the final document using your collection of choice.
+let encodedDoc = doc.encode(as: Data.self)
 ```
 
 ### BisonRead
@@ -77,14 +77,14 @@ let flag = try Bool(bsonBytes: nestedDoc["flag"])
 let maybe = try String?(bsonBytes: nestedDoc["maybe?"])
 ```
 
-### BSONCodable
+### BisonCodable
 
-`BSONCodable` is meant as a drop-in replacement for `PropertyListEncoder` or `JSONDecoder`,
+`BisonCodable` is meant as a drop-in replacement for `PropertyListEncoder` or `JSONDecoder`,
 including error handling using Swift `EncodingError` and `DecodingError`.
 You can use the `BSONEncoder` and `BSONDecoder` types as analogs that produce BSON documents.
 
 ```swift
-import BSONCodable
+import BisonCodable
 
 struct Person: Codable {
     let name: String
@@ -92,6 +92,6 @@ struct Person: Codable {
 }
 
 let person = Person(name: "Bob Belcher", age: 41)
-let encodedPerson = try BSONEncoder().encode(person)
+let encodedPerson = try BSONEncoder<Data>().encode(person)
 let decodedPerson = try BSONDecoder().decode(Person.self, from: encodedPerson)
 ```

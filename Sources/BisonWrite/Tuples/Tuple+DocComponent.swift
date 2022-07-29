@@ -6,10 +6,10 @@
 //
 
 extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1) {
@@ -19,11 +19,11 @@ extension Tuple2: DocComponent where T0: DocComponent, T1: DocComponent {
 }
 
 extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2) {
@@ -35,12 +35,12 @@ extension Tuple3: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3) {
@@ -53,13 +53,13 @@ extension Tuple4: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        concatenatedComponents.append(contentsOf: t4.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
+        t4.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4) {
@@ -73,14 +73,14 @@ extension Tuple5: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        concatenatedComponents.append(contentsOf: t4.bsonBytes)
-        concatenatedComponents.append(contentsOf: t5.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
+        t4.append(to: &document)
+        t5.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5) {
@@ -95,15 +95,15 @@ extension Tuple6: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        concatenatedComponents.append(contentsOf: t4.bsonBytes)
-        concatenatedComponents.append(contentsOf: t5.bsonBytes)
-        concatenatedComponents.append(contentsOf: t6.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
+        t4.append(to: &document)
+        t5.append(to: &document)
+        t6.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6) {
@@ -119,16 +119,16 @@ extension Tuple7: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 
 extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        concatenatedComponents.append(contentsOf: t4.bsonBytes)
-        concatenatedComponents.append(contentsOf: t5.bsonBytes)
-        concatenatedComponents.append(contentsOf: t6.bsonBytes)
-        concatenatedComponents.append(contentsOf: t7.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
+        t4.append(to: &document)
+        t5.append(to: &document)
+        t6.append(to: &document)
+        t7.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6,_ t7: T7) {
@@ -146,17 +146,17 @@ extension Tuple8: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent, 
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent, 
   T8: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        concatenatedComponents.append(contentsOf: t4.bsonBytes)
-        concatenatedComponents.append(contentsOf: t5.bsonBytes)
-        concatenatedComponents.append(contentsOf: t6.bsonBytes)
-        concatenatedComponents.append(contentsOf: t7.bsonBytes)
-        concatenatedComponents.append(contentsOf: t8.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
+        t4.append(to: &document)
+        t5.append(to: &document)
+        t6.append(to: &document)
+        t7.append(to: &document)
+        t8.append(to: &document)
     }
 
     init(_ t0: T0,_ t1: T1,_ t2: T2,_ t3: T3,_ t4: T4,_ t5: T5,_ t6: T6,_ t7: T7,_ t8: T8) {
@@ -175,18 +175,18 @@ extension Tuple9: DocComponent where T0: DocComponent, T1: DocComponent, T2: Doc
 extension Tuple10: DocComponent where T0: DocComponent, T1: DocComponent, T2: DocComponent,
   T3: DocComponent, T4: DocComponent, T5: DocComponent, T6: DocComponent, T7: DocComponent,
   T8: DocComponent, T9: DocComponent {
-    var bsonBytes: [UInt8] {
-        var concatenatedComponents = t0.bsonBytes
-        concatenatedComponents.append(contentsOf: t1.bsonBytes)
-        concatenatedComponents.append(contentsOf: t2.bsonBytes)
-        concatenatedComponents.append(contentsOf: t3.bsonBytes)
-        concatenatedComponents.append(contentsOf: t4.bsonBytes)
-        concatenatedComponents.append(contentsOf: t5.bsonBytes)
-        concatenatedComponents.append(contentsOf: t6.bsonBytes)
-        concatenatedComponents.append(contentsOf: t7.bsonBytes)
-        concatenatedComponents.append(contentsOf: t8.bsonBytes)
-        concatenatedComponents.append(contentsOf: t9.bsonBytes)
-        return concatenatedComponents
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        t0.append(to: &document)
+        t1.append(to: &document)
+        t2.append(to: &document)
+        t3.append(to: &document)
+        t4.append(to: &document)
+        t5.append(to: &document)
+        t6.append(to: &document)
+        t7.append(to: &document)
+        t8.append(to: &document)
+        t9.append(to: &document)
     }
 
     init(

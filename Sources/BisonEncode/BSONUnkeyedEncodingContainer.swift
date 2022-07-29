@@ -27,18 +27,18 @@ extension Array where Element == ValueBox {
 }
 
 extension BSONUnkeyedEncodingContainer: WritableValue {
-    var bsonBytes: [UInt8] {
-        let contents = self.contents
-        return WritableDoc {
-            ForEach(contents.enumerated()) { index, value in 
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        WritableDoc {
+            ForEach(self.contents.enumerated()) { index, value in 
                 String(describing: index) => value
             }
         }
-        .bsonBytes
+        .append(to: &document)
     }
 
     var bsonType: UInt8 {
-        4
+        0x04
     }
 }
 

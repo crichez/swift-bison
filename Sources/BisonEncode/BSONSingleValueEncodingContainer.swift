@@ -9,10 +9,7 @@ import BisonWrite
 
 class BSONSingleValueEncodingContainer {
     /// The value assigned to this container.
-    var encodedValue: [UInt8]? = nil
-
-    /// The type byte declared by the value assigned to this container.
-    var encodedType: UInt8? = nil
+    var value: WritableValue? = nil
 
     /// The path the encoder took to get to this point, used for error composition.
     var codingPath: [CodingKey]
@@ -24,115 +21,89 @@ class BSONSingleValueEncodingContainer {
 }
 
 extension BSONSingleValueEncodingContainer: WritableValue {
-    var bsonBytes: [UInt8] {
-        encodedValue!
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        value!.append(to: &document)
     }
 
     var bsonType: UInt8 {
-        encodedType!
+        value!.bsonType
     }
 }
 
 extension BSONSingleValueEncodingContainer: SingleValueEncodingContainer {
     func encodeNil() throws {
-        encodedValue = []
-        encodedType = 10
+        value = Optional<Bool>.none as WritableValue
     }
 
     func encode(_ value: Bool) throws {
-        encodedValue = value.bsonBytes
-        encodedType = value.bsonType
+        self.value = value
     }
 
     func encode(_ value: String) throws {
-        encodedValue = value.bsonBytes
-        encodedType = value.bsonType
+        self.value = value
     }
 
     func encode(_ value: Double) throws {
-        encodedValue = value.bsonBytes
-        encodedType = value.bsonType
+        self.value = value
     }
 
     func encode(_ value: Int32) throws {
-        encodedValue = value.bsonBytes
-        encodedType = value.bsonType
+        self.value = value
     }
 
     func encode(_ value: UInt64) throws {
-        encodedValue = value.bsonBytes
-        encodedType = value.bsonType
+        self.value = value
     }
 
     func encode(_ value: Int64) throws {
-        encodedValue = value.bsonBytes
-        encodedType = value.bsonType
+        self.value = value
     }
 
     func encode(_ value: Float) throws {
-        let convertedValue = Double(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = Double(value)
     }
 
     func encode(_ value: Int) throws {
         if MemoryLayout<Int>.size == 4 {
-            let convertedValue = Int32(value)
-            encodedValue = convertedValue.bsonBytes
-            encodedType = convertedValue.bsonType
+            self.value = Int32(value)
         } else {
-            let convertedValue = Int64(value)
-            encodedValue = convertedValue.bsonBytes
-            encodedType = convertedValue.bsonType
+            self.value = Int64(value)
         }
         
     }
 
     func encode(_ value: Int8) throws {
-        let convertedValue = Int32(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = Int32(value)
     }
 
     func encode(_ value: Int16) throws {
-        let convertedValue = Int32(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = Int32(value)
     }
 
     func encode(_ value: UInt) throws {
-        let convertedValue = UInt64(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = UInt64(value)
     }
 
     func encode(_ value: UInt8) throws {
-        let convertedValue = UInt64(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = UInt64(value)
     }
 
     func encode(_ value: UInt16) throws {
-        let convertedValue = UInt64(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = UInt64(value)
     }
 
     func encode(_ value: UInt32) throws {
-        let convertedValue = UInt64(value)
-        encodedValue = convertedValue.bsonBytes
-        encodedType = convertedValue.bsonType
+        self.value = UInt64(value)
     }
 
     func encode<T>(_ value: T) throws where T : Encodable {
         if let bsonValue = value as? WritableValue {
-            encodedValue = bsonValue.bsonBytes
-            encodedType = bsonValue.bsonType
+            self.value = bsonValue
         } else {
             let encoder = BSONEncodingContainerProvider(codingPath: codingPath)
             try value.encode(to: encoder)
-            encodedValue = encoder.bsonBytes
-            encodedType = encoder.bsonType
+            self.value = encoder
         }
     }
 }

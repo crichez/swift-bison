@@ -7,6 +7,7 @@
 
 import BisonDecode
 import BisonEncode
+import Foundation
 import XCTest
 
 class BSONDecoderTests: XCTestCase {
@@ -18,7 +19,7 @@ class BSONDecoderTests: XCTestCase {
 
     func testDecoder() throws {
         let value = TestObject(name: "test", number: 12, flag: false)
-        let encodedValue = try BSONEncoder().encode(value)
+        let encodedValue = try BSONEncoder<Data>().encode(value)
         let decodedValue = try BSONDecoder().decode(TestObject.self, from: encodedValue)
         XCTAssertEqual(value, decodedValue)
     }

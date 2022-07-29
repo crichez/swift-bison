@@ -24,8 +24,9 @@ struct ValueBox {
 }
 
 extension ValueBox: WritableValue {
-    var bsonBytes: [UInt8] {
-        value.bsonBytes
+    func append<Doc>(to document: inout Doc)
+    where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+        value.append(to: &document)
     }
 
     var bsonType: UInt8 {
