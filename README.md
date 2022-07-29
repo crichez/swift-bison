@@ -92,6 +92,6 @@ struct Person: Codable {
 }
 
 let person = Person(name: "Bob Belcher", age: 41)
-let encodedPerson = try BSONEncoder().encode(person)
+let encodedPerson = try BSONEncoder<Data>().encode(person)
 let decodedPerson = try BSONDecoder().decode(Person.self, from: encodedPerson)
 ```

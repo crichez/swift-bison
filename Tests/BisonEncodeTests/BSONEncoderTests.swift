@@ -7,6 +7,7 @@
 
 import BisonEncode
 import BisonWrite
+import Foundation
 import XCTest
 
 class BSONEncoderTests: XCTestCase {
@@ -18,7 +19,7 @@ class BSONEncoderTests: XCTestCase {
 
     func testEncodesAsExpected() throws {
         let value = TestType(name: "test", value: 1.23, list: [true, false, true])
-        let encodedValue = try BSONEncoder().encode(value)
+        let encodedValue = try BSONEncoder<Data>().encode(value)
         let expectedDoc = WritableDoc {
             "name" => "test"
             "value" => 1.23

@@ -7,34 +7,38 @@
 
 import Foundation
 
-/// Use `BSONEncoder` to encode `Encodable` values into fully-formed BSON documents.
+/// Use `BSONEncoder` to write `Encodable` values into fully-formed BSON documents.
 /// 
-/// - Note: 
-/// This encoder does not respect custom `WritableValue` implementations.
-/// To encode custom BSON values differently than their `Encodable` implementation,
-/// Use `WritableDoc` or `WritableArray`.
-public struct BSONEncoder {
+/// `BSONEncoder` is generic over its encoded document type: `Doc`.
+/// The only constraint on this type is it must be a `RangeReplaceableCollection` with an
+/// element type of `UInt8`. In most cases, you can simply initialize your encoder over
+/// over the `Data` type as follows.
+/// 
+///     import Foundation
+///     import BisonEncode
+///     
+///     let encoder = BSONEncoder<Data>()
+///     let document = try encoder.encode(myEncodableInstance)
+///     try document.write(to: file)
+/// 
+public struct BSONEncoder<Doc: RangeReplaceableCollection> where Doc.Element == UInt8 {
     /// Initializes an encoder.
     public init() {}
 
     /// Encodes the provided value into a BSON document.
     /// 
-    /// - Note: 
-    /// This encoder does not respect custom ``WritableValue`` implementations.
-    /// To encode custom BSON values differently than their `Encodable` implementation,
-    /// Use ``WritableDoc`` or ``WritableArray``.
-    /// 
     /// - Throws: 
     /// Re-throws any errors thrown in the value's `encode(to:)` method.
+    /// For built-in types, no errors are thrown.
     /// 
     /// - Parameter value: an `Encodable` value
     /// 
     /// - Returns: 
-    /// The bytes of the resulting BSON document.
-    public func encode<T: Encodable>(_ value: T) throws -> Data {
+    /// The bytes of the resulting BSON document as the `Doc` collection type.
+    public func encode<T: Encodable>(_ value: T) throws -> Doc {
         let containerProvider = BSONEncodingContainerProvider(codingPath: [])
         try value.encode(to: containerProvider)
-        var buffer = Data()
+        var buffer = Doc()
         containerProvider.append(to: &buffer)
         return buffer
     }
