@@ -6,12 +6,12 @@
 //
 
 /// A BSON document used exclusively for encoding.
-public struct WritableArray<Body: DocComponent> {
+public struct WritableArray<Body: Sequence> where Body.Element == WritableValue {
     /// The contents of this document.
     let body: Body
     
     /// Initializes a `Document` from the provided components.
-    public init(@DocBuilder body: @escaping () throws -> Body) rethrows {
+    public init(@ArrayDocBuilder body: @escaping () throws -> Body) rethrows {
         self.body = try body()
     }
 
@@ -32,7 +32,12 @@ extension WritableArray: WritableValue {
         let startIndex = document.endIndex
         Int32(0).append(to: &document)
         let sizeEndIndex = document.endIndex
-        body.append(to: &document)
+        for (key, value) in body.enumerated() {
+            document.append(value.bsonType)
+            document.append(contentsOf: String(key).utf8)
+            document.append(0)
+            value.append(to: &document)
+        }
         document.append(0)
         let endIndex = document.endIndex
         let longSize = document.distance(from: startIndex, to: endIndex)

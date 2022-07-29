@@ -139,7 +139,7 @@ class BSONUnkeyedEncodingContainerTests: XCTestCase {
         try nestedContainer.encode(value)
         let expectedBytes = WritableDoc {
             "0" => WritableArray {
-                "0" => value
+                value
             }
         }
         .bsonBytes
