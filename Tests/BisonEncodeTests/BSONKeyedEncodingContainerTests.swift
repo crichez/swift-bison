@@ -156,7 +156,7 @@ class BSONKeyedEncodingContainerTests: XCTestCase {
         try nestedContainer.encode(value)
         let expectedBytes = WritableDoc {
             "test" => WritableArray {
-                "0" => value
+                value
             }
         }
         .bsonBytes

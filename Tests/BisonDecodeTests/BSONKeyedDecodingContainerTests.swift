@@ -319,7 +319,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
         let value = "passed?"
         let doc = WritableDoc {
             "test" => WritableArray {
-                "0" => value
+                value
             }
         }
         let parsedDoc = try ReadableDoc(bsonBytes: doc.bsonBytes)

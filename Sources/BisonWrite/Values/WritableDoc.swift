@@ -15,7 +15,32 @@
 //  limitations under the License.
 //
 
-/// A BSON document used exclusively for encoding.
+/// A BSON document that can be written to a buffer.
+/// 
+/// Declare the structure of a BSON document as follows:
+///     
+///     // Pass a trailing closure to the initializer.
+///     let doc = WritableDoc {
+///         // Assign String keys and WritableValues using the => operator
+///         "zero" => Int32(0)
+///         "one" => Int64(1)
+///         // Use conditionals
+///         if !skipTwo {
+///             "two" => 2.0
+///         }
+///         // And loops
+///         ForEach(Int64(3)..<100) { number in
+///             String(number) => number
+///         }
+///     }
+/// 
+/// When ready to encode the composed document, call its `encode(as:)` method. You can provide
+/// any `RangeReplaceableCollection` of `UInt8` bytes. The example below encodes the document
+/// as `Data`, then writes it to a URL.
+/// 
+///     let encodedDoc = doc.encode(as: Data.self)
+///     try encodedDoc.write(to: path)
+///
 public struct WritableDoc<Body: DocComponent> {
     /// The contents of this document.
     let body: Body

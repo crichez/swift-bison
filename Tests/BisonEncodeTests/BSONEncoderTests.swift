@@ -34,9 +34,9 @@ class BSONEncoderTests: XCTestCase {
             "name" => "test"
             "value" => 1.23
             "list" => WritableArray {
-                "0" => true
-                "1" => false
-                "2" => true
+                true
+                false
+                true
             }
         }
         let expectedBytes = Data(expectedDoc.bsonBytes)
