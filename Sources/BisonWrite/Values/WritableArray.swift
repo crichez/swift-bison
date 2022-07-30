@@ -5,12 +5,44 @@
 //  Created by Christopher Richez on March 31 2022
 //
 
-/// A BSON document used exclusively for encoding.
+/// A BSON array document that can be written to a buffer.
+/// 
+/// Declare the structure of an array document as follows:
+///     
+///     // Pass a trailing closure to the initializer.
+///     let arrayDoc = WritableArray {
+///         // Declare values in the order they should appear.
+///         "zero"
+///         "one"
+///         // You can declare a value of any type conforming to `WritableValue`.
+///         2.0
+///         Int64(3)
+///         // Use conditionals.
+///         if !skipFour {
+///             4.0
+///         }
+///         // And loops.
+///         for number in Int32(5)..<100 {
+///             number
+///         }
+///     }
+/// 
+/// When ready to encode the composed document, call its `encode(as:)` method. You can provide
+/// any `RangeReplaceableCollection` of `UInt8` bytes. The example below encodes the document
+/// as `Data`, then writes it to a URL.
+/// 
+///     let encodedArrayDoc = arrayDoc.encode(as: Data.self)
+///     try encodedArrayDoc.write(to: path)
+/// 
 public struct WritableArray<Body: Sequence> where Body.Element == WritableValue {
-    /// The contents of this document.
+    /// The contents of this array, a sequence of type-erased writable values.
     let body: Body
     
-    /// Initializes a `Document` from the provided components.
+    /// Initializes an array document from the provided declaration.
+    /// 
+    /// - Parameter body: an `ArrayDocBuilder` closure declaring the structure of the array.
+    /// 
+    /// - Throws: Re-throws any errors thrown in the `body` closure.
     public init(@ArrayDocBuilder body: @escaping () throws -> Body) rethrows {
         self.body = try body()
     }
@@ -18,6 +50,8 @@ public struct WritableArray<Body: Sequence> where Body.Element == WritableValue 
     /// Encodes this BSON array document as the specified buffer type.
     /// 
     /// - Parameter type: a `RangeReplaceableCollection` to encode this document as
+    /// 
+    /// - Returns: An instance of the requested buffer type that contains the declared document.
     public func encode<Buffer>(as type: Buffer.Type) -> Buffer
     where Buffer : RangeReplaceableCollection, Buffer.Element == UInt8 {
         var buffer = Buffer()
