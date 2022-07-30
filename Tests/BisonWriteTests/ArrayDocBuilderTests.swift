@@ -68,4 +68,50 @@ class WritableArrayBuilderTests: XCTestCase {
         .encode(as: [UInt8].self)
         XCTAssertEqual(encodedDoc, expectedDoc)
     }
+
+    /// Asserts blocks declared in control-flow branches are stitched at the appropriate index.
+    func testBlockStitching() {
+        let doc = WritableArray {
+            0.0
+            1.0
+            do {
+                2.0
+                3.0
+            }
+            4.0
+        }
+        .encode(as: [UInt8].self)
+        let expectedDoc = WritableDoc {
+            "0" => 0.0
+            "1" => 1.0
+            "2" => 2.0
+            "3" => 3.0
+            "4" => 4.0
+        }
+        .encode(as: [UInt8].self)
+        XCTAssertEqual(doc, expectedDoc)
+    }
+
+    /// Asserts nested documents are indexed as expected.
+    func testNestedDoc() {
+        let doc = WritableArray {
+            WritableArray {
+                "zero"
+            }
+            WritableArray {
+                "one"
+            }
+        }
+        .encode(as: Data.self)
+        let expectedDoc = WritableDoc {
+            "0" => WritableArray {
+                "zero"
+            }
+            "1" => WritableArray {
+                "one"
+            }
+        }
+        .encode(as: Data.self)
+        XCTAssertEqual(doc, expectedDoc)
+    }
 }
