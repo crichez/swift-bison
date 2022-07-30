@@ -2,4 +2,5 @@ Package.resolved
 .vscode
 .swiftpm
 .build
-Sourcery-1.6.1
+
+Sources/BisonWrite/BisonWrite.docc/.docc-build
