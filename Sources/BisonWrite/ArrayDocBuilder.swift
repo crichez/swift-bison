@@ -17,6 +17,11 @@ extension Array: DocComponent where Element == WritableValue {
     }
 }
 
+/// A result builder used to declare the structure of an integer-keyed BSON document.
+/// 
+/// > Note: You won't usually interact with the `ArrayDocBuilder` type directly. You do so 
+///   implicitly when initializing a ``WritableArray``. See that documentation for more details.
+/// 
 @resultBuilder public struct ArrayDocBuilder {
     public static func buildExpression(_ expression: WritableValue) -> Array<WritableValue> {
         [expression]

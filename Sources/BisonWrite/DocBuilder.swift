@@ -15,8 +15,12 @@
 //  limitations under the License.
 //
 
-@resultBuilder
-public struct DocBuilder {
+/// A result builder used to declare the structure of a string-keyed BSON document.
+/// 
+/// > Note: You won't usually interact with the `DocBuilder` type directly. You do so implicitly 
+///   when initializing a ``WritableDoc``. See that documentation for more details.
+/// 
+@resultBuilder public struct DocBuilder {
     public static func buildBlock<T: DocComponent>(_ t: T) -> some DocComponent {
         t
     }
