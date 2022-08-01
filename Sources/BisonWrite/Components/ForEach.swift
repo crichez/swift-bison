@@ -15,7 +15,9 @@
 //  limitations under the License.
 //
 
-/// Encodes a sequence into a document using the provided closure.
+/// Declares a component of a BSON document from the contents of a `Sequence`.
+/// 
+/// Use ``init(_:transform:)`` to quickly convert any sequence to a series of key-value pairs.
 public struct ForEach<Base: Sequence, Element: DocComponent>: DocComponent {
     /// The transformed elements of this loop.
     let elements: LazyMapSequence<Base, Element>
@@ -29,9 +31,12 @@ public struct ForEach<Base: Sequence, Element: DocComponent>: DocComponent {
     /// }
     /// ```
     /// 
+    /// > Note: The closure can return anything conforming to ``DocComponent``. This includes
+    ///   ``Pair``, ``Group``, or another ``ForEach`` declaration. 
+    /// 
     /// - Parameters:
-    ///   - base: a `Sequence` of arbitrary type to which to return a document component
-    ///   - transform: a closure that takes a `base` element and returns a document component.
+    ///   - base: a `Sequence` of arbitrary type to use as input
+    ///   - transform: a closure that takes a `base` element and returns a ``DocComponent``
     public init(_ base: Base, @DocBuilder transform: @escaping (Base.Element) -> Element) {
         self.elements = base.lazy.map(transform)
     }
