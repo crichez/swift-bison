@@ -17,6 +17,30 @@
 
 /// A protocol that defines how a BSON value is written to a document.
 /// 
+/// ## Built-In Types
+/// 
+/// The following types conform to `WritableValue`.
+/// 
+/// ### Standard Library
+/// 
+/// * `Double`
+/// * `String`
+/// * `Bool`
+/// * `Int32`
+/// * `Int64`
+/// * `UInt64`
+/// * `Optional` where `Wrapped` also conforms
+/// 
+/// ### Foundation
+/// 
+/// * `Date`
+/// * `Data`
+/// * `UUID`
+/// 
+/// ### Custom
+/// 
+/// * ``ObjectID``
+/// 
 /// ## Conforming to `WritableValue`
 /// 
 /// The framework can be extended to support alternative versions of built-in BSON types,
