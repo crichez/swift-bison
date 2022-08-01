@@ -40,6 +40,8 @@
 /// ### Custom
 /// 
 /// * ``ObjectID``
+/// * ``WritableDoc``
+/// * ``WritableArray``
 /// 
 /// ## Conforming to `WritableValue`
 /// 
