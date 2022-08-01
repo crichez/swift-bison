@@ -17,32 +17,87 @@
 
 /// A BSON array document that can be written to a buffer.
 /// 
-/// Declare the structure of an array document as follows:
-///     
-///     // Pass a trailing closure to the initializer.
-///     let arrayDoc = WritableArray {
-///         // Declare values in the order they should appear.
-///         "zero"
+/// You can declare the structure of your array document using an ``ArrayDocBuilder`` result 
+/// builder closure.
+/// 
+/// ## Declaring Values
+/// 
+/// Values are encoded in the order they are listed in the declaration, and their index is
+/// determined by their position when the ``append(to:)`` method is called. The following example
+/// declares three `String` values consecutively.
+/// 
+/// ```swift
+/// let doc = WritableArray {
+///     "zero"
+///     "one"
+///     "two"
+/// }
+/// ```
+/// 
+/// It can be helpful to think of BSON documents using their human-readable counterpart, JSON.
+/// The declaration above resembles the following JSON document.
+/// 
+/// ```json
+/// {
+///     "0": "zero",
+///     "1": "one",
+///     "2": "two"
+/// }
+/// ```
+/// 
+/// Declarations contained in `if-else` or `do-catch` statements are handled the same way, and
+/// are always stitched into the final document with the appropriate indices.
+/// 
+/// ```swift
+/// let doc = WritableArray {
+///     do {
+///         try zeroAsString()
 ///         "one"
-///         // You can declare a value of any type conforming to `WritableValue`.
-///         2.0
-///         Int64(3)
-///         // Use conditionals.
-///         if !skipFour {
-///             4.0
+///         if !skipTwo {
+///             "two"
 ///         }
-///         // And loops.
-///         for number in Int32(5)..<100 {
-///             number
-///         }
+///     } catch {
+///         "error"
 ///     }
+/// }
+/// ```
+/// 
+/// You can use Swift `for-in` loops to declare large documents based on the contents of 
+/// another sequence.
+/// 
+/// ```swift
+/// let doc = WritableArray {
+///     for evenNumber in ((0..<10_000).filter { $0.isEven }) {
+///         evenNumber
+///     }
+/// }
+/// ```
+/// 
+/// You can declare any value conforming to ``WritableValue``, or a type-erased ``WritableValue``
+/// itself. Since `WritableArray` conforms to that protocol, you can nest documents too.
+/// 
+/// ```swift
+/// let doc = WritableArray {
+///     "shallow"
+///     WritableArray {
+///         "deep"
+///         WritableArray {
+///             "very deep!"
+///         }
+///     }   
+/// }
+/// ```
+/// 
+/// ## Writing the Document
 /// 
 /// When ready to encode the composed document, call its `encode(as:)` method. You can provide
 /// any `RangeReplaceableCollection` of `UInt8` bytes. The example below encodes the document
 /// as `Data`, then writes it to a URL.
 /// 
-///     let encodedArrayDoc = arrayDoc.encode(as: Data.self)
-///     try encodedArrayDoc.write(to: path)
+/// ```swift
+/// let encodedArrayDoc = arrayDoc.encode(as: Data.self)
+/// try encodedArrayDoc.write(to: path)
+/// ```
 /// 
 public struct WritableArray<Body: Sequence> where Body.Element == WritableValue {
     /// The contents of this array, a sequence of type-erased writable values.
