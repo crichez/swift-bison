@@ -15,10 +15,70 @@
 //  limitations under the License.
 //
 
-/// A BSON value that declares the `binary` type (5).
+/// A protocol that describes how a custom type is encoded into a BSON document.
 /// 
-/// `CustomWritableValue` is a convenience protocol that calculates and writes the size
-/// of the value for you.
+/// ## Conforming to CustomWritableValue
+/// 
+/// Conform to this protocol to encode types that do not exist in 
+/// [the BSON specification](https://bsonspec.org/spec.html). `CustomWritableValue` refines 
+/// ``WritableValue`` and provides default implementations to that protocol's requirements by 
+/// automatically calculating and writing size metadata. All you need to do is: 
+/// * Declare a subtype byte (or subtype number)
+/// * Append your encoded value to the document
+/// 
+/// ### Subtype Byte
+/// 
+/// The specification reserves subtypes 128-255 for custom user-defined types. Just make sure
+/// the recipient of your document knows how to decode your type. The following example declares
+/// subtype byte 128 for `Foundation.Date` to use its value as a number of seconds since
+/// the reference date of January 1st 2001.
+/// 
+/// ```swift
+/// extension Date: CustomWritableValue {
+///     public var bsonSubtype: UInt8 { 128 }
+///     ...  
+/// }
+/// ```
+/// 
+/// ### Value Data
+/// 
+/// Implement the ``appendValue(to:)`` method by calling the `append(contentsOf:)` method of 
+/// `document` and passing in your encoded value as a sequence of bytes. The `Doc` type conforms
+/// to `RangeReplaceableCollection`, and can generally be thought of as an `Array` or `Data` 
+/// buffer.
+/// 
+/// > Note: The `Doc.Index` type is unconstrained, which can make operations other than 
+///   `append(_:)` and `append(contentsOf:)` cumbersome. You can use `Collection` methods to 
+///   calculate indices and replace sections of the document using the `replaceSubrange(_:with:)` 
+///   method.
+/// 
+/// ```swift
+/// extension Date: CustomWritableValue {
+///     ...
+///     public func appendValue<Doc>(to document: inout Doc)
+///     where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+///         withUnsafeBytes(of: self.timeIntervalSinceReferenceDate) { bytes in 
+///             document.append(contentsOf: bytes)
+///         }
+///     }
+/// }
+/// ```
+/// 
+/// ## Size & Metadata
+/// 
+/// Given an `Int64` value and a custom subtype of `255`, the full value would be encoded
+/// into the document as follows:
+/// 
+/// ```
+/// "binary" type byte                         value bytes
+///         |         value size                    |
+///         v              v                        v
+///        [5, Key...]    [0, 0, 0, 8]    [255]    [Value...]
+///            ^                           ^
+///       string key                 custom subtype
+///        
+/// ```
+/// 
 public protocol CustomWritableValue: WritableValue {
     /// The subtype byte to declare.
     var bsonSubtype: UInt8 { get }
