@@ -15,7 +15,7 @@
 //  limitations under the License.
 //
 
-/// A group of document components values.
+/// A group of document components.
 /// 
 /// Use a `Group` when you need to declare more than 10 components in a document.
 /// Grouping document components does not affect the structure of the final document.
