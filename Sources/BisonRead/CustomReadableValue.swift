@@ -15,9 +15,30 @@
 //  limitations under the License.
 //
 
-/// A BSON value whose encoded form declares the BSON binary type (5).
+/// A protocol that defines how a custom value is read from a document.
 ///
-/// Conform to `CustomReadableValue` for BSON binary values to inherit metadata parsing.
+/// ## Conforming to CustomReadableValue
+/// 
+/// Conform to this protocol to decode a custom value from its raw BSON representation. The value's
+/// raw bytes are passed to the ``init(bsonValueBytes:)`` initializer as a generic `Collection`.
+/// The following example is the actual `UUID` conformance.
+/// 
+/// ```swift
+/// extension UUID: CustomReadableValue {
+///     public init<Data: Collection>(bsonValueBytes: Data) throws where Data.Element == UInt8 {
+///         guard bsonValueBytes.count == 16 else {    
+///             throw BisonError.sizeMismatch(16, bsonValueBytes.count)
+///         }
+///         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(capacity: 16, alignment: 16)
+///         copyBuffer.copyBytes(from: bsonValueBytes)
+///         self = copyBuffer.load(as: UUID.self)
+///     }
+/// }
+/// ```
+/// 
+/// > Note: BSON "binary" types include size and type metadata. These are usually parsed for you,
+///   so the data in `bsonValueBytes` is always the declared size. This may not be the size
+///   you expect due to encoding errors, so you should always check.
 public protocol CustomReadableValue: ReadableValue {
     /// Initializes a value from the provided BSON data.
     ///

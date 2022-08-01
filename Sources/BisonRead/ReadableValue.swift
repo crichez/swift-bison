@@ -15,14 +15,43 @@
 //  limitations under the License.
 //
 
-/// A value that can be parsed from its encoded BSON representation.
+/// A protocol that defines how a BSON value is read from a document.
+/// 
+/// ## Conforming to ReadableValue
+/// 
+/// ``BisonWrite`` supports external types in two cases:
+/// 1. **Custom types** that do not exist in the specification.
+/// 2. **Alternatives** to specification types built into the framework.
+/// 
+/// ### Custom Types
+/// 
+/// To decode a type that does not exist in the specification, ``CustomReadableValue`` provides
+/// default implementations that make conforming to ``ReadableValue`` much simpler. In most cases,
+/// That is the recommended protocol to conform to. 
+/// 
+/// ### Alternative Types
+/// 
+/// To decode an alternative version of a specification type, conform to this protocol directly.
+/// You only need to provide a way to initialize a value from its encoded BSON bytes. These are
+/// provided to you as a `Collection` in the ``init(bsonBytes:)`` method. The following example
+/// copies the data for a `Double` into a raw buffer and loads it using Swift's manual memory
+/// management APIs.
+/// 
+/// ```swift
+/// extension Double: ReadableValue {
+///     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
+///         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
+///         copyBuffer.copyBytes(from: data)
+///         self = copyBuffer.load(as: Double.self)
+///     }
+/// } 
+/// ```
 public protocol ReadableValue {
-    /// Initializes this value from the provided BSON bytes.
+    /// Initializes this value from its encoded BSON representation.
     /// 
-    /// - Parameter data: the encoded value, usually returned by the `ReadableDoc` subscript
+    /// - Parameter data: a collection of bytes containing the value's encoded BSON representation
     /// 
-    /// - Throws:
-    /// A `BisonError` appropriate for the type to initialize.
+    /// - Throws: A ``BisonError`` that describes the failure.
     init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8
 }
 
