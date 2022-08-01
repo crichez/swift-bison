@@ -17,7 +17,7 @@
 
 /// A key-value pair used to compose a BSON document.
 /// 
-/// To create a `Pair`, use the `=>` operator on a `String` and a `WritableValue` conforming value:
+/// To create a `Pair`, use the `=>` operator on a `String` and a `WritableValue`.
 /// ```swift
 /// let doc = WritableDoc {
 ///     "key" => "value"
