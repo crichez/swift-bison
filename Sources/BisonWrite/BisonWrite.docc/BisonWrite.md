@@ -10,13 +10,6 @@ Compose BSON documents for writing.
 - ``WritableDoc``
 - ``DocBuilder``
 
-### BSON Document Components
-
-- ``DocComponent``
-- ``ForEach``
-- ``Group``
-- ``Pair``
-
 ### BSON Arrays
 
 - ``WritableArray``
@@ -26,3 +19,10 @@ Compose BSON documents for writing.
 
 - ``WritableValue``
 - ``CustomWritableValue``
+
+### BSON Document Components
+
+- ``DocComponent``
+- ``ForEach``
+- ``Group``
+- ``Pair``
