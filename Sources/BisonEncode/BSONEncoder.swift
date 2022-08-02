@@ -17,20 +17,21 @@
 
 import Foundation
 
-/// Use `BSONEncoder` to write `Encodable` values into fully-formed BSON documents.
+/// Use `BSONEncoder` to write BSON documents from `Encodable` values.
 /// 
 /// `BSONEncoder` is generic over its encoded document type: `Doc`.
 /// The only constraint on this type is it must be a `RangeReplaceableCollection` with an
-/// element type of `UInt8`. In most cases, you can simply initialize your encoder over
+/// element type of `UInt8`. In most cases, you can simply initialize your encoder
 /// over the `Data` type as follows.
 /// 
-///     import Foundation
-///     import BisonEncode
+/// ```swift
+/// import Foundation
+/// import BisonEncode
 ///     
-///     let encoder = BSONEncoder<Data>()
-///     let document = try encoder.encode(myEncodableInstance)
-///     try document.write(to: file)
-/// 
+/// let encoder = BSONEncoder<Data>()
+/// let document = try encoder.encode(myEncodableInstance)
+/// try document.write(to: file)
+/// ```
 public struct BSONEncoder<Doc: RangeReplaceableCollection> where Doc.Element == UInt8 {
     /// Initializes an encoder.
     public init() {}
