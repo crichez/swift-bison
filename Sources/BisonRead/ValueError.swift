@@ -21,11 +21,11 @@ public enum ValueError: Error, Equatable {
     /// 
     /// This usually means the value was not the type you expected.
     /// This case provides the expected and actual size of the data passed to the initializer.
-    case dataTooShort(_ needAtLeast: Int, _ found: Int)
+    case dataTooShort(needAtLeast: Int, found: Int)
 
     /// The data passed to the initializer was not the expected size for this type.
     /// 
     /// This usually means the value was not the type you expected.
     /// This case provides the expected and actual size of the data passed to the initializer.
-    case sizeMismatch(_ expected: Int, _ have: Int)
+    case sizeMismatch(expected: Int, have: Int)
 }

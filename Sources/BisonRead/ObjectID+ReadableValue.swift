@@ -19,7 +19,9 @@ import ObjectID
 
 extension ObjectID: ReadableValue {
     public init<Data>(bsonBytes data: Data) throws where Data : Collection, Data.Element == UInt8 {
-        guard data.count == 12 else { throw ValueError.sizeMismatch(12, data.count) }
+        guard data.count == 12 else { 
+            throw ValueError.sizeMismatch(expected: 12, have: data.count) 
+        }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 12, alignment: 1)
         copyBuffer.copyBytes(from: data)
         self = copyBuffer.load(as: ObjectID.self)

@@ -260,7 +260,9 @@ extension ReadableDoc {
         guard data[terminatorIndex] == 0 else { throw DocError<Data>.notTerminated }
         // Read and check the declared size of the document against its data
         let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
-        guard data.count == size else { throw DocError<Data>.docSizeMismatch(size) }
+        guard data.count == size else { 
+            throw DocError<Data>.docSizeMismatch(expectedExactly: size) 
+        }
 
         // Store the type map for the entire parsing process
         let typeMap = Self.typeMap
@@ -302,7 +304,7 @@ extension ReadableDoc {
             guard type > 0 && type < 20 else {
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[typeIndex...])
-                throw DocError<Data>.unknownType(type, key, progress)
+                throw DocError<Data>.unknownType(type: type, key: key, progress: progress)
             }
 
             // Compute the size of the value
@@ -313,7 +315,7 @@ extension ReadableDoc {
             ) else {
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
-                throw DocError<Data>.unknownType(type, key, progress)
+                throw DocError<Data>.unknownType(type: type, key: key, progress: progress)
             }
 
             // Ensure there are enough bytes left in the document to store that value
@@ -327,7 +329,10 @@ extension ReadableDoc {
                 // If not, compose context and throw
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
-                throw DocError<Data>.valueSizeMismatch(needAtLeast, key, progress)
+                throw DocError<Data>.valueSizeMismatch(
+                    needAtLeast: needAtLeast, 
+                    key: key, 
+                    progress: progress)
             }
         }
         // Assign the discovered contents
