@@ -34,7 +34,7 @@ extension CustomReadableValue {
         }
         let declaredSize = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
         guard data.count == declaredSize + 5 else {
-            throw ValueError.sizeMismatch(declaredSize + 5, data.count)
+            throw ValueError.sizeMismatch(expected: declaredSize + 5, have: data.count)
         }
         try self.init(bsonValueBytes: data.dropFirst(5))
     }

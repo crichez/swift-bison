@@ -25,5 +25,5 @@ public enum ValueError: Error, Equatable {
     /// The data passed to the initializer was not the expected size for this type.
     /// 
     /// This case provides the expected and actual size of the data passed to the initializer.
-    case sizeMismatch(_ expected: Int, _ have: Int)
+    case sizeMismatch(expected: Int, have: Int)
 }

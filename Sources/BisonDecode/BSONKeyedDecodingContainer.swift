@@ -67,7 +67,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
-                underlyingError: ValueError.sizeMismatch(need, have))
+                underlyingError: ValueError.sizeMismatch(expected: need, have: have))
             throw DecodingError.typeMismatch(type, context)
         } catch ValueError.dataTooShort(let needAtLeast, let have) {
             let context = DecodingError.Context(
@@ -93,7 +93,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
-                underlyingError: ValueError.sizeMismatch(need, have))
+                underlyingError: ValueError.sizeMismatch(expected: need, have: have))
             throw DecodingError.typeMismatch(type, context)
         } catch ValueError.dataTooShort(let needAtLeast, let have) {
             let context = DecodingError.Context(
