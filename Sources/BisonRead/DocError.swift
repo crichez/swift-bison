@@ -62,11 +62,11 @@ public enum DocError<Data: Collection>: Error where Data.Element == UInt8 {
     /// the data was corrupted in transit or isn't a valid BSON document.
     /// 
     /// > Note: In the case of corruption, ``notTerminated`` will usually be triggered first.
-    ///   There is a chance that the corrupted data happens to be null-terminated, in whcih case
+    ///   There is a chance that the corrupted data happens to be null-terminated, in which case
     ///   this error may be triggered instead.
     case docSizeMismatch(expectedExactly: Int)
 
-    /// An unknown or deprecated BSON type byte was found while parsing a key.
+    /// An unknown BSON type byte was found while parsing a key.
     /// 
     /// This error includes a ``Progress`` value. You may check the partially decoded document
     /// within to recover from the error.

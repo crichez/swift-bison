@@ -15,11 +15,87 @@
 //  limitations under the License.
 //
 
-/// A value that can be assigned to a ``Pair`` in a BSON document.
+/// A protocol that defines how a BSON value is written to a document.
+/// 
+/// ## Built-In Types
+/// 
+/// The following types conform to `WritableValue`.
+/// 
+/// ### Standard Library
+/// 
+/// * `Double`
+/// * `String`
+/// * `Bool`
+/// * `Int32`
+/// * `Int64`
+/// * `UInt64`
+/// * `Optional` where `Wrapped` also conforms
+/// 
+/// ### Foundation
+/// 
+/// * `Date`
+/// * `Data`
+/// * `UUID`
+/// 
+/// ### Custom
+/// 
+/// * ``ObjectID``
+/// * ``WritableDoc``
+/// * ``WritableArray``
+/// 
+/// ## Conforming to `WritableValue`
+/// 
+/// The framework can be extended to support alternative versions of built-in BSON types,
+/// or custom types. 
+/// 
+/// ### Custom Non-Specification Types
+/// 
+/// The specification supports encoding custom user-defined types as "binary" types. 
+/// ``BisonWrite`` provides a convenience protocol for this use case called
+/// ``CustomWritableValue``. In most cases, conforming through that protocol is recommended.
+/// 
+/// ### Replacements to Specification Types
+/// 
+/// If you prefer to use your own type instead of a built-in one for a specification type,
+/// you should conform that type to this protocol. A good example would be using a custom date 
+/// type as an alternative to `Foundation.Date`. 
+/// 
+/// BSON values must declare a type byte (or type number) to inform decoder implementations of the
+/// value assigned to each key. You can find the byte to declare for your type in 
+/// [the specification](https://bsonspec.org/spec.html), then declare it using the ``bsonType``
+/// property.
+/// 
+/// ```swift
+/// extension Double: ValueProtocol {
+///     public var bsonType: UInt8 { 1 }
+///     ...
+/// }
+/// ```
+///
+/// The ``append(to:)`` method appends the value's data to the document. The document conforms
+/// to `RangeReplaceableCollection` and can generally be thought of as an `Array` or `Data` buffer.
+/// 
+/// ```swift
+/// extension Double: ValueProtocol {
+///     ...
+///     public func append<Doc>(to document: inout Doc)
+///     where Doc : RangeReplaceableCollection, Doc.Element == UInt8 {
+///         withUnsafeBytes(of: self.bitPattern) { bytes in 
+///             document.append(contentsOf: bytes)
+///         }    
+///     }
+/// }
+/// ```
+/// 
+/// > Tip: The `Index` type of the document is unconstrained, which can make mutations other
+///   than `append(_:)` and `append(contentsOf:)` more challenging. You can calculate indices
+///   using `Collection` methods and replace entire ranges using the document's
+///   `replaceSubrange(_:with:)` method.
+/// 
 public protocol WritableValue {
-    /// The BSON type byte for this type.
+    /// The type byte to assign to keys that declare this value.
     /// 
-    /// This is the number that will be prefixed to keys that declare this value type.
+    /// Type bytes are defined in [the BSON specification](https://bsonspec.org/spec.html).
     var bsonType: UInt8 { get }
     
     /// Appends this value to the end of a BSON document.

@@ -19,22 +19,50 @@ import OrderedCollections
 
 // MARK: Public API & Storage
 
-/// A document where keys and values have been discovered and can be retrieved.
+// See Sources/BisonRead/BisonRead.docc/ReadableDoc.md
 public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// The keys and discovered values in this document.
     let discovered: OrderedDictionary<String, Data.SubSequence>
 
-    /// The keys discovered in this document.
+    /// The keys discovered in this document, in the order they were discovered.
+    /// 
+    /// - Complexity: O(1).
     public var keys: OrderedSet<String> {
         discovered.keys
     }
 
-    /// The value blocks discovered in this document.
+    /// The BSON bytes of each value discovered in this document, 
+    /// in the order they were discovered.
+    /// 
+    /// - Complexity: O(1).
     public var values: OrderedDictionary<String, Data.SubSequence>.Values {
         discovered.values
     }
 
-    /// Returns the value data block for the specified key, or `nil` if the key doesn't exist.
+    /// Returns the BSON value data associated with the specified key, or `nil` if the key doesn't
+    /// exist.
+    /// 
+    /// The data returned is a sub-sequence of the original collection passed to the initializer.
+    /// It is the caller's responsibility to know the type of data associated with each key.
+    /// 
+    /// The following example extracts a `String` value assigned to the "name" key.
+    /// 
+    /// ```swift
+    /// do {
+    ///     // Start with a buffer of type Data    
+    ///     let encodedDoc: Data  = ...     
+    ///     // Parse the document   
+    ///     let doc = try ReadableDoc(bsonBytes: encodedDoc)
+    ///     // Unwrap the value's data
+    ///     guard let nameData = doc["name"] else { return }
+    ///     // Initialize the value
+    ///     let name = try String(bsonBytes: nameData)
+    /// } catch {
+    ///     // Handle document and value initializer errors
+    /// }       
+    /// ```
+    /// 
+    /// > Tip: For error handling documentation, see ``DocError`` and ``ValueError``.
     public subscript(key: String) -> Data.SubSequence? {
         discovered[key]
     }
@@ -42,7 +70,28 @@ public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// The declared minimum key for this document.
     let minKey: String?
 
-    /// The minimum value declared by this document, or `nil` if none was declared.
+    /// The BSON bytes of the minimum value declared by this document, or `nil` if none was 
+    /// declared.
+    /// 
+    /// It is the caller's responsibility to know the type of the minimum value.
+    /// The following example extracts the minimum value as a `Double`.
+    /// 
+    /// ```swift
+    /// do {
+    ///     // Start with a buffer of type Data    
+    ///     let encodedDoc: Data  = ...     
+    ///     // Parse the document   
+    ///     let doc = try ReadableDoc(bsonBytes: encodedDoc)
+    ///     // Unwrap the value's data
+    ///     guard let minData = doc.min else { return }
+    ///     // Initialize the value
+    ///     let minValue = try Double(bsonBytes: minData)
+    /// } catch {   
+    ///     // Handle document and value initializer errors
+    /// }
+    /// ```
+    /// 
+    /// > Tip: For error handling documentation, see ``DocError`` and ``ValueError``.
     public var min: Data.SubSequence? {
         guard let minKey = minKey, let min = discovered[minKey] else { return nil }
         return min
@@ -51,7 +100,28 @@ public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// The declared maximum key for this document.
     let maxKey: String?
 
-    /// The maximum value declared by this document, or `nil` if none was declared.
+    /// The BSON bytes of the maximum value declared by this document, or `nil` if none was 
+    /// declared.
+    /// 
+    /// It is the caller's responsibility to know the type of the maximum value.
+    /// The following example extracts the maximum value as a `Double`.
+    /// 
+    /// ```swift
+    /// do {
+    ///     // Start with a buffer of type Data    
+    ///     let encodedDoc: Data  = ...     
+    ///     // Parse the document   
+    ///     let doc = try ReadableDoc(bsonBytes: encodedDoc)
+    ///     // Unwrap the value's data
+    ///     guard let maxData = doc.max else { return }
+    ///     // Initialize the value
+    ///     let maxValue = try Double(bsonBytes: maxData)
+    /// } catch {   
+    ///     // Handle document and value initializer errors
+    /// }
+    /// ```
+    /// 
+    /// > Tip: For error handling documentation, see ``DocError`` and ``ValueError``.
     public var max: Data.SubSequence? {
         guard let maxKey = maxKey, let max = discovered[maxKey] else { return nil }
         return max

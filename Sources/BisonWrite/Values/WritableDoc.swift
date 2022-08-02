@@ -17,29 +17,103 @@
 
 /// A BSON document that can be written to a buffer.
 /// 
-/// Declare the structure of a BSON document as follows:
-///     
-///     // Pass a trailing closure to the initializer.
-///     let doc = WritableDoc {
-///         // Assign String keys and WritableValues using the => operator
-///         "zero" => Int32(0)
-///         "one" => Int64(1)
-///         // Use conditionals
+/// You can declare the structure of your document using a ``DocBuilder`` result builder closure.
+/// 
+/// ## Declaring Values
+/// 
+/// Each value in a `WritableDoc` must be assigned to a `String`. Use the `=>` operator
+/// to make key-value assignment look natural. The following document declares three
+/// key-value pairs consecutively.
+/// 
+/// ```swift
+/// let doc = WritableDoc {
+///     "zero" => 0.0
+///     "one" => 1.0
+///     "two" => 2.0
+/// }
+/// ```
+/// 
+/// It can be helpful to think of BSON documents using their human readable JSON counterpart. The
+/// declaration above resembles the following JSON document:
+/// 
+/// ```json
+/// {
+///     "zero": 0.0,
+///     "one": 1.0,
+///     "two": 2.0  
+/// }
+/// ```
+/// 
+/// Declarations contained in `if-else` or `do-catch` statements are handled the same way, and
+/// are always stitched into the final document at the declared position. 
+/// 
+/// ```swift
+/// let doc = WritableDoc {
+///     do {
+///         "zero" => try zeroAsDouble()
+///         "one" => 1.0
 ///         if !skipTwo {
-///             "two" => 2.0
+///             "two" => 2.0    
 ///         }
-///         // And loops
-///         ForEach(Int64(3)..<100) { number in
-///             String(number) => number
+///     } catch {
+///         "error" => "Zero couldn't be converted to a Double."
+///     }
+/// }
+/// ```
+/// 
+/// An important limitation of the current ``DocBuilder`` implementation is the 10 key-value pair
+/// limit per block. A block here can be thought of as a level of indentation in the closure. To
+/// get around this limit, you can use the ``Group`` document component to turn up to 20 pairs
+/// into two components. These will all appear at the same depth level in the resulting document.
+/// 
+/// ```swift
+/// let doc = WritableDoc {
+///     Group {
+///         "zero" => 0
+///         "one" => 1
+///         "two" => 2
+///     }
+///     Group {
+///         "three" => 3
+///         "four" => 4
+///     }
+/// }
+/// ```
+/// 
+/// When composing large documents from the contents of another sequence, a ``ForEach`` declaration
+/// is not subject to this limitation. The following declaration declares 10,000 key-value pairs.
+/// 
+/// ```swift
+/// let doc = WritableDoc {
+///     ForEach(Int64(0)..<10_000) { number in 
+///         String(number) => number
+///     }
+/// }
+/// ```
+/// 
+/// You can declare any value conforming to ``WritableValue``, but not the existential type itself.
+/// Since `WritableDoc` conforms to that protocol, you can nest documents as normal values.
+/// 
+/// ```swift
+/// let doc = WritableDoc {
+///     "deeper?" => WritableDoc {
+///         "deeper??" => WritableDoc {
+///             "even deeper!?" => true        
 ///         }
 ///     }
+/// }
+/// ```
 /// 
-/// When ready to encode the composed document, call its `encode(as:)` method. You can provide
+/// ## Writing Documents
+///     
+/// When ready to encode the composed document, call its ``encode(as:)`` method. You can provide
 /// any `RangeReplaceableCollection` of `UInt8` bytes. The example below encodes the document
 /// as `Data`, then writes it to a URL.
 /// 
-///     let encodedDoc = doc.encode(as: Data.self)
-///     try encodedDoc.write(to: path)
+/// ```swift
+/// let encodedDoc = doc.encode(as: Data.self)
+/// try encodedDoc.write(to: path)
+/// ```
 ///
 public struct WritableDoc<Body: DocComponent> {
     /// The contents of this document.

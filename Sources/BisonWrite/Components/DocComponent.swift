@@ -16,8 +16,11 @@
 //
 
 /// A basic building block of a BSON document.
+/// 
+/// `DocComponent` is used as the return type of all ``DocBuilder`` declarations. You shouldn't
+/// need to conform anything to this protocol.
 public protocol DocComponent {
-    /// Appends this components BSON bytes to the end of a document.
+    /// Appends this component's BSON bytes to the end of a document.
     func append<Doc>(to document: inout Doc)
     where Doc : RangeReplaceableCollection, Doc.Element == UInt8
 }
