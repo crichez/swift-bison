@@ -71,68 +71,6 @@ public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     }
 }
 
-// MARK: Errors
-
-extension ReadableDoc {
-    /// An error that occured while parsing this BSON document during initialization.
-    public enum Error: Swift.Error {
-        /// Less than 5 bytes were passed to the initializer.
-        /// 
-        /// BSON documents will always be 5 or more bytes to include the size and null-terminator.
-        /// 
-        /// - Note: This error is triggered before `.notTerminated`, even if the data also isn't
-        /// properly null-terminated.
-        case docTooShort
-
-        /// The data passed to the initializer was not null-terminated.
-        /// 
-        /// Parsing an otherwise valid BSON document may cause out-of-bounds errors and crashes
-        /// while reading keys.
-        case notTerminated
-
-        /// The declared size of the document does not match the size of the data passed to the
-        /// initializer.
-        /// 
-        /// The declared size of the document is attached to the error.
-        case docSizeMismatch(_ expectedExactly: Int)
-
-        /// An unknown or deprecated BSON type byte was found while parsing a key.
-        /// 
-        /// The type byte, key and parsing progress are attached to the error.
-        case unknownType(_ type: UInt8, _ key: String, _ progress: Progress)
-
-        /// There were not enough bytes left in the document to parse the next expected value.
-        /// 
-        /// The expected number of remaining bytes, key and progress are attached to the error.
-        case valueSizeMismatch(_ needAtLeast: Int, _ key: String, _ progress: Progress)
-    }
-
-    /// The context in which an error occured.
-    public struct Progress {
-        /// The partially parsed key-value pairs.
-        public let parsed: ReadableDoc
-
-        /// The remaining unparsed data.
-        public let remaining: Data.SubSequence
-    }
-}
-
-extension ReadableDoc.Progress: Equatable where Data.SubSequence : Equatable {
-    // This conformance is inherited from `Data.SubSequence`.
-}
-
-extension ReadableDoc.Error: Equatable where Data.SubSequence : Equatable {
-    // This conformance is inherited from `Progress`.
-}
-
-extension ReadableDoc.Progress: Hashable where Data.SubSequence : Hashable {
-    // This conformance is inherited from `Data.SubSequence`.
-}
-
-extension ReadableDoc.Error: Hashable where Data.SubSequence : Hashable {
-    // This conformance is inherited from `Progress`.
-}
-
 // MARK: Type Maps & Parsing
 
 extension ReadableDoc {
@@ -241,15 +179,15 @@ extension ReadableDoc {
     /// 
     /// - Parameter data: a collection of BSON-encoded bytes that represent a full document
     /// 
-    /// - Throws: A `ReadableDoc<_>.Error` where `_` is the type of `data` if parsing fails.
+    /// - Throws: A `DocError<_>` where `_` is the type of `data` if parsing fails.
     public init(bsonBytes data: Data) throws {
         // Ensure there are at least 5 bytes for the size and terminator
-        guard data.count >= 5 else { throw Error.docTooShort }
+        guard data.count >= 5 else { throw DocError<Data>.docTooShort }
         let terminatorIndex = data.index(data.endIndex, offsetBy: -1)
-        guard data[terminatorIndex] == 0 else { throw Error.notTerminated }
+        guard data[terminatorIndex] == 0 else { throw DocError<Data>.notTerminated }
         // Read and check the declared size of the document against its data
         let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
-        guard data.count == size else { throw Error.docSizeMismatch(size) }
+        guard data.count == size else { throw DocError<Data>.docSizeMismatch(size) }
 
         // Store the type map for the entire parsing process
         let typeMap = Self.typeMap
@@ -291,7 +229,7 @@ extension ReadableDoc {
             guard type > 0 && type < 20 else {
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[typeIndex...])
-                throw Error.unknownType(type, key, progress)
+                throw DocError<Data>.unknownType(type, key, progress)
             }
 
             // Compute the size of the value
@@ -302,7 +240,7 @@ extension ReadableDoc {
             ) else {
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
-                throw Error.unknownType(type, key, progress)
+                throw DocError<Data>.unknownType(type, key, progress)
             }
 
             // Ensure there are enough bytes left in the document to store that value
@@ -316,7 +254,7 @@ extension ReadableDoc {
                 // If not, compose context and throw
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
-                throw Error.valueSizeMismatch(needAtLeast, key, progress)
+                throw DocError<Data>.valueSizeMismatch(needAtLeast, key, progress)
             }
         }
         // Assign the discovered contents

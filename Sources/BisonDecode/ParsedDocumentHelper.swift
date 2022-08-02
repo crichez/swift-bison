@@ -22,39 +22,39 @@ extension ReadableDoc {
     init(decoding data: Data, codingPath: [CodingKey], for type: Any.Type) throws {
         do {
             try self.init(bsonBytes: data)
-        } catch Error.docTooShort {
+        } catch DocError<Data>.docTooShort {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     expected at least 5 bytes for a document, but found \(data.count)
                 """,
-                underlyingError: Error.docTooShort)
+                underlyingError: DocError<Data>.docTooShort)
             throw DecodingError.typeMismatch(type, context)
-        } catch Error.notTerminated {
+        } catch DocError<Data>.notTerminated {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected a null byte at the end of the document",
-                underlyingError: Error.notTerminated)
+                underlyingError: DocError<Data>.notTerminated)
             throw DecodingError.dataCorrupted(context)
-        } catch Error.docSizeMismatch(let declared) {
+        } catch DocError<Data>.docSizeMismatch(let declared) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     declared document size is \(declared) but actual size is \(data.count)
                 """,
-                underlyingError: Error.docSizeMismatch(declared))
+                underlyingError: DocError<Data>.docSizeMismatch(declared))
             throw DecodingError.typeMismatch(type, context)
-        } catch Error.unknownType(let type, let key, let progress) {
+        } catch DocError<Data>.unknownType(let type, let key, let progress) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "key \"\(key)\" has unknown type byte \(type)", 
-                underlyingError: Error.unknownType(type, key, progress))
+                underlyingError: DocError<Data>.unknownType(type, key, progress))
             throw DecodingError.dataCorrupted(context)
-        } catch Error.valueSizeMismatch(let need, let key, let progress) {
+        } catch DocError<Data>.valueSizeMismatch(let need, let key, let progress) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected at least \(need) bytes for value \"\(key)\"",
-                underlyingError: Error.valueSizeMismatch(need, key, progress))
+                underlyingError: DocError<Data>.valueSizeMismatch(need, key, progress))
             throw DecodingError.dataCorrupted(context)
         }
     }
