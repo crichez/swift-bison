@@ -66,7 +66,7 @@ public enum DocError<Data: Collection>: Error where Data.Element == UInt8 {
     ///   this error may be triggered instead.
     case docSizeMismatch(expectedExactly: Int)
 
-    /// An unknown or deprecated BSON type byte was found while parsing a key.
+    /// An unknown BSON type byte was found while parsing a key.
     /// 
     /// This error includes a ``Progress`` value. You may check the partially decoded document
     /// within to recover from the error.
