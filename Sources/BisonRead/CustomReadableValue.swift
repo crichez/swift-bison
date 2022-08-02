@@ -44,16 +44,16 @@ public protocol CustomReadableValue: ReadableValue {
     ///
     /// - Parameter bsonValueBytes: the value's encoded bytes, not including size and subtype bytes
     ///
-    /// - Throws: The appropriate ``BisonError``.
+    /// - Throws: The appropriate ``ValueError``.
     init<Data: Collection>(bsonValueBytes: Data) throws where Data.Element == UInt8
 }
 
 extension CustomReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count >= 5 else { throw BisonError.dataTooShort(5, data.count) }
+        guard data.count >= 5 else { throw ValueError.dataTooShort(5, data.count) }
         let declaredSize = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
         guard data.count == declaredSize + 5 else {
-            throw BisonError.sizeMismatch(declaredSize + 5, data.count)
+            throw ValueError.sizeMismatch(declaredSize + 5, data.count)
         }
         try self.init(bsonValueBytes: data.dropFirst(5))
     }

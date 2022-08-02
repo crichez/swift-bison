@@ -63,19 +63,19 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
             let decodedValue = try type.init(bsonBytes: valueData)
             codingPath.append(key)
             return decodedValue
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
-                underlyingError: BisonError.sizeMismatch(need, have))
+                underlyingError: ValueError.sizeMismatch(need, have))
             throw DecodingError.typeMismatch(type, context)
-        } catch BisonError.dataTooShort(let needAtLeast, let have) {
+        } catch ValueError.dataTooShort(let needAtLeast, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     expected at least\(needAtLeast) bytes for a \(type) but found \(have)
                 """,
-                underlyingError: BisonError.dataTooShort(needAtLeast, have))
+                underlyingError: ValueError.dataTooShort(needAtLeast, have))
             throw DecodingError.typeMismatch(type, context)
         }
     }
@@ -89,19 +89,19 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
             let decodedValue = try type.init(bsonBytes: valueData)
             codingPath.append(key)
             return decodedValue as! T
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected \(need) bytes for a \(type) but found \(have)",
-                underlyingError: BisonError.sizeMismatch(need, have))
+                underlyingError: ValueError.sizeMismatch(need, have))
             throw DecodingError.typeMismatch(type, context)
-        } catch BisonError.dataTooShort(let needAtLeast, let have) {
+        } catch ValueError.dataTooShort(let needAtLeast, let have) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: """
                     expected at least\(needAtLeast) bytes for a \(type) but found \(have)
                 """,
-                underlyingError: BisonError.dataTooShort(needAtLeast, have))
+                underlyingError: ValueError.dataTooShort(needAtLeast, have))
             throw DecodingError.typeMismatch(type, context)
         }
     }
@@ -184,7 +184,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
     }
 
     /// The error expected from parsing a nested keyed document.
-    private typealias NestedDocError = ReadableDoc<Data.SubSequence>.Error
+    private typealias NestedDocError = DocError<Data.SubSequence>
 
     func nestedContainer<NestedKey: CodingKey>(
         keyedBy type: NestedKey.Type, 

@@ -51,13 +51,14 @@ public protocol ReadableValue {
     /// 
     /// - Parameter data: a collection of bytes containing the value's encoded BSON representation
     /// 
-    /// - Throws: A ``BisonError`` that describes the failure.
+    /// - Throws:
+    /// A `ValueError` appropriate for the type to initialize.
     init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8
 }
 
 extension Int32: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count == 4 else { throw BisonError.sizeMismatch(4, data.count) }
+        guard data.count == 4 else { throw ValueError.sizeMismatch(4, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 4, alignment: 4)
         copyBuffer.copyBytes(from: data)
         self = copyBuffer.load(as: Int32.self)
@@ -66,7 +67,7 @@ extension Int32: ReadableValue {
 
 extension Int64: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count == 8 else { throw BisonError.sizeMismatch(8, data.count) }
+        guard data.count == 8 else { throw ValueError.sizeMismatch(8, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
         self = copyBuffer.load(as: Int64.self)
@@ -75,7 +76,7 @@ extension Int64: ReadableValue {
 
 extension UInt64: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count == 8 else { throw BisonError.sizeMismatch(8, data.count) }
+        guard data.count == 8 else { throw ValueError.sizeMismatch(8, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
         self = copyBuffer.load(as: UInt64.self)
@@ -84,7 +85,7 @@ extension UInt64: ReadableValue {
 
 extension Double: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count == 8 else { throw BisonError.sizeMismatch(8, data.count) }
+        guard data.count == 8 else { throw ValueError.sizeMismatch(8, data.count) }
         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
         copyBuffer.copyBytes(from: data)
         self = copyBuffer.load(as: Double.self)
@@ -93,20 +94,20 @@ extension Double: ReadableValue {
 
 extension Bool: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count == 1 else { throw BisonError.sizeMismatch(1, data.count) }
+        guard data.count == 1 else { throw ValueError.sizeMismatch(1, data.count) }
         self = data[data.startIndex] == 0 ? false : true
     }
 }
 
 extension String: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count > 4 else { throw BisonError.dataTooShort(5, data.count) }
+        guard data.count > 4 else { throw ValueError.dataTooShort(5, data.count) }
         let sizeStart = data.startIndex
         let sizeEnd = data.index(sizeStart, offsetBy: 4)
         // We try! here since we already ensured we have four bytes to read
         let size = Int(try! Int32(bsonBytes: data[sizeStart..<sizeEnd]))
         guard data.count == size + 4 else { 
-            throw BisonError.sizeMismatch(size + 4, data.count) 
+            throw ValueError.sizeMismatch(size + 4, data.count) 
         }
         self.init(decoding: data[sizeEnd..<data.index(data.endIndex, offsetBy: -1)], as: UTF8.self)
     }

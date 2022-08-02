@@ -18,6 +18,7 @@
 @testable 
 import BisonRead
 import BisonWrite
+import ObjectID
 import XCTest
 
 extension WritableValue {
@@ -50,25 +51,25 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts attempting to parse a document from less than 5 bytes throws 
-    /// `ReadableDoc<_>.Error.docTooShort`.
+    /// `DocError<_>.docTooShort`.
     func testDocDataTooShort() throws {
         let faultyBytes: [UInt8] = [4, 0, 0, 0]
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch ReadableDoc<[UInt8]>.Error.docTooShort {
+        } catch DocError<[UInt8]>.docTooShort {
             // This is expected
         }
     }
 
     /// Asserts attempting to parse a document from non null-terminated data throws
-    /// `ReadableDoc<_>.Error.notTerminated`.
+    /// `DocError<_>.notTerminated`.
     func testDocDataNotTerminated() throws {
         let faultyBytes: [UInt8] = [10] + [UInt8](repeating: 1, count: 9)
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch ReadableDoc<[UInt8]>.Error.notTerminated {
+        } catch DocError<[UInt8]>.notTerminated {
             // This is expected
         }
     }
@@ -80,13 +81,13 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             XCTAssertEqual(error, .docSizeMismatch(3))
         }
     }
 
     /// Asserts attempting to parse a document with a non-specification type throws 
-    /// `ReadableDoc<_>.Error.unknownType` with the expected attached values.
+    /// `DocError<_>.unknownType` with the expected attached values.
     func testUnknownType() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 10, 0, 0, 0, 
@@ -96,9 +97,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>(["": faultyBytes[6...6]])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[7...])
             XCTAssertEqual(error, .unknownType(100, "", progress))
@@ -106,7 +107,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts parsing a document with a value truncated to less than its expected number of bytes
-    /// throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected attached values.
+    /// throws `DocError<_>.valueSizeMismatch` with the expected attached values.
     /// 
     /// This test uses `Double` as its fixed-size type of choice. The logic is the same for other
     /// fixed-size types, so this test satisfies those requirements as well.
@@ -120,9 +121,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(8, "", progress))
@@ -143,9 +144,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
@@ -153,7 +154,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts parsing a document with a `String` value less than 5 bytes long throws
-    /// `ReadableDoc<_>.Error.valueSizeMismatch` with the expected attached values.
+    /// `DocError<_>.valueSizeMismatch` with the expected attached values.
     func testStringTooShort() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 10, 0, 0, 0, 
@@ -164,9 +165,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
                 XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
@@ -174,7 +175,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts parsing a document with a `String` value shorter than its declared size
-    /// throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected attached values.
+    /// throws `DocError<_>.valueSizeMismatch` with the expected attached values.
     func testStringSizeMismatch() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 15, 0, 0, 0,
@@ -186,9 +187,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(14, "", progress))
@@ -196,7 +197,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts decoding a document that declares a nested document but offers less than 5 
-    /// remaining bytes throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected
+    /// remaining bytes throws `DocError<_>.valueSizeMismatch` with the expected
     /// attached values.
     func testDocValueDataTooShort() throws {
         let faultyBytes: [UInt8] = [
@@ -208,9 +209,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
@@ -218,7 +219,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts decoding a document that declares a nested document but offers fewer bytes left
-    /// than are declared throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected
+    /// than are declared throws `DocError<_>.valueSizeMismatch` with the expected
     /// attached values.
     func testDocValueSizeMismatch() throws {
         let faultyBytes: [UInt8] = [
@@ -230,9 +231,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(10, "", progress))
@@ -240,7 +241,7 @@ class ReadableDocTests: XCTestCase {
     }
     
     /// Asserts decoding a document that declares a binary value but offers fewer than 5 bytes
-    /// left throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected attached values.
+    /// left throws `DocError<_>.valueSizeMismatch` with the expected attached values.
     func testBinaryValueDataTooShort() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 10, 0, 0, 0,
@@ -251,9 +252,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
@@ -261,7 +262,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts decoding a document that declares a binary value but offers fewer bytes left
-    /// than declared throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected
+    /// than declared throws `DocError<_>.valueSizeMismatch` with the expected
     /// attached values.
     func testBinaryValueSizeMismatch() throws {
         let faultyBytes: [UInt8] = [
@@ -274,9 +275,9 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(15, "", progress))
@@ -284,7 +285,7 @@ class ReadableDocTests: XCTestCase {
     }
 
     /// Asserts parsing a document with a regular expression value that doesn't contain a zero
-    /// throws `ReadableDoc<_>.Error.valueSizeMismatch` with the expected attached values.
+    /// throws `DocError<_>.valueSizeMismatch` with the expected attached values.
     func testRegularExpressionSizeMismatch() throws {
         let faultyBytes: [UInt8] = [
             /* size: */ 11, 0, 0, 0,
@@ -295,12 +296,87 @@ class ReadableDocTests: XCTestCase {
         do {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
-        } catch let error as ReadableDoc<[UInt8]>.Error {
+        } catch let error as DocError<[UInt8]> {
             let partialDoc = ReadableDoc<[UInt8]>([:])
-            let progress = ReadableDoc<[UInt8]>.Progress(
+            let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(6, "", progress))
         }
+    }
+
+    /// Asserts reading a document with a deprecated "undefined" value succeeds.
+    func testUndefinedParsed() throws {
+        var encodedDoc = WritableDoc {
+            // Encode a null since it has the same size as undefined.
+            "test" => Bool?.none
+        }
+        .encode(as: [UInt8].self)
+        // Replace the null type byte with the undefined type byte.
+        encodedDoc[4] = 6
+        // Try parsing the document.
+        let decodedDoc = try ReadableDoc(bsonBytes: encodedDoc)
+        // Try retrieving the value's data.
+        let valueData = try XCTUnwrap(decodedDoc["test"])
+        // That data should be empty.
+        XCTAssertTrue(valueData.isEmpty)
+    }
+    /// Asserts reading a document with a deprecated "DBPointer" value succeeds.
+    func testDBPointerParsed() throws {
+        var encodedDoc: [UInt8] = []
+        // Append placeholder size bytes
+        Int32(0).append(to: &encodedDoc)
+        // Append the DBPointer type byte
+        encodedDoc.append(12)
+        // Append a key
+        encodedDoc.append(contentsOf: "test".utf8)
+        encodedDoc.append(0)
+        // Append a random String
+        "test".append(to: &encodedDoc)
+        // Append a random ObjectID
+        let id = ObjectID()
+        id.append(to: &encodedDoc)
+        // Terminate the document
+        encodedDoc.append(0)
+        // Size the document
+        encodedDoc.replaceSubrange(0..<4, with: withUnsafeBytes(of: Int32(encodedDoc.count)) { $0 })
+        // Parse the document
+        let decodedDoc = try ReadableDoc(bsonBytes: encodedDoc)
+        let stringBytes = try XCTUnwrap(decodedDoc["test"]).dropLast(12)
+        let idBytes = try XCTUnwrap(decodedDoc["test"]).dropFirst(stringBytes.count)
+        let decodedString = try String(bsonBytes: stringBytes)
+        let decodedID = try ObjectID(bsonBytes: idBytes)
+        XCTAssertEqual(decodedString, "test")
+        XCTAssertEqual(decodedID, id)
+    }
+
+    /// Asserts reading a document with a deprecated "code_w_scope" value succeeds.
+    func testJSCodeParsed() throws {
+        var encodedDoc: [UInt8] = []
+        // Append placeholder size bytes
+        Int32(0).append(to: &encodedDoc)
+        // Append the code_w_scope type byte
+        encodedDoc.append(15)
+        // Append a key
+        encodedDoc.append(contentsOf: "test".utf8)
+        encodedDoc.append(0)
+        // Append a random String
+        "test".append(to: &encodedDoc)
+        // Append a random Document
+        let valueDoc = WritableDoc {
+            "test" => true
+        }
+        valueDoc.append(to: &encodedDoc)
+        // Terminate the document
+        encodedDoc.append(0)
+        // Size the document
+        encodedDoc.replaceSubrange(0..<4, with: withUnsafeBytes(of: Int32(encodedDoc.count)) { $0 })
+        // Parse the document
+        let decodedDoc = try ReadableDoc(bsonBytes: encodedDoc)
+        let valueDocBytes = try XCTUnwrap(decodedDoc["test"]).dropFirst("test".utf8.count + 5)
+        let stringBytes = try XCTUnwrap(decodedDoc["test"]).dropLast(valueDocBytes.count)
+        let decodedString = try String(bsonBytes: stringBytes)
+        XCTAssertEqual(decodedString, "test")
+        XCTAssertEqual(Array(valueDocBytes), valueDoc.encode(as: [UInt8].self))
     }
 }
