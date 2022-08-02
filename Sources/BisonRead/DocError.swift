@@ -70,7 +70,7 @@ public enum DocError<Data: Collection>: Error where Data.Element == UInt8 {
     /// 
     /// This error includes a ``Progress`` value. You may check the partially decoded document
     /// within to recover from the error.
-    case unknownType(_ type: UInt8, _ key: String, _ progress: Progress<Data>)
+    case unknownType(type: UInt8, key: String, progress: Progress<Data>)
 
     /// There were not enough bytes left in the document to parse the next expected value.
     /// 

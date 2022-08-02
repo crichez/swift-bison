@@ -48,7 +48,10 @@ extension ReadableDoc {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "key \"\(key)\" has unknown type byte \(type)", 
-                underlyingError: DocError<Data>.unknownType(type, key, progress))
+                underlyingError: DocError<Data>.unknownType(
+                    type: type, 
+                    key: key, 
+                    progress: progress))
             throw DecodingError.dataCorrupted(context)
         } catch DocError<Data>.valueSizeMismatch(let need, let key, let progress) {
             let context = DecodingError.Context(

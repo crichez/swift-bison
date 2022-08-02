@@ -234,7 +234,7 @@ extension ReadableDoc {
             guard type > 0 && type < 20 else {
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[typeIndex...])
-                throw DocError<Data>.unknownType(type, key, progress)
+                throw DocError<Data>.unknownType(type: type, key: key, progress: progress)
             }
 
             // Compute the size of the value
@@ -245,7 +245,7 @@ extension ReadableDoc {
             ) else {
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
-                throw DocError<Data>.unknownType(type, key, progress)
+                throw DocError<Data>.unknownType(type: type, key: key, progress: progress)
             }
 
             // Ensure there are enough bytes left in the document to store that value

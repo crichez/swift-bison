@@ -102,7 +102,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[7...])
-            XCTAssertEqual(error, .unknownType(100, "", progress))
+            XCTAssertEqual(error, .unknownType(type: 100, key: "", progress: progress))
         }
     }
 
