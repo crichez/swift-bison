@@ -147,6 +147,9 @@ extension ReadableDoc {
         /// The same size rules as the type at the provided index.
         case recursive(UInt8)
 
+        /// The same size rules as two concatenated types at the provided indices.
+        indirect case compound(UInt8, UInt8)
+
         /// An unknown type.
         case none
 
@@ -204,7 +207,7 @@ extension ReadableDoc {
                 /// Return the declared size of the value plus metadata
                 return .success(size: declaredSize + 5)
             },
-            /* [6] Undefined (deprecated): */ .none,
+            /* [6] Undefined (deprecated): */ .fixed(0),
             /* [7] ObjectID: */ .fixed(12),
             /* [8] Bool: */ .fixed(1),
             /* [9] UTC DateTime: */ .fixed(8),
@@ -223,10 +226,10 @@ extension ReadableDoc {
                     return .failure(needAtLeast: data.count + 1)
                 }
             },
-            /* [12] DBPointer (deprecated): */ .none,
+            /* [12] DBPointer (deprecated): */ .compound(2, 7),
             /* [13] JavaScript Code: */ .recursive(2),
-            /* [14] Symbol (deprecated): */ .none,
-            /* [15] JavaScript Code with Scope (Deprecated): */ .none,
+            /* [14] Symbol (deprecated): */ .recursive(2),
+            /* [15] JavaScript Code with Scope (Deprecated): */ .compound(2, 3),
             /* [16] Int32: */ .fixed(4),
             /* [17] UInt64: */ .fixed(8),
             /* [18] Int64: */ .fixed(8),
@@ -343,6 +346,24 @@ extension ReadableDoc {
             return sizeHandler(data)
         case .recursive(let alias):
             return measure(type: alias, in: data, using: typeMap)
+        case .compound(let alias1, let alias2):
+            var size1: Int = 0
+            switch measure(type: alias1, in: data, using: typeMap) {
+            case .success(let size):
+                size1 = size
+            case .failure(let needAtLeast):
+                return .failure(needAtLeast: needAtLeast)
+            case .none: 
+                return nil
+            }
+            switch measure(type: alias2, in: data.dropFirst(size1), using: typeMap) {
+            case .success(let size):
+                return .success(size: size1 + size)
+            case .failure(let needAtLeast):
+                return .failure(needAtLeast: size1 + needAtLeast)
+            case .none:
+                return nil
+            }
         case .none:
             return nil
         }

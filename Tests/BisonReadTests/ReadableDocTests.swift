@@ -18,6 +18,7 @@
 @testable 
 import BisonRead
 import BisonWrite
+import ObjectID
 import XCTest
 
 extension WritableValue {
@@ -302,5 +303,80 @@ class ReadableDocTests: XCTestCase {
                 remaining: faultyBytes[6...])
             XCTAssertEqual(error, .valueSizeMismatch(6, "", progress))
         }
+    }
+
+    /// Asserts reading a document with a deprecated "undefined" value succeeds.
+    func testUndefinedParsed() throws {
+        var encodedDoc = WritableDoc {
+            // Encode a null since it has the same size as undefined.
+            "test" => Bool?.none
+        }
+        .encode(as: [UInt8].self)
+        // Replace the null type byte with the undefined type byte.
+        encodedDoc[4] = 6
+        // Try parsing the document.
+        let decodedDoc = try ReadableDoc(bsonBytes: encodedDoc)
+        // Try retrieving the value's data.
+        let valueData = try XCTUnwrap(decodedDoc["test"])
+        // That data should be empty.
+        XCTAssertTrue(valueData.isEmpty)
+    }
+    /// Asserts reading a document with a deprecated "DBPointer" value succeeds.
+    func testDBPointerParsed() throws {
+        var encodedDoc: [UInt8] = []
+        // Append placeholder size bytes
+        Int32(0).append(to: &encodedDoc)
+        // Append the DBPointer type byte
+        encodedDoc.append(12)
+        // Append a key
+        encodedDoc.append(contentsOf: "test".utf8)
+        encodedDoc.append(0)
+        // Append a random String
+        "test".append(to: &encodedDoc)
+        // Append a random ObjectID
+        let id = ObjectID()
+        id.append(to: &encodedDoc)
+        // Terminate the document
+        encodedDoc.append(0)
+        // Size the document
+        encodedDoc.replaceSubrange(0..<4, with: withUnsafeBytes(of: Int32(encodedDoc.count)) { $0 })
+        // Parse the document
+        let decodedDoc = try ReadableDoc(bsonBytes: encodedDoc)
+        let stringBytes = try XCTUnwrap(decodedDoc["test"]).dropLast(12)
+        let idBytes = try XCTUnwrap(decodedDoc["test"]).dropFirst(stringBytes.count)
+        let decodedString = try String(bsonBytes: stringBytes)
+        let decodedID = try ObjectID(bsonBytes: idBytes)
+        XCTAssertEqual(decodedString, "test")
+        XCTAssertEqual(decodedID, id)
+    }
+
+    /// Asserts reading a document with a deprecated "code_w_scope" value succeeds.
+    func testJSCodeParsed() throws {
+        var encodedDoc: [UInt8] = []
+        // Append placeholder size bytes
+        Int32(0).append(to: &encodedDoc)
+        // Append the code_w_scope type byte
+        encodedDoc.append(15)
+        // Append a key
+        encodedDoc.append(contentsOf: "test".utf8)
+        encodedDoc.append(0)
+        // Append a random String
+        "test".append(to: &encodedDoc)
+        // Append a random Document
+        let valueDoc = WritableDoc {
+            "test" => true
+        }
+        valueDoc.append(to: &encodedDoc)
+        // Terminate the document
+        encodedDoc.append(0)
+        // Size the document
+        encodedDoc.replaceSubrange(0..<4, with: withUnsafeBytes(of: Int32(encodedDoc.count)) { $0 })
+        // Parse the document
+        let decodedDoc = try ReadableDoc(bsonBytes: encodedDoc)
+        let valueDocBytes = try XCTUnwrap(decodedDoc["test"]).dropFirst("test".utf8.count + 5)
+        let stringBytes = try XCTUnwrap(decodedDoc["test"]).dropLast(valueDocBytes.count)
+        let decodedString = try String(bsonBytes: stringBytes)
+        XCTAssertEqual(decodedString, "test")
+        XCTAssertEqual(Array(valueDocBytes), valueDoc.encode(as: [UInt8].self))
     }
 }
