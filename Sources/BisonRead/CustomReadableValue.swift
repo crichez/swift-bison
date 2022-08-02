@@ -29,7 +29,9 @@ public protocol CustomReadableValue: ReadableValue {
 
 extension CustomReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count >= 5 else { throw ValueError.dataTooShort(5, data.count) }
+        guard data.count >= 5 else { 
+            throw ValueError.dataTooShort(needAtLeast: 5, found: data.count) 
+        }
         let declaredSize = Int(truncatingIfNeeded: try Int32(bsonBytes: data.prefix(4)))
         guard data.count == declaredSize + 5 else {
             throw ValueError.sizeMismatch(declaredSize + 5, data.count)

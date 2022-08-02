@@ -75,7 +75,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
                 debugDescription: """
                     expected at least\(needAtLeast) bytes for a \(type) but found \(have)
                 """,
-                underlyingError: ValueError.dataTooShort(needAtLeast, have))
+                underlyingError: ValueError.dataTooShort(needAtLeast: needAtLeast, found: have))
             throw DecodingError.typeMismatch(type, context)
         }
     }
@@ -101,7 +101,7 @@ extension BSONKeyedDecodingContainer: KeyedDecodingContainerProtocol {
                 debugDescription: """
                     expected at least\(needAtLeast) bytes for a \(type) but found \(have)
                 """,
-                underlyingError: ValueError.dataTooShort(needAtLeast, have))
+                underlyingError: ValueError.dataTooShort(needAtLeast: needAtLeast, found: have))
             throw DecodingError.typeMismatch(type, context)
         }
     }

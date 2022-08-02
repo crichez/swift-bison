@@ -71,7 +71,9 @@ extension Bool: ReadableValue {
 
 extension String: ReadableValue {
     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
-        guard data.count > 4 else { throw ValueError.dataTooShort(5, data.count) }
+        guard data.count > 4 else { 
+            throw ValueError.dataTooShort(needAtLeast: 5, found: data.count) 
+        }
         let sizeStart = data.startIndex
         let sizeEnd = data.index(sizeStart, offsetBy: 4)
         // We try! here since we already ensured we have four bytes to read

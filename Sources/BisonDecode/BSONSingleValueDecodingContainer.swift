@@ -39,7 +39,7 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
                 debugDescription: """
                     expected at least \(needAtLeast) bytes for a \(type), but found \(contents.count)
                 """,
-                underlyingError: ValueError.dataTooShort(needAtLeast, have))
+                underlyingError: ValueError.dataTooShort(needAtLeast: needAtLeast, found: have))
             throw DecodingError.typeMismatch(type, context)
         } catch ValueError.sizeMismatch(let need, let have) {
             let context = DecodingError.Context(
@@ -71,7 +71,7 @@ extension BSONSingleValueDecodingContainer: SingleValueDecodingContainer {
                 debugDescription: """
                     expected at least\(needAtLeast) bytes for a \(type) but found \(have)
                 """,
-                underlyingError: ValueError.dataTooShort(needAtLeast, have))
+                underlyingError: ValueError.dataTooShort(needAtLeast: needAtLeast, found: have))
             throw DecodingError.typeMismatch(type, context)
         }
     }

@@ -122,7 +122,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
-            XCTAssertEqual(underlyingError, .dataTooShort(5, MemoryLayout<Int32>.size))
+            XCTAssertEqual(underlyingError, .dataTooShort(
+                needAtLeast: 5, 
+                found: MemoryLayout<Int32>.size))
         }
     }
 

@@ -92,7 +92,9 @@ class BSONUnkeyedDecodingContainerTests: XCTestCase {
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(
                 context.underlyingError as? ValueError)
-            XCTAssertEqual(underlyingError, .dataTooShort(5, MemoryLayout<Bool>.size))
+            XCTAssertEqual(underlyingError, .dataTooShort(
+                needAtLeast: 5, 
+                found: MemoryLayout<Bool>.size))
         }
     }
 
