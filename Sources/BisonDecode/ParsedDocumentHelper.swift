@@ -42,19 +42,25 @@ extension ReadableDoc {
                 debugDescription: """
                     declared document size is \(declared) but actual size is \(data.count)
                 """,
-                underlyingError: DocError<Data>.docSizeMismatch(declared))
+                underlyingError: DocError<Data>.docSizeMismatch(expectedExactly: declared))
             throw DecodingError.typeMismatch(type, context)
         } catch DocError<Data>.unknownType(let type, let key, let progress) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "key \"\(key)\" has unknown type byte \(type)", 
-                underlyingError: DocError<Data>.unknownType(type, key, progress))
+                underlyingError: DocError<Data>.unknownType(
+                    type: type, 
+                    key: key, 
+                    progress: progress))
             throw DecodingError.dataCorrupted(context)
         } catch DocError<Data>.valueSizeMismatch(let need, let key, let progress) {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected at least \(need) bytes for value \"\(key)\"",
-                underlyingError: DocError<Data>.valueSizeMismatch(need, key, progress))
+                underlyingError: DocError<Data>.valueSizeMismatch(
+                    needAtLeast: need, 
+                    key: key, 
+                    progress: progress))
             throw DecodingError.dataCorrupted(context)
         }
     }

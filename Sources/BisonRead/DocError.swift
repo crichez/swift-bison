@@ -64,19 +64,19 @@ public enum DocError<Data: Collection>: Error where Data.Element == UInt8 {
     /// > Note: In the case of corruption, ``notTerminated`` will usually be triggered first.
     ///   There is a chance that the corrupted data happens to be null-terminated, in whcih case
     ///   this error may be triggered instead.
-    case docSizeMismatch(_ expectedExactly: Int)
+    case docSizeMismatch(expectedExactly: Int)
 
     /// An unknown or deprecated BSON type byte was found while parsing a key.
     /// 
     /// This error includes a ``Progress`` value. You may check the partially decoded document
     /// within to recover from the error.
-    case unknownType(_ type: UInt8, _ key: String, _ progress: Progress<Data>)
+    case unknownType(type: UInt8, key: String, progress: Progress<Data>)
 
     /// There were not enough bytes left in the document to parse the next expected value.
     /// 
     /// This error includes a ``Progress`` value. You may check the partially decoded document
     /// within to recover from the error.
-    case valueSizeMismatch(_ needAtLeast: Int, _ key: String, _ progress: Progress<Data>)
+    case valueSizeMismatch(needAtLeast: Int, key: String, progress: Progress<Data>)
 }
 
 /// The parsed and un-parsed parts of a document after an error occured.

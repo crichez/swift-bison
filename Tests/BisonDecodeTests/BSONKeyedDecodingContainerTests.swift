@@ -96,7 +96,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                ValueError.sizeMismatch(MemoryLayout<Double>.size, MemoryLayout<Int32>.size))
+                ValueError.sizeMismatch(
+                    expected: MemoryLayout<Double>.size, 
+                    have: MemoryLayout<Int32>.size))
         }
     }
 
@@ -122,7 +124,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
-            XCTAssertEqual(underlyingError, .dataTooShort(5, MemoryLayout<Int32>.size))
+            XCTAssertEqual(underlyingError, .dataTooShort(
+                needAtLeast: 5, 
+                found: MemoryLayout<Int32>.size))
         }
     }
 
@@ -139,7 +143,7 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             XCTAssert(attempted == String.self)
             XCTAssertTrue(context.codingPath.isEmpty)
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
-            XCTAssertEqual(underlyingError, .sizeMismatch(6, 8))
+            XCTAssertEqual(underlyingError, .sizeMismatch(expected: 6, have: 8))
         }
     }
 
@@ -167,7 +171,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Bool>.size, MemoryLayout<UInt64>.size))
+                .sizeMismatch(
+                    expected: MemoryLayout<Bool>.size, 
+                    have: MemoryLayout<UInt64>.size))
         }
     }
 
@@ -196,7 +202,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Int32>.size, MemoryLayout<UInt64>.size))
+                .sizeMismatch(
+                    expected: MemoryLayout<Int32>.size, 
+                    have: MemoryLayout<UInt64>.size))
         }
     }
 
@@ -225,7 +233,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Int64>.size, MemoryLayout<Int32>.size))
+                .sizeMismatch(
+                    expected: MemoryLayout<Int64>.size, 
+                    have: MemoryLayout<Int32>.size))
         }
     }
 
@@ -254,7 +264,9 @@ class BSONKeyedDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<UInt64>.size, MemoryLayout<Int32>.size))
+                .sizeMismatch(
+                    expected: MemoryLayout<UInt64>.size, 
+                    have: MemoryLayout<Int32>.size))
         }
     }
 

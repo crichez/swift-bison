@@ -50,7 +50,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Bool>.size, container.contents.count))
+                .sizeMismatch(expected: MemoryLayout<Bool>.size, have: container.contents.count))
         }
     }
 
@@ -73,7 +73,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Double>.size, container.contents.count))
+                .sizeMismatch(expected: MemoryLayout<Double>.size, have: container.contents.count))
         }
     }
 
@@ -96,7 +96,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .dataTooShort(5, container.contents.count))
+                .dataTooShort(needAtLeast: 5, found: container.contents.count))
         }
     }
 
@@ -113,7 +113,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(13, container.contents.count))
+                .sizeMismatch(expected: 13, have: container.contents.count))
         }
     }
 
@@ -136,7 +136,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Int32>.size, container.contents.count))
+                .sizeMismatch(expected: MemoryLayout<Int32>.size, have: container.contents.count))
         }
     }
 
@@ -159,7 +159,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<UInt64>.size, container.contents.count))
+                .sizeMismatch(expected: MemoryLayout<UInt64>.size, have: container.contents.count))
         }
     }
 
@@ -182,7 +182,7 @@ class BSONSingleValueDecodingContainerTests: XCTestCase {
             let underlyingError = try XCTUnwrap(context.underlyingError as? ValueError)
             XCTAssertEqual(
                 underlyingError, 
-                .sizeMismatch(MemoryLayout<Int64>.size, container.contents.count))
+                .sizeMismatch(expected: MemoryLayout<Int64>.size, have: container.contents.count))
         }
     }
 
