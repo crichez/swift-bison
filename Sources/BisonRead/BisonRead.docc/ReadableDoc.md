@@ -11,8 +11,8 @@ A BSON document from which values can be read.
 ### Parsing a Document
 
 - ``BisonRead/ReadableDoc/init(bsonBytes:)``
-- ``BisonRead/ReadableDoc/Error``
-- ``BisonRead/ReadableDoc/Progress``
+- ``BisonRead/DocError``
+- ``BisonRead/Progress``
 
 ### Extracting Values
 

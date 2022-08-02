@@ -7,12 +7,12 @@ Read BSON documents.
 ### Documents
 
 - ``ReadableDoc``
+- ``DocError``
+- ``Progress``
 
 ### Values
 
 - ``ReadableValue``
 - ``CustomReadableValue``
+- ``ValueError``
 
-### Errors
-
-- ``BisonError``

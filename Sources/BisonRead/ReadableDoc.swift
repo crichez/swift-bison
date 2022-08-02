@@ -62,7 +62,7 @@ public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// }       
     /// ```
     /// 
-    /// > Tip: For error handling documentation, see ``Error`` and ``BisonError``.
+    /// > Tip: For error handling documentation, see ``DocError`` and ``ValueError``.
     public subscript(key: String) -> Data.SubSequence? {
         discovered[key]
     }
@@ -91,7 +91,7 @@ public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// }
     /// ```
     /// 
-    /// > Tip: For error handling documentation, see ``Error`` and ``BisonError``.
+    /// > Tip: For error handling documentation, see ``DocError`` and ``ValueError``.
     public var min: Data.SubSequence? {
         guard let minKey = minKey, let min = discovered[minKey] else { return nil }
         return min
@@ -121,7 +121,7 @@ public struct ReadableDoc<Data: Collection> where Data.Element == UInt8 {
     /// }
     /// ```
     /// 
-    /// > Tip: For error handling documentation, see ``Error`` and ``BisonError``.
+    /// > Tip: For error handling documentation, see ``DocError`` and ``ValueError``.
     public var max: Data.SubSequence? {
         guard let maxKey = maxKey, let max = discovered[maxKey] else { return nil }
         return max

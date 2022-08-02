@@ -40,6 +40,7 @@
 /// ```swift
 /// extension Double: ReadableValue {
 ///     public init<Data: Collection>(bsonBytes data: Data) throws where Data.Element == UInt8 {
+///         guard data.count == 8 else { throw ValueError.sizeMismatch(8, data.count) }
 ///         let copyBuffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8, alignment: 8)
 ///         copyBuffer.copyBytes(from: data)
 ///         self = copyBuffer.load(as: Double.self)
