@@ -37,7 +37,7 @@ class ReadableValueTests: XCTestCase {
         do {
             let decodedValue = try Double(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             XCTAssertEqual(need, MemoryLayout<Double>.size)
             XCTAssertEqual(have, faultyBytes.count)
         }
@@ -59,7 +59,7 @@ class ReadableValueTests: XCTestCase {
         do {
             let decodedValue = try String(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.dataTooShort(let needAtLeast, let have) {
+        } catch ValueError.dataTooShort(let needAtLeast, let have) {
             XCTAssertEqual(needAtLeast, 5)
             XCTAssertEqual(have, faultyBytes.count)
         }
@@ -74,7 +74,7 @@ class ReadableValueTests: XCTestCase {
             encodedValue.replaceSubrange(0..<4, with: Int32(100).bsonBytes)
             let decodedValue = try String(bsonBytes: encodedValue)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             XCTAssertEqual(need, 104)
             XCTAssertEqual(have, encodedValue.count)
         }
@@ -96,7 +96,7 @@ class ReadableValueTests: XCTestCase {
         do {
             let decodedValue = try Bool(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             XCTAssertEqual(need, MemoryLayout<Bool>.size)
             XCTAssertEqual(have, faultyBytes.count)
         }
@@ -118,7 +118,7 @@ class ReadableValueTests: XCTestCase {
         do {
             let decodedValue = try Int32(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             XCTAssertEqual(need, MemoryLayout<Int32>.size)
             XCTAssertEqual(have, faultyBytes.count)
         }
@@ -140,7 +140,7 @@ class ReadableValueTests: XCTestCase {
         do {
             let decodedValue = try UInt64(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             XCTAssertEqual(need, MemoryLayout<UInt64>.size)
             XCTAssertEqual(have, faultyBytes.count)
         }
@@ -162,7 +162,7 @@ class ReadableValueTests: XCTestCase {
         do {
             let decodedValue = try Int64(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedValue)")
-        } catch BisonError.sizeMismatch(let need, let have) {
+        } catch ValueError.sizeMismatch(let need, let have) {
             XCTAssertEqual(need, MemoryLayout<Int64>.size)
             XCTAssertEqual(have, faultyBytes.count)
         }

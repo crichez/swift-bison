@@ -1,5 +1,5 @@
 //
-//  BisonError.swift
+//  ValueError.swift
 //  Copyright 2022 Christopher Richez
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 //
 
 /// An error that occured while parsing a BSON value.
-public enum BisonError: Error, Equatable {
+public enum ValueError: Error, Equatable {
     /// The data passed to the initializer was shorter than the required metadata for this value.
     /// 
     /// This case provides the expected and actual size of the data passed to the initializer.

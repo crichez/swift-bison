@@ -36,7 +36,7 @@ struct DecodingContainerProvider<Data: Collection> where Data.Element == UInt8 {
 }
 
 extension DecodingContainerProvider: Decoder {
-    private typealias NestedDocError = ReadableDoc<Data>.Error
+    private typealias NestedDocError = DocError<Data>
 
     func container<Key: CodingKey>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
         let doc = try ReadableDoc(
