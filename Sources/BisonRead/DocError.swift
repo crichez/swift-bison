@@ -76,7 +76,7 @@ public enum DocError<Data: Collection>: Error where Data.Element == UInt8 {
     /// 
     /// This error includes a ``Progress`` value. You may check the partially decoded document
     /// within to recover from the error.
-    case valueSizeMismatch(_ needAtLeast: Int, _ key: String, _ progress: Progress<Data>)
+    case valueSizeMismatch(needAtLeast: Int, key: String, progress: Progress<Data>)
 }
 
 /// The parsed and un-parsed parts of a document after an error occured.

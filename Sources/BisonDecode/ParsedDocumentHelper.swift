@@ -57,7 +57,10 @@ extension ReadableDoc {
             let context = DecodingError.Context(
                 codingPath: codingPath, 
                 debugDescription: "expected at least \(need) bytes for value \"\(key)\"",
-                underlyingError: DocError<Data>.valueSizeMismatch(need, key, progress))
+                underlyingError: DocError<Data>.valueSizeMismatch(
+                    needAtLeast: need, 
+                    key: key, 
+                    progress: progress))
             throw DecodingError.dataCorrupted(context)
         }
     }

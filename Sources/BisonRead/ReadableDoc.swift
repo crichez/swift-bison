@@ -259,7 +259,10 @@ extension ReadableDoc {
                 // If not, compose context and throw
                 let partialDoc = ReadableDoc(discovered, minKey: minKey, maxKey: maxKey)
                 let progress = Progress(parsed: partialDoc, remaining: data[cursor...])
-                throw DocError<Data>.valueSizeMismatch(needAtLeast, key, progress)
+                throw DocError<Data>.valueSizeMismatch(
+                    needAtLeast: needAtLeast, 
+                    key: key, 
+                    progress: progress)
             }
         }
         // Assign the discovered contents

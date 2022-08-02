@@ -126,7 +126,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(8, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 8, key: "", progress: progress))
         }
     }
 
@@ -149,7 +149,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 5, key: "", progress: progress))
         }
     }
 
@@ -170,7 +170,10 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-                XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
+                XCTAssertEqual(error, .valueSizeMismatch(
+                    needAtLeast: 5, 
+                    key: "", 
+                    progress: progress))
         }
     }
 
@@ -192,7 +195,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(14, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 14, key: "", progress: progress))
         }
     }
 
@@ -214,7 +217,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 5, key: "", progress: progress))
         }
     }
 
@@ -236,7 +239,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(10, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 10, key: "", progress: progress))
         }
     }
     
@@ -257,7 +260,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(5, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 5, key: "", progress: progress))
         }
     }
 
@@ -280,7 +283,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(15, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 15, key: "", progress: progress))
         }
     }
 
@@ -301,7 +304,7 @@ class ReadableDocTests: XCTestCase {
             let progress = Progress(
                 parsed: partialDoc, 
                 remaining: faultyBytes[6...])
-            XCTAssertEqual(error, .valueSizeMismatch(6, "", progress))
+            XCTAssertEqual(error, .valueSizeMismatch(needAtLeast: 6, key: "", progress: progress))
         }
     }
 
