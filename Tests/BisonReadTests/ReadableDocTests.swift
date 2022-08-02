@@ -82,7 +82,7 @@ class ReadableDocTests: XCTestCase {
             let decodedDoc = try ReadableDoc(bsonBytes: faultyBytes)
             XCTFail("expected decoding to fail, but returned \(decodedDoc)")
         } catch let error as DocError<[UInt8]> {
-            XCTAssertEqual(error, .docSizeMismatch(3))
+            XCTAssertEqual(error, .docSizeMismatch(expectedExactly: 3))
         }
     }
 

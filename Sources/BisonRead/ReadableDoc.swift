@@ -190,7 +190,9 @@ extension ReadableDoc {
         guard data[terminatorIndex] == 0 else { throw DocError<Data>.notTerminated }
         // Read and check the declared size of the document against its data
         let size = Int(truncatingIfNeeded: try! Int32(bsonBytes: data.prefix(4)))
-        guard data.count == size else { throw DocError<Data>.docSizeMismatch(size) }
+        guard data.count == size else { 
+            throw DocError<Data>.docSizeMismatch(expectedExactly: size) 
+        }
 
         // Store the type map for the entire parsing process
         let typeMap = Self.typeMap

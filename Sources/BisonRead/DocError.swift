@@ -64,7 +64,7 @@ public enum DocError<Data: Collection>: Error where Data.Element == UInt8 {
     /// > Note: In the case of corruption, ``notTerminated`` will usually be triggered first.
     ///   There is a chance that the corrupted data happens to be null-terminated, in whcih case
     ///   this error may be triggered instead.
-    case docSizeMismatch(_ expectedExactly: Int)
+    case docSizeMismatch(expectedExactly: Int)
 
     /// An unknown or deprecated BSON type byte was found while parsing a key.
     /// 

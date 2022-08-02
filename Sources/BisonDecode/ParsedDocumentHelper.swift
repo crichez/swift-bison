@@ -42,7 +42,7 @@ extension ReadableDoc {
                 debugDescription: """
                     declared document size is \(declared) but actual size is \(data.count)
                 """,
-                underlyingError: DocError<Data>.docSizeMismatch(declared))
+                underlyingError: DocError<Data>.docSizeMismatch(expectedExactly: declared))
             throw DecodingError.typeMismatch(type, context)
         } catch DocError<Data>.unknownType(let type, let key, let progress) {
             let context = DecodingError.Context(
